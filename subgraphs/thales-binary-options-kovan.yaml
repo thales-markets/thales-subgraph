@@ -1,0 +1,89 @@
+specVersion: 0.0.2
+description: Thales Binary Options API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ./thales-binary-options.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: BinaryOptionMarketManager
+    network: kovan
+    source:
+      address: '0x95dCaDDaa40aC726BF4734754e6B75eAe6F5eb9F'
+      abi: BinaryOptionMarketManager
+      startBlock: 22714763
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,uint256)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+        - event: MarketCancelled(address)
+          handler: handleMarketCancelled
+  - kind: ethereum/contract
+    name: BinaryOptionMarketManager_new
+    network: kovan
+    source:
+      address: '0xC2D6cCfCDAB5Be09F15320FD2d642f374f89bC20'
+      abi: BinaryOptionMarketManager
+      startBlock: 8328904
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,uint256)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+        - event: MarketCancelled(address)
+          handler: handleMarketCancelled
+templates:
+  - name: BinaryOptionMarket
+    kind: ethereum/contract
+    network: kovan
+    source:
+      abi: BinaryOptionMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+        - OptionTransaction
+        - HistoricalOptionPrice
+      abis:
+        - name: BinaryOptionMarket
+          file: ../abis/BinaryOptionMarket.json
+      eventHandlers:
+        - event: Bid(uint8,indexed address,uint256)
+          handler: handleNewBid
+        - event: Refund(uint8,indexed address,uint256,uint256)
+          handler: handleNewRefund
+        - event: PricesUpdated(uint256,uint256)
+          handler: handleNewPricesUpdate
+        - event: MarketResolved(uint8,uint256,uint256,uint256,uint256,uint256)
+          handler: handleMarketResolved
+        - event: OptionsClaimed(indexed address,uint256,uint256)
+          handler: handleOptionsClaimed
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
