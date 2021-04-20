@@ -43,3 +43,17 @@ type HistoricalOptionPrice @entity {
   market: Bytes!
   poolSize: BigInt!
 }
+
+type Trade @entity {
+  # tx hash - order hash - log index
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  orderHash: Bytes!
+  maker: Bytes!
+  taker: Bytes!
+  makerToken: Bytes!
+  takerToken: Bytes!
+  makerAmount: BigInt!
+  takerAmount: BigInt!
+}

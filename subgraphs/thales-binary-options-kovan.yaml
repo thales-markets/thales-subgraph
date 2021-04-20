@@ -56,6 +56,26 @@ dataSources:
           handler: handleMarketExpired
         - event: MarketCancelled(address)
           handler: handleMarketCancelled
+  - kind: ethereum/contract
+    name: ExchangeProxy
+    network: kovan
+    source:
+      address: '0xdef1c0ded9bec7f1a1670819833240f027b25eff'
+      abi: ExchangeProxy
+      startBlock: 19020005
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/exchange-proxy-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: ExchangeProxy
+          file: ../abis/0x/ExchangeProxy.json
+      eventHandlers:
+        - event: LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)
+          handler: handleLimitOrderFilledEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
