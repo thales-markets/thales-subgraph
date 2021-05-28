@@ -31,40 +31,6 @@
               }
             ],
             "internalType": "struct BinaryOptionMarketData.OptionValues",
-            "name": "bids",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "short",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarketData.OptionValues",
-            "name": "claimable",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "short",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarketData.OptionValues",
             "name": "balances",
             "type": "tuple"
           }
@@ -76,8 +42,7 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xdca5f5c3"
+    "type": "function"
   },
   {
     "constant": true,
@@ -113,29 +78,7 @@
             "components": [
               {
                 "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "short",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarket.Prices",
-            "name": "prices",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
                 "name": "deposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "exercisableDeposits",
                 "type": "uint256"
               }
             ],
@@ -184,40 +127,6 @@
               }
             ],
             "internalType": "struct BinaryOptionMarketData.OptionValues",
-            "name": "totalBids",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "short",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarketData.OptionValues",
-            "name": "totalClaimableSupplies",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "long",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "short",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarketData.OptionValues",
             "name": "totalSupplies",
             "type": "tuple"
           }
@@ -229,8 +138,7 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0xa30c302d"
+    "type": "function"
   },
   {
     "constant": true,
@@ -269,11 +177,6 @@
           },
           {
             "components": [
-              {
-                "internalType": "uint256",
-                "name": "biddingEnd",
-                "type": "uint256"
-              },
               {
                 "internalType": "uint256",
                 "name": "maturity",
@@ -322,32 +225,10 @@
                 "internalType": "uint256",
                 "name": "creatorFee",
                 "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "refundFee",
-                "type": "uint256"
               }
             ],
             "internalType": "struct BinaryOptionMarketManager.Fees",
             "name": "fees",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "capitalRequirement",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "skewLimit",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BinaryOptionMarketManager.CreatorLimits",
-            "name": "creatorLimits",
             "type": "tuple"
           }
         ],
@@ -358,7 +239,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function",
-    "signature": "0x1216fc7b"
+    "type": "function"
   }
 ]

@@ -4,12 +4,9 @@ type Market @entity {
   creator: Bytes!
   currencyKey: Bytes!
   strikePrice: BigInt!
-  biddingEndDate: BigInt!
   maturityDate: BigInt!
   expiryDate: BigInt!
   isOpen: Boolean!
-  longPrice: BigInt!
-  shortPrice: BigInt!
   poolSize: BigInt!
   longAddress: Bytes!
   shortAddress: Bytes!
@@ -17,9 +14,7 @@ type Market @entity {
 }
 
 enum OptionTransactionType {
-  bid
-  refund
-  claim
+  mint
   exercise
 }
 
@@ -33,15 +28,6 @@ type OptionTransaction @entity {
   currencyKey: Bytes
   side: Int
   fee: BigInt
-}
-
-type HistoricalOptionPrice @entity {
-  id: ID!
-  timestamp: BigInt!
-  longPrice: BigInt!
-  shortPrice: BigInt!
-  market: Bytes!
-  poolSize: BigInt!
 }
 
 type Trade @entity {

@@ -1,24 +1,19 @@
 import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
-  MarketCancelled as MarketCancelledEvent,
 } from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
 import {
-  Bid as BidEvent,
-  Refund as RefundEvent,
-  PricesUpdated as PricesUpdatedEvent,
+  Mint as MintEvent,
   MarketResolved as MarketResolvedEvent,
-  OptionsClaimed as OptionsClaimedEvent,
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { Market, OptionTransaction, HistoricalOptionPrice } from '../generated/schema';
+import { Market, OptionTransaction } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
   let binaryOptionContract = BinaryOptionMarket.bind(event.params.market);
-  let prices = binaryOptionContract.prices();
   let options = binaryOptionContract.options();
 
   let entity = new Market(event.params.market.toHex());
@@ -26,67 +21,18 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.timestamp = event.block.timestamp;
   entity.currencyKey = event.params.oracleKey;
   entity.strikePrice = event.params.strikePrice;
-  entity.biddingEndDate = event.params.biddingEndDate;
   entity.maturityDate = event.params.maturityDate;
   entity.expiryDate = event.params.expiryDate;
   entity.isOpen = true;
-  entity.longPrice = prices.value0;
-  entity.shortPrice = prices.value1;
   entity.longAddress = options.value0;
   entity.shortAddress = options.value1;
-  entity.poolSize = binaryOptionContract.exercisableDeposits();
+  entity.poolSize = binaryOptionContract.deposited();
   entity.save();
 }
 
 export function handleMarketExpired(event: MarketExpiredEvent): void {
   let marketEntity = Market.load(event.params.market.toHex());
   marketEntity.isOpen = false;
-  marketEntity.save();
-}
-
-export function handleNewBid(event: BidEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let entity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  entity.type = 'bid';
-  entity.timestamp = event.block.timestamp;
-  entity.account = event.params.account;
-  entity.market = event.address;
-  entity.currencyKey = marketEntity.currencyKey;
-  entity.side = event.params.side;
-  entity.amount = event.params.value;
-  entity.save();
-}
-
-export function handleNewRefund(event: RefundEvent): void {
-  let market = Market.load(event.address.toHex());
-  let entity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  entity.type = 'refund';
-  entity.timestamp = event.block.timestamp;
-  entity.account = event.params.account;
-  entity.market = event.address;
-  entity.currencyKey = market.currencyKey;
-  entity.side = event.params.side;
-  entity.amount = event.params.value;
-  entity.fee = event.params.fee;
-  entity.save();
-}
-
-export function handleNewPricesUpdate(event: PricesUpdatedEvent): void {
-  let marketId = event.address.toHex();
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let marketEntity = Market.load(marketId);
-  let poolSize = binaryOptionContract.exercisableDeposits();
-  let entity = new HistoricalOptionPrice(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  entity.timestamp = event.block.timestamp;
-  entity.longPrice = event.params.longPrice;
-  entity.shortPrice = event.params.shortPrice;
-  entity.market = event.address;
-  entity.poolSize = poolSize;
-  entity.save();
-
-  marketEntity.longPrice = event.params.longPrice;
-  marketEntity.shortPrice = event.params.shortPrice;
-  marketEntity.poolSize = poolSize;
   marketEntity.save();
 }
 
@@ -97,42 +43,11 @@ export function handleMarketResolved(event: MarketResolvedEvent): void {
   market.save();
 }
 
-export function handleOptionsClaimed(event: OptionsClaimedEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let optionTransactionEntityLong = new OptionTransaction(
-    event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0',
-  );
-  let optionTransactionEntityShort = new OptionTransaction(
-    event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1',
-  );
-  let poolSize = binaryOptionContract.exercisableDeposits();
-
-  marketEntity.poolSize = poolSize;
-  marketEntity.save();
-
-  optionTransactionEntityLong.type = 'claim';
-  optionTransactionEntityLong.timestamp = event.block.timestamp;
-  optionTransactionEntityLong.account = event.params.account;
-  optionTransactionEntityLong.market = event.address;
-  optionTransactionEntityLong.amount = event.params.longOptions;
-  optionTransactionEntityLong.side = 0;
-  optionTransactionEntityLong.save();
-
-  optionTransactionEntityShort.type = 'claim';
-  optionTransactionEntityShort.timestamp = event.block.timestamp;
-  optionTransactionEntityShort.account = event.params.account;
-  optionTransactionEntityShort.market = event.address;
-  optionTransactionEntityShort.amount = event.params.shortOptions;
-  optionTransactionEntityLong.side = 1;
-  optionTransactionEntityShort.save();
-}
-
 export function handleOptionsExercised(event: OptionsExercisedEvent): void {
   let marketEntity = Market.load(event.address.toHex());
   let binaryOptionContract = BinaryOptionMarket.bind(event.address);
   let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  let poolSize = binaryOptionContract.exercisableDeposits();
+  let poolSize = binaryOptionContract.deposited();
 
   marketEntity.poolSize = poolSize;
   marketEntity.save();
@@ -145,8 +60,19 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
   optionTransactionEntity.save();
 }
 
-export function handleMarketCancelled(event: MarketCancelledEvent): void {
-  let marketEntity = Market.load(event.params.market.toHex());
-  marketEntity.isOpen = false;
+export function handleMint(event: MintEvent): void {
+  let marketEntity = Market.load(event.address.toHex());
+  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
+  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  let poolSize = binaryOptionContract.deposited();
+
+  marketEntity.poolSize = poolSize;
   marketEntity.save();
+
+  optionTransactionEntity.type = 'mint';
+  optionTransactionEntity.timestamp = event.block.timestamp;
+  optionTransactionEntity.account = event.params.account;
+  optionTransactionEntity.market = event.address;
+  optionTransactionEntity.amount = event.params.value;
+  optionTransactionEntity.save();
 }

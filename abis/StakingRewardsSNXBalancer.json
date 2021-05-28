@@ -1,90 +1,25 @@
 [
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "enum IBinaryOptionMarket.Side",
-        "name": "result",
-        "type": "uint8"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oraclePrice",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oracleTimestamp",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "deposited",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "poolFees",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "creatorFees",
-        "type": "uint256"
-      }
-    ],
-    "name": "MarketResolved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "enum IBinaryOptionMarket.Side",
-        "name": "side",
-        "type": "uint8"
-      },
-      {
-        "indexed": true,
         "internalType": "address",
-        "name": "account",
+        "name": "_owner",
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "Mint",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
-        "name": "account",
+        "name": "_rewardsToken",
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_stakingToken",
+        "type": "address"
       }
     ],
-    "name": "OptionsExercised",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
     "anonymous": false,
@@ -119,6 +54,91 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardPaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Staked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdrawn",
+    "type": "event"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "DURATION",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [],
     "name": "acceptOwnership",
@@ -136,32 +156,12 @@
         "type": "address"
       }
     ],
-    "name": "balancesOf",
+    "name": "balanceOf",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "long",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "short",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "canResolve",
-    "outputs": [
-      {
-        "internalType": "bool",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -170,23 +170,14 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "creator",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "account",
         "type": "address"
       }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "deposited",
+    "name": "earned",
     "outputs": [
       {
         "internalType": "uint256",
@@ -201,28 +192,16 @@
   {
     "constant": false,
     "inputs": [],
-    "name": "exerciseOptions",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "name": "exit",
+    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "beneficiary",
-        "type": "address"
-      }
-    ],
-    "name": "expire",
+    "inputs": [],
+    "name": "getReward",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -231,27 +210,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "fees",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "poolFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "creatorFee",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "initialMint",
+    "name": "lastTimeRewardApplicable",
     "outputs": [
       {
         "internalType": "uint256",
@@ -264,88 +223,18 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_binaryOptionMastercopy",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IAddressResolver",
-        "name": "_resolver",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_creator",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_oracleKey",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_strikePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[2]",
-        "name": "_times",
-        "type": "uint256[2]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_deposit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[2]",
-        "name": "_fees",
-        "type": "uint256[2]"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
-    "name": "initialized",
+    "name": "lastUpdateTime",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "mint",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -379,68 +268,18 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "options",
-    "outputs": [
-      {
-        "internalType": "contract BinaryOption",
-        "name": "long",
-        "type": "address"
-      },
-      {
-        "internalType": "contract BinaryOption",
-        "name": "short",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "oracleDetails",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "key",
-        "type": "bytes32"
-      },
+    "constant": false,
+    "inputs": [
       {
         "internalType": "uint256",
-        "name": "strikePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "finalPrice",
+        "name": "reward",
         "type": "uint256"
       }
     ],
+    "name": "notifyRewardAmount",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "oraclePriceAndTimestamp",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "updatedAt",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -461,12 +300,12 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "phase",
+    "name": "periodFinish",
     "outputs": [
       {
-        "internalType": "enum IBinaryOptionMarket.Phase",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint8"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -476,30 +315,12 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "requireUnpaused",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "resolve",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "resolved",
+    "name": "rewardPerToken",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -509,10 +330,61 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "resolver",
+    "name": "rewardPerTokenStored",
     "outputs": [
       {
-        "internalType": "contract IAddressResolver",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "rewardRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "rewardsDistribution",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -524,12 +396,57 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "result",
+    "name": "rewardsToken",
     "outputs": [
       {
-        "internalType": "enum IBinaryOptionMarket.Side",
+        "internalType": "contract IERC20",
         "name": "",
-        "type": "uint8"
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_rewardsDistribution",
+        "type": "address"
+      }
+    ],
+    "name": "setRewardsDistribution",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "stake",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "stakingToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
       }
     ],
     "payable": false,
@@ -539,16 +456,11 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "times",
+    "name": "totalSupply",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maturity",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "expiry",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -558,22 +470,38 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "totalSupplies",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userRewardPerTokenPaid",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "long",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "short",
+        "name": "",
         "type": "uint256"
       }
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -9,7 +9,8 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "constructor"
+    "type": "constructor",
+    "signature": "constructor"
   },
   {
     "anonymous": false,
@@ -28,7 +29,8 @@
       }
     ],
     "name": "OwnerChanged",
-    "type": "event"
+    "type": "event",
+    "signature": "0xb532073b38c83145e3e5135377a08bf9aab55bc0fd7c1179cd4fb995d2a5159c"
   },
   {
     "anonymous": false,
@@ -41,7 +43,8 @@
       }
     ],
     "name": "OwnerNominated",
-    "type": "event"
+    "type": "event",
+    "signature": "0x906a1c6bd7e3091ea86693dd029a831c19049ce77f1dce2ce0bab1cacbabce22"
   },
   {
     "constant": false,
@@ -50,12 +53,19 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x79ba5097"
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "binaryOptionMarketManager",
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -65,12 +75,19 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x21f8a721"
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "binaryOptionMarketMastercopy",
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "key",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getSynth",
     "outputs": [
       {
         "internalType": "address",
@@ -80,73 +97,29 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "binaryOptionMastercopy",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x51456061"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
+        "internalType": "bytes32[]",
+        "name": "names",
+        "type": "bytes32[]"
       },
       {
-        "internalType": "contract IAddressResolver",
-        "name": "_resolver",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "oracleKey",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "strikePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[2]",
-        "name": "times",
-        "type": "uint256[2]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialMint",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[2]",
-        "name": "fees",
-        "type": "uint256[2]"
+        "internalType": "address[]",
+        "name": "destinations",
+        "type": "address[]"
       }
     ],
-    "name": "createMarket",
-    "outputs": [
-      {
-        "internalType": "contract BinaryOptionMarket",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "name": "importAddresses",
+    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0xab0b8f77"
   },
   {
     "constant": false,
@@ -161,7 +134,8 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
+    "type": "function",
+    "signature": "0x1627540c"
   },
   {
     "constant": true,
@@ -176,7 +150,8 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x53a47bb7"
   },
   {
     "constant": true,
@@ -191,51 +166,56 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "signature": "0x8da5cb5b"
   },
   {
-    "constant": false,
+    "constant": true,
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "repository",
+    "outputs": [
+      {
         "internalType": "address",
-        "name": "_binaryOptionMarketManager",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "setBinaryOptionMarketManager",
-    "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x187f7935"
   },
   {
-    "constant": false,
+    "constant": true,
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "requireAndGetAddress",
+    "outputs": [
+      {
         "internalType": "address",
-        "name": "_binaryOptionMarketMastercopy",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "setBinaryOptionMarketMastercopy",
-    "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_binaryOptionMastercopy",
-        "type": "address"
-      }
-    ],
-    "name": "setBinaryOptionMastercopy",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xdacb2d01"
   }
 ]
