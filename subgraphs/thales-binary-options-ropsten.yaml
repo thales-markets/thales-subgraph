@@ -5,36 +5,12 @@ schema:
   file: ./thales-binary-options.graphql
 dataSources:
   - kind: ethereum/contract
-    name: BinaryOptionMarketManager_old
-    network: ropsten
-    source:
-      address: '0x8a7a7927370d42B063002FF0f285E3e0c31d4592'
-      abi: BinaryOptionMarketManager
-      startBlock: 10319210
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
-      entities:
-        - Market
-      abis:
-        - name: BinaryOptionMarketManager
-          file: ../abis/BinaryOptionMarketManager_old.json
-        - name: BinaryOptionMarket
-          file: '../abis/BinaryOptionMarket.json'
-      eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256)
-          handler: handleNewMarket
-        - event: MarketExpired(address)
-          handler: handleMarketExpired
-  - kind: ethereum/contract
     name: BinaryOptionMarketManager
     network: ropsten
     source:
-      address: '0xeb50FDB06972cf01d04AA9A509b34A9300176EE0'
+      address: '0x35272f59a87c6A0043c69066243bD80ceADeE238'
       abi: BinaryOptionMarketManager
-      startBlock: 10450501
+      startBlock: 10501994
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

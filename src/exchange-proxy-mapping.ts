@@ -9,7 +9,9 @@ export function handleLimitOrderFilledEvent(event: LimitOrderFilled): void {
   nativeFill.timestamp = event.block.timestamp;
   nativeFill.orderHash = event.params.orderHash;
   nativeFill.maker = event.params.maker;
-  nativeFill.taker = event.params.taker;
+  // We need to take taker from transaction, because taker from params is filled with exchange address in case of market buy/sell
+  //nativeFill.taker = event.params.taker;
+  nativeFill.taker = event.transaction.from;
   nativeFill.makerToken = event.params.makerToken;
   nativeFill.takerToken = event.params.takerToken;
   nativeFill.makerAmount = event.params.makerTokenFilledAmount;
