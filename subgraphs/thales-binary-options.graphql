@@ -11,6 +11,8 @@ type Market @entity {
   longAddress: Bytes!
   shortAddress: Bytes!
   result: Int
+  customMarket: Boolean!
+  customOracle: Bytes!
 }
 
 enum OptionTransactionType {

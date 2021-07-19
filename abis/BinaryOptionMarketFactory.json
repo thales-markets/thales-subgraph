@@ -17,6 +17,45 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "_binaryOptionMarketManager",
+        "type": "address"
+      }
+    ],
+    "name": "BinaryOptionMarketManagerChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_binaryOptionMarketMastercopy",
+        "type": "address"
+      }
+    ],
+    "name": "BinaryOptionMarketMastercopyChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_binaryOptionMastercopy",
+        "type": "address"
+      }
+    ],
+    "name": "BinaryOptionMastercopyChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "oldOwner",
         "type": "address"
       },

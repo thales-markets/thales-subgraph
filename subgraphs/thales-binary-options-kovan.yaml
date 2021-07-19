@@ -8,9 +8,9 @@ dataSources:
     name: BinaryOptionMarketManager
     network: kovan
     source:
-      address: '0xd5928acfAd2b5D7b119691ce9524496fbc765c17'
+      address: '0x30C1d1BE9E33696F8dd9FDf3430c36FCd73436cB'
       abi: BinaryOptionMarketManager
-      startBlock: 25096582
+      startBlock: 26210606
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -24,7 +24,7 @@ dataSources:
         - name: BinaryOptionMarket
           file: '../abis/BinaryOptionMarket.json'
       eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256)
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired

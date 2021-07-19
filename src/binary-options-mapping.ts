@@ -24,8 +24,10 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.maturityDate = event.params.maturityDate;
   entity.expiryDate = event.params.expiryDate;
   entity.isOpen = true;
-  entity.longAddress = options.value0;
-  entity.shortAddress = options.value1;
+  entity.longAddress = event.params.long;
+  entity.shortAddress = event.params.short;
+  entity.customMarket = event.params.customMarket;
+  entity.customOracle = event.params.customOracle;
   entity.poolSize = binaryOptionContract.deposited();
   entity.save();
 }
