@@ -8,9 +8,9 @@ dataSources:
     name: BinaryOptionMarketManager
     network: mainnet
     source:
-      address: '0xC3449336909bf8663903c784047f5Cbe82dA09F1'
+      address: '0x4D49a1ed7B7F80aC70a6bA47F9cDDFF64FC8fa21'
       abi: BinaryOptionMarketManager
-      startBlock: 12651597
+      startBlock: 12888424
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -24,7 +24,7 @@ dataSources:
         - name: BinaryOptionMarket
           file: '../abis/BinaryOptionMarket.json'
       eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address)
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired

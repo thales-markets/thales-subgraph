@@ -8,7 +8,7 @@ dataSources:
     name: BinaryOptionMarketManager
     network: ropsten
     source:
-      address: '0x3e4E650f61C7A747A4baDCfF5C3b3e2BaF37AEc3'
+      address: '0x4E48FA3638939D2B8e0acE9ceed724c606FEf608'
       abi: BinaryOptionMarketManager
       startBlock: 10673213
     mapping:
