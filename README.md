@@ -1,6 +1,6 @@
 # Thales Subgraph
 
-[![Discord](https://img.shields.io/discord/816415414404907089.svg?color=768AD4&label=discord&logo=https%3A%2F%2Fdiscordapp.com%2Fassets%2F8c9701b98ad4372b58f13fd9f65f966e.svg)](https://discordapp.com/channels/413890591840272394/)
+[![Discord](https://img.shields.io/discord/816415414404907089.svg?color=768AD4&label=discord&logo=https%3A%2F%2Fdiscordapp.com%2Fassets%2F8c9701b98ad4372b58f13fd9f65f966e.svg)](https://discord.com/invite/cFGv5zyVEj)
 [![Twitter Follow](https://img.shields.io/twitter/follow/thalesmarket.svg?label=thalesmarket&style=social)](https://twitter.com/thalesmarket)
 
 The Graph exposes a GraphQL endpoint to query the events and entities within the Thales system.  
