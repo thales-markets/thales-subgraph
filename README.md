@@ -23,11 +23,11 @@ For any of the supported networks: `options` (mainnet), `options-ropsten` (ropst
 2. [Optional] run the `npm run build:[subgraph]` task for the subgraph
 3. Deploy via `npm run deploy:[subgraph]`. Note: requires env variable of `$THEGRAPH_SNX_ACCESS_TOKEN` set in bash to work.
 
-## To query these subgraphs
+## To query this subgraph
 
 Please use our node & browser utility: [thales-data](https://github.com/thales-markets/thales-data).
 
-## Or to query the subgraphs without any JS library
+## Or to query the subgraph without any JS library
 
 In it's simplest version (on a modern browser assuming `async await` support and `fetch`):
 
