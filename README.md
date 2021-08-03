@@ -11,7 +11,7 @@ Thales has one subgraph generated from this repository. It is used for getting b
 
 Following networks are supported:
 
-- **Mainent**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
+- **Mainnet**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
 - **Ropsten**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-ropsten
 - **Kovan**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-kovan
 
