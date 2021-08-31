@@ -9,6 +9,7 @@ Thales has one subgraph generated from this repository. It is used for getting b
 - Markets
 - Market transactions
 - Market trades
+- Token transactions
 
 ## Supported networks
 

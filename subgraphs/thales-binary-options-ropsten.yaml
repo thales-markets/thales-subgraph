@@ -48,6 +48,112 @@ dataSources:
       eventHandlers:
         - event: LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)
           handler: handleLimitOrderFilledEvent
+  - kind: ethereum/contract
+    name: Airdrop
+    network: ropsten
+    source:
+      address: '0x012122615a48d1a0c5B15E147BAA54FfE89B9FC8'
+      abi: Airdrop
+      startBlock: 10912236
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: Airdrop
+          file: ../abis/token/Airdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleRetroAirdropClaimEvent
+  - kind: ethereum/contract
+    name: VestingEscrow
+    network: ropsten
+    source:
+      address: '0x26d5A65c9354b1B4305C995A468670A141aa651c'
+      abi: VestingEscrow
+      startBlock: 10828973
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: VestingEscrow
+          file: ../abis/token/VestingEscrow.json
+      eventHandlers:
+        - event: Claim(indexed address,uint256)
+          handler: handleRetroUnlockedClaimEvent
+  - kind: ethereum/contract
+    name: OngoingAirdrop
+    network: ropsten
+    source:
+      address: '0xFe323C6A4ec6e12BF55552FD939768E4CBA7db60'
+      abi: OngoingAirdrop
+      startBlock: 10906587
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: OngoingAirdrop
+          file: ../abis/token/OngoingAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleStakingRewardsClaimEvent
+  - kind: ethereum/contract
+    name: StakingThales
+    network: ropsten
+    source:
+      address: '0x2313e80c960e9Df1d3C956a6E7c4dB39c717E858'
+      abi: StakingThales
+      startBlock: 10932613
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/token/StakingThales.json
+      eventHandlers:
+        - event: Staked(address,uint256)
+          handler: handleStakedEvent
+        - event: UnstakeCooldown(address,uint256,uint256)
+          handler: handleStartUnstakeEvent
+        - event: Unstaked(address,uint256)
+          handler: handleUnstakedEvent
+  - kind: ethereum/contract
+    name: EscrowThales
+    network: ropsten
+    source:
+      address: '0x61C7f4643DA0506ea9aA10f70Eec0d6B63488820'
+      abi: EscrowThales
+      startBlock: 10906589
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: EscrowThales
+          file: ../abis/token/EscrowThales.json
+      eventHandlers:
+        - event: AddedToEscrow(address,uint256)
+          handler: handleAddedToEscrowEvent
+        - event: Vested(address,uint256)
+          handler: handleVestedEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract

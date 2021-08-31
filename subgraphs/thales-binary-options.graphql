@@ -45,3 +45,24 @@ type Trade @entity {
   makerAmount: BigInt!
   takerAmount: BigInt!
 }
+
+enum TokenTransactionType {
+  claimRetroAirdrop
+  claimRetroUnlocked
+  claimStakingRewards
+  stake
+  startUnstake
+  unstake
+  addToEscrow
+  vest
+}
+
+type TokenTransaction @entity {
+  # tx hash - log index
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt!
+  type: TokenTransactionType!
+}
