@@ -72,9 +72,9 @@ dataSources:
     name: VestingEscrow
     network: ropsten
     source:
-      address: '0x26d5A65c9354b1B4305C995A468670A141aa651c'
+      address: '0x13ecC96c51E08b2D06D8E97d5449D78B3E8D9A25'
       abi: VestingEscrow
-      startBlock: 10828973
+      startBlock: 10984960
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
