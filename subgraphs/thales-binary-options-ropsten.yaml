@@ -52,9 +52,9 @@ dataSources:
     name: Airdrop
     network: ropsten
     source:
-      address: '0x012122615a48d1a0c5B15E147BAA54FfE89B9FC8'
+      address: '0x2F7bceFfBe76020908563F320F51a98B02f3382F'
       abi: Airdrop
-      startBlock: 10912236
+      startBlock: 10985373
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -92,9 +92,9 @@ dataSources:
     name: OngoingAirdrop
     network: ropsten
     source:
-      address: '0xFe323C6A4ec6e12BF55552FD939768E4CBA7db60'
+      address: '0x92FE463eC998b9e66d282B6470Cb24365E45D0b9'
       abi: OngoingAirdrop
-      startBlock: 10906587
+      startBlock: 10989790
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -112,9 +112,9 @@ dataSources:
     name: StakingThales
     network: ropsten
     source:
-      address: '0x2313e80c960e9Df1d3C956a6E7c4dB39c717E858'
+      address: '0x0924a1b25270B560f4AA6493eF31b8664C031c65'
       abi: StakingThales
-      startBlock: 10932613
+      startBlock: 10989828
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -136,9 +136,9 @@ dataSources:
     name: EscrowThales
     network: ropsten
     source:
-      address: '0x61C7f4643DA0506ea9aA10f70Eec0d6B63488820'
+      address: '0xd873c1534e8709601Be4F9C2b63B0074B81c2E0c'
       abi: EscrowThales
-      startBlock: 10906589
+      startBlock: 10989791
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
