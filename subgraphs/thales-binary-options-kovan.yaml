@@ -52,9 +52,9 @@ dataSources:
     name: Airdrop
     network: kovan
     source:
-      address: '0x6A07E7B1479658b74261e8359f58c083F3fA667b'
+      address: '0xD9ceC0F5b2B43C74DFA4A87117968808b95d9018'
       abi: Airdrop
-      startBlock: 27120371
+      startBlock: 27136267
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -92,9 +92,9 @@ dataSources:
     name: OngoingAirdrop
     network: kovan
     source:
-      address: '0xE3F45271A87F409569890412C99f560002839d0e'
+      address: '0xd9112fC9396d38D024D1369e72f039d542000f80'
       abi: OngoingAirdrop
-      startBlock: 27122964
+      startBlock: 27135589
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -112,9 +112,9 @@ dataSources:
     name: StakingThales
     network: kovan
     source:
-      address: '0x9C7CC98D31713e43b46cfa10B3b5C3eF66Bc043D'
+      address: '0x8d178B3Dd7B29dfB38f55FdFE6518cabe6B31059'
       abi: StakingThales
-      startBlock: 27122993
+      startBlock: 27135615
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -136,9 +136,9 @@ dataSources:
     name: EscrowThales
     network: kovan
     source:
-      address: '0x1Ef73df0C90FA3208e11a440dBf7bbA216CA662F'
+      address: '0xcE9c1aAb41b18b24355138776186484B260B9cf0'
       abi: EscrowThales
-      startBlock: 27122966
+      startBlock: 27135591
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
