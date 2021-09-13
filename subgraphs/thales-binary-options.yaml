@@ -48,6 +48,46 @@ dataSources:
       eventHandlers:
         - event: LimitOrderFilled(bytes32,address,address,address,address,address,uint128,uint128,uint128,uint256,bytes32)
           handler: handleLimitOrderFilledEvent
+  - kind: ethereum/contract
+    name: Airdrop
+    network: mainnet
+    source:
+      address: '0x0f33af99f3C124189B8dA7C7BE6Dc08C77a9ddc7'
+      abi: Airdrop
+      startBlock: 13204279
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: Airdrop
+          file: ../abis/token/Airdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleRetroAirdropClaimEvent
+  - kind: ethereum/contract
+    name: VestingEscrow
+    network: mainnet
+    source:
+      address: '0xbaE14FAf280FB293e6f3D6c0b5E80eD5D477b161'
+      abi: VestingEscrow
+      startBlock: 13210181
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: VestingEscrow
+          file: ../abis/token/VestingEscrow.json
+      eventHandlers:
+        - event: Claim(indexed address,uint256)
+          handler: handleRetroUnlockedClaimEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
