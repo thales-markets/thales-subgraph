@@ -173,6 +173,16 @@
         "internalType": "uint256[2]",
         "name": "fees",
         "type": "uint256[2]"
+      },
+      {
+        "internalType": "bool",
+        "name": "customMarket",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "customOracle",
+        "type": "address"
       }
     ],
     "name": "createMarket",
