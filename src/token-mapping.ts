@@ -1,13 +1,13 @@
 import { Claim as AirdropClaimEvent } from '../generated/Airdrop/Airdrop';
 import { Claim as RetroRewardsClaimEvent } from '../generated/VestingEscrow/VestingEscrow';
-import { Claim as StakingRewardsClaimEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
+import { Claim as StakingRewardsClaimEvent, NewRoot as NewRootEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import {
   Staked as StakedEvent,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
 } from '../generated/StakingThales/StakingThales';
 import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
-import { TokenTransaction } from '../generated/schema';
+import { TokenTransaction, OngoingAirdropNewRoot } from '../generated/schema';
 
 export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -86,5 +86,16 @@ export function handleVestedEvent(event: VestedEvent): void {
   tokenTransaction.account = event.params.account;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'vest';
+  tokenTransaction.save();
+}
+
+export function handleNewRootEvent(event: NewRootEvent): void {
+  let tokenTransaction = new OngoingAirdropNewRoot(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString(),
+  );
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.root = event.params.root;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.period = event.params.period;
   tokenTransaction.save();
 }

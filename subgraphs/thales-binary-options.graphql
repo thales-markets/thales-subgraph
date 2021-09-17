@@ -66,3 +66,12 @@ type TokenTransaction @entity {
   amount: BigInt!
   type: TokenTransactionType!
 }
+
+type OngoingAirdropNewRoot @entity {
+  # tx hash - log index
+  id: ID!
+  transactionHash: Bytes!
+  root: Bytes!
+  timestamp: BigInt!
+  period: BigInt!
+}

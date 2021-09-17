@@ -108,6 +108,8 @@ dataSources:
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
+        - event: NewRoot(bytes32,uint256,uint256)
+          handler: handleNewRootEvent
   - kind: ethereum/contract
     name: StakingThales
     network: kovan
