@@ -52,6 +52,7 @@ enum TokenTransactionType {
   claimStakingRewards
   stake
   startUnstake
+  cancelUnstake
   unstake
   addToEscrow
   vest
@@ -63,7 +64,7 @@ type TokenTransaction @entity {
   transactionHash: Bytes!
   timestamp: BigInt!
   account: Bytes!
-  amount: BigInt!
+  amount: BigInt
   type: TokenTransactionType!
 }
 

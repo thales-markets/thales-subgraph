@@ -5,6 +5,7 @@ import {
   Staked as StakedEvent,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
+  CancelUnstake as CancelUnstakeEvent,
 } from '../generated/StakingThales/StakingThales';
 import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
 import { TokenTransaction, OngoingAirdropNewRoot } from '../generated/schema';
@@ -97,5 +98,14 @@ export function handleNewRootEvent(event: NewRootEvent): void {
   tokenTransaction.root = event.params.root;
   tokenTransaction.timestamp = event.block.timestamp;
   tokenTransaction.period = event.params.period;
+  tokenTransaction.save();
+}
+
+export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.type = 'cancelUnstake';
   tokenTransaction.save();
 }
