@@ -88,6 +88,76 @@ dataSources:
       eventHandlers:
         - event: Claim(indexed address,uint256)
           handler: handleRetroUnlockedClaimEvent
+  - kind: ethereum/contract
+    name: OngoingAirdrop
+    network: mainnet
+    source:
+      address: '0xDAaB884D083FE5c38b4679ae194c52f176Bd8783'
+      abi: OngoingAirdrop
+      startBlock: 13319519
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: OngoingAirdrop
+          file: ../abis/token/OngoingAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleStakingRewardsClaimEvent
+        - event: NewRoot(bytes32,uint256,uint256)
+          handler: handleNewRootEvent
+  - kind: ethereum/contract
+    name: StakingThales
+    network: mainnet
+    source:
+      address: '0x883D651429B0829BC045A94F288f3b514021B8C1'
+      abi: StakingThales
+      startBlock: 13319570
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/token/StakingThales.json
+      eventHandlers:
+        - event: Staked(address,uint256)
+          handler: handleStakedEvent
+        - event: UnstakeCooldown(address,uint256,uint256)
+          handler: handleStartUnstakeEvent
+        - event: Unstaked(address,uint256)
+          handler: handleUnstakedEvent
+        - event: CancelUnstake(address)
+          handler: handleCancelUnstakeEvent
+  - kind: ethereum/contract
+    name: EscrowThales
+    network: mainnet
+    source:
+      address: '0x8d3703d4dED77473E632dEf20002DAdC86bf4AAD'
+      abi: EscrowThales
+      startBlock: 13319529
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: EscrowThales
+          file: ../abis/token/EscrowThales.json
+      eventHandlers:
+        - event: AddedToEscrow(address,uint256)
+          handler: handleAddedToEscrowEvent
+        - event: Vested(address,uint256)
+          handler: handleVestedEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
