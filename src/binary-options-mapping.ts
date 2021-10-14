@@ -8,13 +8,12 @@ import {
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { Market, OptionTransaction } from '../generated/schema';
+import { Market, OptionTransaction, BinaryOption } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
   let binaryOptionContract = BinaryOptionMarket.bind(event.params.market);
-  let options = binaryOptionContract.options();
 
   let entity = new Market(event.params.market.toHex());
   entity.creator = event.params.creator;
@@ -30,6 +29,17 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.customOracle = event.params.customOracle;
   entity.poolSize = binaryOptionContract.deposited();
   entity.save();
+
+  let longEntity = new BinaryOption(event.params.long.toHex());
+  longEntity.market = event.params.market;
+  longEntity.timestamp = event.block.timestamp;
+  longEntity.side = 'long';
+  longEntity.save();
+  let shortEntity = new BinaryOption(event.params.short.toHex());
+  shortEntity.market = event.params.market;
+  shortEntity.timestamp = event.block.timestamp;
+  shortEntity.side = 'short';
+  shortEntity.save();
 }
 
 export function handleMarketExpired(event: MarketExpiredEvent): void {

@@ -1,5 +1,6 @@
+/* eslint-disable no-empty */
 import { LimitOrderFilled } from '../generated/ExchangeProxy/ExchangeProxy';
-import { Trade } from '../generated/schema';
+import { Trade, BinaryOption } from '../generated/schema';
 
 export function handleLimitOrderFilledEvent(event: LimitOrderFilled): void {
   let nativeFill = new Trade(
@@ -16,5 +17,20 @@ export function handleLimitOrderFilledEvent(event: LimitOrderFilled): void {
   nativeFill.takerToken = event.params.takerToken;
   nativeFill.makerAmount = event.params.makerTokenFilledAmount;
   nativeFill.takerAmount = event.params.takerTokenFilledAmount;
-  nativeFill.save();
+
+  let makerEntity = BinaryOption.load(event.params.makerToken.toHex());
+  if (makerEntity !== null) {
+    nativeFill.market = makerEntity.market;
+    nativeFill.optionSide = makerEntity.side;
+    nativeFill.orderSide = 'buy';
+    nativeFill.save();
+  } else {
+    let takerEntity = BinaryOption.load(event.params.takerToken.toHex());
+    if (takerEntity !== null) {
+      nativeFill.market = takerEntity.market;
+      nativeFill.optionSide = takerEntity.side;
+      nativeFill.orderSide = 'sell';
+      nativeFill.save();
+    }
+  }
 }

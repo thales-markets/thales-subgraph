@@ -32,6 +32,16 @@ type OptionTransaction @entity {
   fee: BigInt
 }
 
+enum OptionSide {
+  long
+  short
+}
+
+enum OrderSide {
+  buy
+  sell
+}
+
 type Trade @entity {
   # tx hash - order hash - log index
   id: ID!
@@ -44,6 +54,9 @@ type Trade @entity {
   takerToken: Bytes!
   makerAmount: BigInt!
   takerAmount: BigInt!
+  market: Bytes
+  optionSide: OptionSide
+  orderSide: OrderSide
 }
 
 enum TokenTransactionType {
@@ -75,4 +88,11 @@ type OngoingAirdropNewRoot @entity {
   root: Bytes!
   timestamp: BigInt!
   period: BigInt!
+}
+
+type BinaryOption @entity {
+  id: ID!
+  timestamp: BigInt!
+  market: Bytes!
+  side: OptionSide
 }

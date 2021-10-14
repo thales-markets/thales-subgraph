@@ -183,3 +183,18 @@ templates:
           handler: handleMarketResolved
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
+  - name: BinaryOption
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: BinaryOption
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/exchange-proxy-mapping.ts
+      entities:
+        - BinaryOption
+      abis:
+        - name: BinaryOption
+          file: ../abis/BinaryOption.json
