@@ -29,6 +29,30 @@ dataSources:
         - event: MarketExpired(address)
           handler: handleMarketExpired
   - kind: ethereum/contract
+    name: BinaryOptionMarketManager_new
+    network: kovan
+    source:
+      address: '0x7ef54B7aF71D9F491D9735d8Cb093fFc4A51d01d'
+      abi: BinaryOptionMarketManager
+      startBlock: 28005301
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager_new.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
     name: ExchangeProxy
     network: kovan
     source:
@@ -181,3 +205,18 @@ templates:
           handler: handleMarketResolved
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
+  - name: BinaryOption
+    kind: ethereum/contract
+    network: kovan
+    source:
+      abi: BinaryOption
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/exchange-proxy-mapping.ts
+      entities:
+        - BinaryOption
+      abis:
+        - name: BinaryOption
+          file: ../abis/BinaryOption.json
