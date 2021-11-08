@@ -96,3 +96,13 @@ type BinaryOption @entity {
   market: Bytes!
   side: OptionSide
 }
+
+type Staker @entity {
+  id: ID!
+  account: Bytes!
+  timestamp: BigInt!
+  stakedAmount: BigInt!
+  escrowedAmount: BigInt!
+  totalStakedAmount: BigInt!
+  unstakingAmount: BigInt!
+}
