@@ -96,3 +96,25 @@ type BinaryOption @entity {
   market: Bytes!
   side: OptionSide
 }
+
+type ThalesRoyaleGame @entity {
+  id: ID!
+  timestamp: BigInt!
+  address: Bytes!
+}
+
+type ThalesRoyalePlayer @entity {
+  id: ID!
+  timestamp: BigInt!
+  game: Bytes!
+  isAlive: Boolean!
+}
+
+type ThalesRoyalePosition @entity {
+  id: ID!
+  timestamp: BigInt!
+  game: Bytes!
+  player: Bytes!
+  round: BigInt!
+  position: BigInt!
+}
