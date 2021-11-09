@@ -27,6 +27,34 @@ dataSources:
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: ThalesRoyale
+    network: optimism-kovan
+    source:
+      address: '0xd76F18E09501F7838d2F1C28133643a7b56Ab8D7'
+      abi: ThalesRoyale
+      startBlock: 34546
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-mapping.ts
+      entities:
+        - ThalesToyaleGame
+        - ThalesRoyalePlayer
+        - ThalesRoyalePostition
+      abis:
+        - name: ThalesRoyale
+          file: ../abis/thales-royale/ThalesRoyale.json
+      eventHandlers:
+        - event: SignedUp(address)
+          handler: handleSignedUp
+        - event: TookAPosition(address,uint256,uint256)
+          handler: handleTookAPosition
+        - event: RoyaleStarted()
+          handler: handleRoyaleStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
