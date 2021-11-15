@@ -52,16 +52,20 @@ export function handleRoyaleStarted(event: RoyaleStartedEvent): void {
 
 export function handleRoundClosed(event: RoundClosedEvent): void {
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let allPlayers = thalesRoyaleContract.getPlayers();
+  let alivePlayers = thalesRoyaleContract.getAlivePlayers();
 
-  for (let index = 0; index < allPlayers.length; index++) {
-    const player = allPlayers[index];
+  for (let index = 0; index < alivePlayers.length; index++) {
+    let player = alivePlayers[index];
     let thalesRoyalePlayer = ThalesRoyalePlayer.load(player.toHex());
     let thalesRoyalePosition = ThalesRoyalePosition.load(
       event.address.toHex() + '-' + player.toHex() + '-' + event.params.round.toString(),
     );
-    if (thalesRoyalePosition === null || thalesRoyalePosition.position.notEqual(event.params.result)) {
+    if (
+      (thalesRoyalePosition === null || thalesRoyalePosition.position.notEqual(event.params.result)) &&
+      thalesRoyalePlayer.isAlive
+    ) {
       thalesRoyalePlayer.isAlive = false;
+      thalesRoyalePlayer.deathRound = event.params.round;
       thalesRoyalePlayer.timestamp = event.block.timestamp;
       thalesRoyalePlayer.save();
     }

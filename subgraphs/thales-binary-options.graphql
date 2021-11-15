@@ -108,6 +108,7 @@ type ThalesRoyalePlayer @entity {
   timestamp: BigInt!
   game: Bytes!
   isAlive: Boolean!
+  deathRound: BigInt
 }
 
 type ThalesRoyalePosition @entity {
