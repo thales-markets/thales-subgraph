@@ -54,7 +54,7 @@ export function handleRoyaleStarted(event: RoyaleStartedEvent): void {
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
   let alivePlayers = thalesRoyaleContract.getAlivePlayers();
 
-  let thalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-1');
+  let thalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + BigInt.fromI32(1).toHex());
   thalesRoyaleRound.game = event.address;
   thalesRoyaleRound.round = BigInt.fromI32(1);
   thalesRoyaleRound.timestamp = event.block.timestamp;
@@ -83,9 +83,11 @@ export function handleRoundClosed(event: RoundClosedEvent): void {
       thalesRoyalePlayer.save();
 
       let thalesRoyaleRound = ThalesRoyaleRound.load(event.address.toHex() + '-' + event.params.round.toHex());
-      thalesRoyaleRound.eliminatedPerRound = thalesRoyaleRound.eliminatedPerRound.plus(BigInt.fromI32(1));
-      thalesRoyaleRound.timestamp = event.block.timestamp;
-      thalesRoyaleRound.save();
+      if (thalesRoyaleRound !== null) {
+        thalesRoyaleRound.eliminatedPerRound = thalesRoyaleRound.eliminatedPerRound.plus(BigInt.fromI32(1));
+        thalesRoyaleRound.timestamp = event.block.timestamp;
+        thalesRoyaleRound.save();
+      }
     }
   }
 
