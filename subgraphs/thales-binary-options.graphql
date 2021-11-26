@@ -114,6 +114,7 @@ type ThalesRoyaleRound @entity {
 
 type ThalesRoyalePlayer @entity {
   id: ID!
+  number: BigInt!
   address: Bytes!
   timestamp: BigInt!
   game: Bytes!

@@ -17,11 +17,15 @@ export function handleSignedUp(event: SignedUpEvent): void {
     thalesRoyaleGame.save();
   }
 
+  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
+  let players = thalesRoyaleContract.getPlayers();
+
   let thalesRoyalePlayer = new ThalesRoyalePlayer(event.address.toHex() + '-' + event.params.user.toHex());
   thalesRoyalePlayer.address = event.params.user;
   thalesRoyalePlayer.timestamp = event.block.timestamp;
   thalesRoyalePlayer.game = event.address;
   thalesRoyalePlayer.isAlive = true;
+  thalesRoyalePlayer.number = BigInt.fromI32(players.length);
   thalesRoyalePlayer.save();
 }
 

@@ -82,6 +82,15 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "canStartRoyale",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [],
     "name": "closeRound",
@@ -140,6 +149,18 @@
     "inputs": [],
     "name": "getPlayers",
     "outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      { "internalType": "uint256", "name": "_round", "type": "uint256" },
+      { "internalType": "uint256", "name": "_position", "type": "uint256" }
+    ],
+    "name": "getPositionsPerRound",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
