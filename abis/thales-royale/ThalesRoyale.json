@@ -4,7 +4,7 @@
       { "internalType": "address", "name": "_owner", "type": "address" },
       { "internalType": "bytes32", "name": "_oracleKey", "type": "bytes32" },
       { "internalType": "contract IPriceFeed", "name": "_priceFeed", "type": "address" },
-      { "internalType": "uint256", "name": "reward", "type": "uint256" },
+      { "internalType": "uint256", "name": "_reward", "type": "uint256" },
       { "internalType": "address", "name": "_rewardToken", "type": "address" },
       { "internalType": "uint256", "name": "_rounds", "type": "uint256" },
       { "internalType": "uint256", "name": "_signUpPeriod", "type": "uint256" },
