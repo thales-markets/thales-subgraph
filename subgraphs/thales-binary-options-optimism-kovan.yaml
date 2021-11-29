@@ -8,7 +8,7 @@ dataSources:
     name: BinaryOptionMarketManager
     network: optimism-kovan
     source:
-      address: '0x9EE65877dE8658e95f5c893581a76CCd5bc6d35B'
+      address: '0x496307BD492C5538A2AcC67c328995c9B0194504'
       abi: BinaryOptionMarketManager
     mapping:
       kind: ethereum/events
@@ -31,7 +31,7 @@ dataSources:
     name: ThalesRoyale
     network: optimism-kovan
     source:
-      address: '0x6F1A7d0Dc472Aa24f5636b348c6116787FcD249A'
+      address: '0x9EE65877dE8658e95f5c893581a76CCd5bc6d35B'
       abi: ThalesRoyale
       startBlock: 104023
     mapping:
