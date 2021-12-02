@@ -56,13 +56,13 @@ export function handleRoyaleStarted(event: RoyaleStartedEvent): void {
   }
 
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let alivePlayers = thalesRoyaleContract.getAlivePlayers();
+  let players = thalesRoyaleContract.getPlayers();
 
   let thalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + BigInt.fromI32(1).toHex());
   thalesRoyaleRound.game = event.address;
   thalesRoyaleRound.round = BigInt.fromI32(1);
   thalesRoyaleRound.timestamp = event.block.timestamp;
-  thalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(alivePlayers.length);
+  thalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(players.length);
   thalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
   thalesRoyaleRound.save();
 }
@@ -95,14 +95,18 @@ export function handleRoundClosed(event: RoundClosedEvent): void {
     }
   }
 
-  let alivePlayers = thalesRoyaleContract.getAlivePlayers();
+  // let alivePlayers = thalesRoyaleContract.getAlivePlayers();
   let nextRound = event.params.round.plus(BigInt.fromI32(1));
+  let thalesRoyaleLastRound = ThalesRoyaleRound.load(event.address.toHex() + '-' + event.params.round.toHex());
+  let nextRoundTotalPlayers = thalesRoyaleLastRound.totalPlayersPerRound.minus(
+    thalesRoyaleLastRound.eliminatedPerRound,
+  );
 
   let nextThalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + nextRound.toHex());
   nextThalesRoyaleRound.game = event.address;
   nextThalesRoyaleRound.round = nextRound;
   nextThalesRoyaleRound.timestamp = event.block.timestamp;
-  nextThalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(alivePlayers.length);
+  nextThalesRoyaleRound.totalPlayersPerRound = nextRoundTotalPlayers;
   nextThalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
   nextThalesRoyaleRound.save();
 }
