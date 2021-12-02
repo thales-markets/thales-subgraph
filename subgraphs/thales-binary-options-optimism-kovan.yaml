@@ -31,9 +31,9 @@ dataSources:
     name: ThalesRoyale
     network: optimism-kovan
     source:
-      address: '0xd76F18E09501F7838d2F1C28133643a7b56Ab8D7'
+      address: '0x9EE65877dE8658e95f5c893581a76CCd5bc6d35B'
       abi: ThalesRoyale
-      startBlock: 34546
+      startBlock: 104023
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

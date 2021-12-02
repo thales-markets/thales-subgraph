@@ -5,7 +5,8 @@ import {
   RoundClosed as RoundClosedEvent,
   ThalesRoyale,
 } from '../generated/ThalesRoyale/ThalesRoyale';
-import { ThalesRoyaleGame, ThalesRoyalePlayer, ThalesRoyalePosition } from '../generated/schema';
+import { ThalesRoyaleGame, ThalesRoyalePlayer, ThalesRoyalePosition, ThalesRoyaleRound } from '../generated/schema';
+import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleSignedUp(event: SignedUpEvent): void {
   let thalesRoyaleGame = ThalesRoyaleGame.load(event.address.toHex());
@@ -16,10 +17,15 @@ export function handleSignedUp(event: SignedUpEvent): void {
     thalesRoyaleGame.save();
   }
 
-  let thalesRoyalePlayer = new ThalesRoyalePlayer(event.params.user.toHex());
+  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
+  let players = thalesRoyaleContract.getPlayers();
+
+  let thalesRoyalePlayer = new ThalesRoyalePlayer(event.address.toHex() + '-' + event.params.user.toHex());
+  thalesRoyalePlayer.address = event.params.user;
   thalesRoyalePlayer.timestamp = event.block.timestamp;
   thalesRoyalePlayer.game = event.address;
   thalesRoyalePlayer.isAlive = true;
+  thalesRoyalePlayer.number = BigInt.fromI32(players.length);
   thalesRoyalePlayer.save();
 }
 
@@ -48,22 +54,55 @@ export function handleRoyaleStarted(event: RoyaleStartedEvent): void {
     thalesRoyaleGame.address = event.address;
     thalesRoyaleGame.save();
   }
+
+  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
+  let alivePlayers = thalesRoyaleContract.getAlivePlayers();
+
+  let thalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + BigInt.fromI32(1).toHex());
+  thalesRoyaleRound.game = event.address;
+  thalesRoyaleRound.round = BigInt.fromI32(1);
+  thalesRoyaleRound.timestamp = event.block.timestamp;
+  thalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(alivePlayers.length);
+  thalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
+  thalesRoyaleRound.save();
 }
 
 export function handleRoundClosed(event: RoundClosedEvent): void {
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let allPlayers = thalesRoyaleContract.getPlayers();
+  let players = thalesRoyaleContract.getPlayers();
 
-  for (let index = 0; index < allPlayers.length; index++) {
-    const player = allPlayers[index];
-    let thalesRoyalePlayer = ThalesRoyalePlayer.load(player.toHex());
+  for (let index = 0; index < players.length; index++) {
+    let player = players[index];
+    let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.address.toHex() + '-' + player.toHex());
     let thalesRoyalePosition = ThalesRoyalePosition.load(
       event.address.toHex() + '-' + player.toHex() + '-' + event.params.round.toString(),
     );
-    if (thalesRoyalePosition === null || thalesRoyalePosition.position.notEqual(event.params.result)) {
+    if (
+      (thalesRoyalePosition === null || thalesRoyalePosition.position.notEqual(event.params.result)) &&
+      thalesRoyalePlayer.isAlive
+    ) {
       thalesRoyalePlayer.isAlive = false;
+      thalesRoyalePlayer.deathRound = event.params.round;
       thalesRoyalePlayer.timestamp = event.block.timestamp;
       thalesRoyalePlayer.save();
+
+      let thalesRoyaleRound = ThalesRoyaleRound.load(event.address.toHex() + '-' + event.params.round.toHex());
+      if (thalesRoyaleRound !== null) {
+        thalesRoyaleRound.eliminatedPerRound = thalesRoyaleRound.eliminatedPerRound.plus(BigInt.fromI32(1));
+        thalesRoyaleRound.timestamp = event.block.timestamp;
+        thalesRoyaleRound.save();
+      }
     }
   }
+
+  let alivePlayers = thalesRoyaleContract.getAlivePlayers();
+  let nextRound = event.params.round.plus(BigInt.fromI32(1));
+
+  let nextThalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + nextRound.toHex());
+  nextThalesRoyaleRound.game = event.address;
+  nextThalesRoyaleRound.round = nextRound;
+  nextThalesRoyaleRound.timestamp = event.block.timestamp;
+  nextThalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(alivePlayers.length);
+  nextThalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
+  nextThalesRoyaleRound.save();
 }

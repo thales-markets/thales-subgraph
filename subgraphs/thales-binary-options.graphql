@@ -103,11 +103,23 @@ type ThalesRoyaleGame @entity {
   address: Bytes!
 }
 
-type ThalesRoyalePlayer @entity {
+type ThalesRoyaleRound @entity {
   id: ID!
   timestamp: BigInt!
   game: Bytes!
+  round: BigInt!
+  totalPlayersPerRound: BigInt!
+  eliminatedPerRound: BigInt!
+}
+
+type ThalesRoyalePlayer @entity {
+  id: ID!
+  number: BigInt!
+  address: Bytes!
+  timestamp: BigInt!
+  game: Bytes!
   isAlive: Boolean!
+  deathRound: BigInt
 }
 
 type ThalesRoyalePosition @entity {
