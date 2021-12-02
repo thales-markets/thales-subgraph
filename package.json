@@ -20,6 +20,8 @@
     "codegen:options-rinkeby": "npm run codegen-rinkeby -- subgraphs/thales-binary-options-rinkeby.yaml",
     "codegen-optimism-kovan": "graph codegen",
     "codegen:options-optimism-kovan": "npm run codegen-optimism-kovan -- subgraphs/thales-binary-options-optimism-kovan.yaml",
+    "codegen-optimism": "graph codegen",
+    "codegen:options-optimism": "npm run codegen-optimism -- subgraphs/thales-binary-options-optimism.yaml",
     "build": "graph build",
     "build:options": "graph build subgraphs/thales-binary-options.yaml",
     "build:options-ropsten": "graph build subgraphs/thales-binary-options-ropsten.yaml",
@@ -35,6 +37,8 @@
     "deploy:options-rinkeby": "npm run deploy-rinkeby -- thales-markets/thales-rinkeby subgraphs/thales-binary-options-rinkeby.yaml",
     "deploy-optimism-kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     "deploy:options-optimism-kovan": "npm run deploy-optimism-kovan -- thales-markets/thales-kovan-optimism subgraphs/thales-binary-options-optimism-kovan.yaml",
+    "deploy-optimism": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-optimism": "npm run deploy-optimism -- thales-markets/thales-optimism subgraphs/thales-binary-options-optimism.yaml",
     "create-local": "graph create --node http://localhost:8020/ thales-markets/thales-options",
     "remove-local": "graph remove --node http://localhost:8020/ thales-markets/thales-options",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thales-markets/thales-options"

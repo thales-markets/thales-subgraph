@@ -1,0 +1,55 @@
+specVersion: 0.0.2
+description: Thales Binary Options API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ./thales-binary-options.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: BinaryOptionMarketManager
+    network: optimism
+    source:
+      address: '0x4dB7AfB6b777fB47101C86Bdeb56669ffA8cD656'
+      abi: BinaryOptionMarketManager
+      startBlock: 619456
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager_new.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+templates:
+  - name: BinaryOptionMarket
+    kind: ethereum/contract
+    network: optimism
+    source:
+      abi: BinaryOptionMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+        - OptionTransaction
+        - HistoricalOptionPrice
+      abis:
+        - name: BinaryOptionMarket
+          file: ../abis/BinaryOptionMarket.json
+      eventHandlers:
+        - event: Mint(uint8,indexed address,uint256)
+          handler: handleMint
+        - event: MarketResolved(uint8,uint256,uint256,uint256,uint256,uint256)
+          handler: handleMarketResolved
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
