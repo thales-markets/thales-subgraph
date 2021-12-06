@@ -1,332 +1,400 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_binaryOptionMarketManager",
-        "type": "address"
-      }
+      { "indexed": true, "internalType": "address", "name": "maker", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "newNonce", "type": "uint256" }
     ],
-    "name": "BinaryOptionMarketManagerChanged",
+    "name": "NonceIncreased",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_binaryOptionMarketMastercopy",
-        "type": "address"
-      }
+      { "indexed": true, "internalType": "address", "name": "maker", "type": "address" },
+      { "indexed": false, "internalType": "bytes32", "name": "orderHash", "type": "bytes32" },
+      { "indexed": false, "internalType": "uint256", "name": "remaining", "type": "uint256" }
     ],
-    "name": "BinaryOptionMarketMastercopyChanged",
+    "name": "OrderFilled",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_binaryOptionMastercopy",
-        "type": "address"
-      }
+      { "indexed": false, "internalType": "bytes32", "name": "orderHash", "type": "bytes32" },
+      { "indexed": false, "internalType": "uint256", "name": "makingAmount", "type": "uint256" }
     ],
-    "name": "BinaryOptionMastercopyChanged",
+    "name": "OrderFilledRFQ",
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oldOwner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnerChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnerNominated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_zeroExAddress",
-        "type": "address"
-      }
-    ],
-    "name": "ZeroExAddressChanged",
-    "type": "event"
-  },
-  {
-    "constant": false,
     "inputs": [],
-    "name": "acceptOwnership",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "binaryOptionMarketManager",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
+    "name": "DOMAIN_SEPARATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
     "inputs": [],
-    "name": "binaryOptionMarketMastercopy",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
+    "name": "LIMIT_ORDER_RFQ_TYPEHASH",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
     "inputs": [],
-    "name": "binaryOptionMastercopy",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
+    "name": "LIMIT_ORDER_TYPEHASH",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IERC20",
-        "name": "_sUSD",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IPriceFeed",
-        "name": "_priceFeed",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "oracleKey",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "strikePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[2]",
-        "name": "times",
-        "type": "uint256[2]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialMint",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "customMarket",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "customOracle",
-        "type": "address"
-      }
-    ],
-    "name": "createMarket",
-    "outputs": [
-      {
-        "internalType": "contract BinaryOptionMarket",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      }
-    ],
-    "name": "nominateNewOwner",
+    "inputs": [{ "internalType": "uint8", "name": "amount", "type": "uint8" }],
+    "name": "advanceNonce",
     "outputs": [],
-    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "nominatedOwner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+    "inputs": [
+      { "internalType": "address[]", "name": "targets", "type": "address[]" },
+      { "internalType": "bytes[]", "name": "data", "type": "bytes[]" }
     ],
-    "payable": false,
+    "name": "and",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+    "inputs": [
+      { "internalType": "address", "name": "target", "type": "address" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
-    "payable": false,
+    "name": "arbitraryStaticCall",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_binaryOptionMarketManager",
-        "type": "address"
+        "components": [
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "address", "name": "makerAsset", "type": "address" },
+          { "internalType": "address", "name": "takerAsset", "type": "address" },
+          { "internalType": "bytes", "name": "makerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "takerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "getMakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "getTakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "predicate", "type": "bytes" },
+          { "internalType": "bytes", "name": "permit", "type": "bytes" },
+          { "internalType": "bytes", "name": "interaction", "type": "bytes" }
+        ],
+        "internalType": "struct LimitOrderProtocol.Order",
+        "name": "order",
+        "type": "tuple"
       }
     ],
-    "name": "setBinaryOptionMarketManager",
+    "name": "cancelOrder",
     "outputs": [],
-    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_binaryOptionMarketMastercopy",
-        "type": "address"
-      }
-    ],
-    "name": "setBinaryOptionMarketMastercopy",
+    "inputs": [{ "internalType": "uint256", "name": "orderInfo", "type": "uint256" }],
+    "name": "cancelOrderRFQ",
     "outputs": [],
-    "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_binaryOptionMastercopy",
-        "type": "address"
+        "components": [
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "address", "name": "makerAsset", "type": "address" },
+          { "internalType": "address", "name": "takerAsset", "type": "address" },
+          { "internalType": "bytes", "name": "makerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "takerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "getMakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "getTakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "predicate", "type": "bytes" },
+          { "internalType": "bytes", "name": "permit", "type": "bytes" },
+          { "internalType": "bytes", "name": "interaction", "type": "bytes" }
+        ],
+        "internalType": "struct LimitOrderProtocol.Order",
+        "name": "order",
+        "type": "tuple"
       }
     ],
-    "name": "setBinaryOptionMastercopy",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "name": "checkPredicate",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_zeroExAddress",
-        "type": "address"
-      }
+      { "internalType": "contract AggregatorV3Interface", "name": "oracle1", "type": "address" },
+      { "internalType": "contract AggregatorV3Interface", "name": "oracle2", "type": "address" },
+      { "internalType": "uint256", "name": "spread", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
-    "name": "setZeroExAddress",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "name": "doublePrice",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "zeroExAddress",
+    "inputs": [
+      { "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "internalType": "address", "name": "target", "type": "address" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "eq",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "salt", "type": "uint256" },
+          { "internalType": "address", "name": "makerAsset", "type": "address" },
+          { "internalType": "address", "name": "takerAsset", "type": "address" },
+          { "internalType": "bytes", "name": "makerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "takerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "getMakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "getTakerAmount", "type": "bytes" },
+          { "internalType": "bytes", "name": "predicate", "type": "bytes" },
+          { "internalType": "bytes", "name": "permit", "type": "bytes" },
+          { "internalType": "bytes", "name": "interaction", "type": "bytes" }
+        ],
+        "internalType": "struct LimitOrderProtocol.Order",
+        "name": "order",
+        "type": "tuple"
+      },
+      { "internalType": "bytes", "name": "signature", "type": "bytes" },
+      { "internalType": "uint256", "name": "makingAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "takingAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "thresholdAmount", "type": "uint256" }
+    ],
+    "name": "fillOrder",
     "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
-    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "info", "type": "uint256" },
+          { "internalType": "address", "name": "makerAsset", "type": "address" },
+          { "internalType": "address", "name": "takerAsset", "type": "address" },
+          { "internalType": "bytes", "name": "makerAssetData", "type": "bytes" },
+          { "internalType": "bytes", "name": "takerAssetData", "type": "bytes" }
+        ],
+        "internalType": "struct LimitOrderProtocol.OrderRFQ",
+        "name": "order",
+        "type": "tuple"
+      },
+      { "internalType": "bytes", "name": "signature", "type": "bytes" },
+      { "internalType": "uint256", "name": "makingAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "takingAmount", "type": "uint256" }
+    ],
+    "name": "fillOrderRFQ",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "contract IERC721", "name": "token", "type": "address" }
+    ],
+    "name": "func_20xtkDI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "contract IERC721", "name": "token", "type": "address" }
+    ],
+    "name": "func_40aVqeY",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "contract IERC20", "name": "token", "type": "address" }
+    ],
+    "name": "func_50BkM4K",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "contract IERC1155", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "func_733NCGU",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "orderMakerAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "orderTakerAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "swapTakerAmount", "type": "uint256" }
+    ],
+    "name": "getMakerAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "orderMakerAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "orderTakerAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "swapMakerAmount", "type": "uint256" }
+    ],
+    "name": "getTakerAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "internalType": "address", "name": "target", "type": "address" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "gt",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "immutableOwner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "increaseNonce", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "maker", "type": "address" },
+      { "internalType": "uint256", "name": "slot", "type": "uint256" }
+    ],
+    "name": "invalidatorForOrderRFQ",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "internalType": "address", "name": "target", "type": "address" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "lt",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "nonce",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "makerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "makerNonce", "type": "uint256" }
+    ],
+    "name": "nonceEquals",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "targets", "type": "address[]" },
+      { "internalType": "bytes[]", "name": "data", "type": "bytes[]" }
+    ],
+    "name": "or",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "orderHash", "type": "bytes32" }],
+    "name": "remaining",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "orderHash", "type": "bytes32" }],
+    "name": "remainingRaw",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32[]", "name": "orderHashes", "type": "bytes32[]" }],
+    "name": "remainingsRaw",
+    "outputs": [{ "internalType": "uint256[]", "name": "results", "type": "uint256[]" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "targets", "type": "address[]" },
+      { "internalType": "bytes[]", "name": "data", "type": "bytes[]" }
+    ],
+    "name": "simulateCalls",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "contract AggregatorV3Interface", "name": "oracle", "type": "address" },
+      { "internalType": "uint256", "name": "inverseAndSpread", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "singlePrice",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "time", "type": "uint256" }],
+    "name": "timestampBelow",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   }

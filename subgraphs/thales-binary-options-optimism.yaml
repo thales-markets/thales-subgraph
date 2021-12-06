@@ -8,7 +8,7 @@ dataSources:
     name: BinaryOptionMarketManager
     network: optimism
     source:
-      address: '0xB8109ac56EE572990e6d2C6b4648042bB1C33317'
+      address: '0x1EBCE103B528bBCe8c3bF0bd594cdF18d284cEf7'
       abi: BinaryOptionMarketManager
       startBlock: 710010
     mapping:
