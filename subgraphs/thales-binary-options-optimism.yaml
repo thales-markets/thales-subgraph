@@ -28,6 +28,26 @@ dataSources:
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: LimitOrderProtocol
+    network: optimism
+    source:
+      address: '0xb707d89d29c189421163515c59e42147371d6857'
+      abi: LimitOrderProtocol
+      startBlock: 46409
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/1inch-limit-order-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: LimitOrderProtocol
+          file: ../abis/1inch/LimitOrderProtocol.json
+      eventHandlers:
+        - event: OrderFilled(indexed address,bytes32,uint256)
+          handler: handleOrderFilledEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
