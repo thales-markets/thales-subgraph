@@ -5,12 +5,36 @@ schema:
   file: ./thales-binary-options.graphql
 dataSources:
   - kind: ethereum/contract
-    name: BinaryOptionMarketManager
+    name: BinaryOptionMarketManager_old_for_testing
     network: optimism
     source:
       address: '0x1EBCE103B528bBCe8c3bF0bd594cdF18d284cEf7'
       abi: BinaryOptionMarketManager
       startBlock: 710010
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager_new.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: BinaryOptionMarketManager
+    network: optimism
+    source:
+      address: '0x6002a8F2A8dC0B704080765cE96aac63D5f7B224'
+      abi: BinaryOptionMarketManager
+      startBlock: 925209
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
