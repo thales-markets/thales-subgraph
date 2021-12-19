@@ -8,9 +8,9 @@ dataSources:
     name: BinaryOptionMarketManager
     network: optimism-kovan
     source:
-      address: '0x3Aa0814cD91f33467e6eb5ba58e56AB73699582b'
+      address: '0x6382660BF24f5e7BeC43a7D47591F823488FDB8D'
       abi: BinaryOptionMarketManager
-      startBlock: 399735
+      startBlock: 476204
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,6 +28,28 @@ dataSources:
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: AMM
+    network: optimism-kovan
+    source:
+      address: '0xB0437C95551738FC48e2656017B70344d269f337'
+      abi: AMM
+      startBlock: 476272
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: AMM
+          file: ../abis/thales/AMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
   - kind: ethereum/contract
     name: ThalesRoyale
     network: optimism-kovan

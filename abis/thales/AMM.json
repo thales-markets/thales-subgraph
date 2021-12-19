@@ -1,70 +1,13 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
         "internalType": "address",
-        "name": "_owner",
+        "name": "buyer",
         "type": "address"
       },
-      {
-        "internalType": "contract IERC20",
-        "name": "_sUSD",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IPriceFeed",
-        "name": "_priceFeed",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_expiryDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxTimeToMaturity",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_creatorCapitalRequirement",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "CreatorCapitalRequirementUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExpiryDurationUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
       {
         "indexed": false,
         "internalType": "address",
@@ -72,138 +15,37 @@
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "oracleKey",
-        "type": "bytes32"
+        "indexed": false,
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "strikePrice",
+        "name": "amount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "maturityDate",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "expiryDate",
+        "name": "sUSDPaid",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "long",
+        "name": "susd",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "short",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "customMarket",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "customOracle",
+        "name": "asset",
         "type": "address"
       }
     ],
-    "name": "MarketCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
-      }
-    ],
-    "name": "MarketCreationEnabledUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "market",
-        "type": "address"
-      }
-    ],
-    "name": "MarketExpired",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "contract BinaryOptionMarketManager",
-        "name": "receivingManager",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "contract BinaryOptionMarket[]",
-        "name": "markets",
-        "type": "address[]"
-      }
-    ],
-    "name": "MarketsMigrated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "contract BinaryOptionMarketManager",
-        "name": "migratingManager",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "contract BinaryOptionMarket[]",
-        "name": "markets",
-        "type": "address[]"
-      }
-    ],
-    "name": "MarketsReceived",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "MaxTimeToMaturityUpdated",
+    "name": "BoughtFromAmm",
     "type": "event"
   },
   {
@@ -257,11 +99,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_binaryOptionMarketFactory",
+        "name": "_manager",
         "type": "address"
       }
     ],
-    "name": "SetBinaryOptionsMarketFactory",
+    "name": "SetBinaryOptionsMarketManager",
     "type": "event"
   },
   {
@@ -269,12 +111,70 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_capPerMarket",
+        "type": "uint256"
       }
     ],
-    "name": "SetCustomMarketCreationEnabled",
+    "name": "SetCapPerMarket",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "asset",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_impliedVolatility",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetImpliedVolatilityPerAsset",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_spread",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMaxSpread",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_spread",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMinSpread",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_minimalTimeLeftToMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMinimalTimeLeftToMaturity",
     "type": "event"
   },
   {
@@ -283,20 +183,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "manager",
-        "type": "address"
-      }
-    ],
-    "name": "SetMigratingManager",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_address",
+        "name": "_priceFeed",
         "type": "address"
       }
     ],
@@ -309,11 +196,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_zeroExAddress",
+        "name": "sUSD",
         "type": "address"
       }
     ],
-    "name": "SetZeroExAddress",
+    "name": "SetSUSD",
     "type": "event"
   },
   {
@@ -322,11 +209,47 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sUSDPaid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "susd",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "asset",
         "type": "address"
       }
     ],
-    "name": "SetsUSD",
+    "name": "SoldToAMM",
     "type": "event"
   },
   {
@@ -342,22 +265,48 @@
     "constant": true,
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
       },
       {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      }
+    ],
+    "name": "availableToBuyFromAMM",
+    "outputs": [
+      {
         "internalType": "uint256",
-        "name": "pageSize",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "activeMarkets",
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      }
+    ],
+    "name": "availableToSellToAMM",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "address[]"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -369,11 +318,31 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "market",
         "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expectedPayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "additionalSlippage",
+        "type": "uint256"
       }
     ],
-    "name": "addWhitelistedAddress",
+    "name": "buyFromAMM",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -381,23 +350,24 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "binaryOptionMarketFactory",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "market",
         "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "capitalRequirement",
+    "name": "buyFromAmmQuote",
     "outputs": [
       {
         "internalType": "uint256",
@@ -410,103 +380,152 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "buyPriceImpact",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "strike",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timeLeftInDays",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "volatility",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateOdds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      }
+    ],
+    "name": "canExerciseMaturedMarket",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "capPerMarket",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "deciMath",
+    "outputs": [
+      {
+        "internalType": "contract DeciMath",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      }
+    ],
+    "name": "exerciseMaturedMarket",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "oracleKey",
+        "name": "",
         "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "strikePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maturity",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialMint",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "customMarket",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "customOracle",
-        "type": "address"
       }
     ],
-    "name": "createMarket",
+    "name": "impliedVolatilityPerAsset",
     "outputs": [
       {
-        "internalType": "contract IBinaryOptionMarket",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "customMarketCreationEnabled",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "delta",
-        "type": "uint256"
-      }
-    ],
-    "name": "decrementTotalDeposited",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "disableWhitelistedAddresses",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "durations",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "expiryDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxTimeToMaturity",
         "type": "uint256"
       }
     ],
@@ -517,7 +536,7 @@
   {
     "constant": false,
     "inputs": [],
-    "name": "enableWhitelistedAddresses",
+    "name": "initNonReentrant",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -527,27 +546,47 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "markets",
-        "type": "address[]"
-      }
-    ],
-    "name": "expireMarkets",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IPriceFeed",
+        "name": "_priceFeed",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "_sUSD",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
-        "name": "delta",
+        "name": "_capPerMarket",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract DeciMath",
+        "name": "_deciMath",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_min_spread",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_max_spread",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minimalTimeLeftToMaturity",
         "type": "uint256"
       }
     ],
-    "name": "incrementTotalDeposited",
+    "name": "initialize",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -558,32 +597,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "candidate",
+        "name": "market",
         "type": "address"
       }
     ],
-    "name": "isActiveMarket",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "candidate",
-        "type": "address"
-      }
-    ],
-    "name": "isKnownMarket",
+    "name": "isMarketInAMMTrading",
     "outputs": [
       {
         "internalType": "bool",
@@ -613,12 +631,12 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "marketCreationEnabled",
+    "name": "manager",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "address",
         "name": "",
-        "type": "bool"
+        "type": "address"
       }
     ],
     "payable": false,
@@ -627,24 +645,13 @@
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pageSize",
-        "type": "uint256"
-      }
-    ],
-    "name": "maturedMarkets",
+    "inputs": [],
+    "name": "max_spread",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "address[]"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -652,28 +659,33 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
+    "constant": true,
+    "inputs": [],
+    "name": "min_spread",
+    "outputs": [
       {
-        "internalType": "contract BinaryOptionMarketManager",
-        "name": "receivingManager",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "active",
-        "type": "bool"
-      },
-      {
-        "internalType": "contract BinaryOptionMarket[]",
-        "name": "marketsToMigrate",
-        "type": "address[]"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "migrateMarkets",
-    "outputs": [],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "minimalTimeLeftToMaturity",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -700,51 +712,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "numActiveMarkets",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "numMaturedMarkets",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "onlyWhitelistedAddressesCanCreateMarkets",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "payable": false,
@@ -783,6 +750,32 @@
   },
   {
     "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      }
+    ],
+    "name": "price",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "priceFeed",
     "outputs": [
@@ -800,47 +793,12 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "active",
-        "type": "bool"
-      },
-      {
-        "internalType": "contract BinaryOptionMarket[]",
-        "name": "marketsToReceive",
-        "type": "address[]"
-      }
-    ],
-    "name": "receiveMarkets",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
+        "internalType": "address payable",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "removeWhitelistedAddress",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "market",
-        "type": "address"
-      }
-    ],
-    "name": "resolveMarket",
+    "name": "retrieveSUSD",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -862,15 +820,112 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "sellPriceImpact",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
         "internalType": "address",
-        "name": "_binaryOptionMarketFactory",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expectedPayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "additionalSlippage",
+        "type": "uint256"
+      }
+    ],
+    "name": "sellToAMM",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
+        "internalType": "enum ThalesAMM.Position",
+        "name": "position",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "sellToAmmQuote",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_manager",
         "type": "address"
       }
     ],
-    "name": "setBinaryOptionsMarketFactory",
+    "name": "setBinaryOptionsMarketManager",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -881,11 +936,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_creatorCapitalRequirement",
+        "name": "_capPerMarket",
         "type": "uint256"
       }
     ],
-    "name": "setCreatorCapitalRequirement",
+    "name": "setCapPerMarket",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -895,12 +950,17 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
+        "internalType": "bytes32",
+        "name": "asset",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_impliedVolatility",
+        "type": "uint256"
       }
     ],
-    "name": "setCustomMarketCreationEnabled",
+    "name": "setImpliedVolatilityPerAsset",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -911,26 +971,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_expiryDuration",
+        "name": "_spread",
         "type": "uint256"
       }
     ],
-    "name": "setExpiryDuration",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
-      }
-    ],
-    "name": "setMarketCreationEnabled",
+    "name": "setMaxSpread",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -941,11 +986,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_maxTimeToMaturity",
+        "name": "_spread",
         "type": "uint256"
       }
     ],
-    "name": "setMaxTimeToMaturity",
+    "name": "setMinSpread",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -955,12 +1000,27 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "contract BinaryOptionMarketManager",
-        "name": "manager",
+        "internalType": "uint256",
+        "name": "_minimalTimeLeftToMaturity",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMinimalTimeLeftToMaturity",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
         "type": "address"
       }
     ],
-    "name": "setMigratingManager",
+    "name": "setOwner",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -985,8 +1045,8 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_address",
+        "internalType": "contract IPriceFeed",
+        "name": "_priceFeed",
         "type": "address"
       }
     ],
@@ -1000,27 +1060,12 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_whitelistedAddresses",
-        "type": "address[]"
-      }
-    ],
-    "name": "setWhitelistedAddresses",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
+        "internalType": "contract IERC20",
+        "name": "_sUSD",
         "type": "address"
       }
     ],
-    "name": "setsUSD",
+    "name": "setSUSD",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -1028,8 +1073,14 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "totalDeposited",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "spentOnMarket",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1046,45 +1097,14 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sender",
+        "name": "proxyAddress",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
-    "name": "transferSusdTo",
+    "name": "transferOwnershipAtInit",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "whitelistedAddresses",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
     "type": "function"
   }
 ]
