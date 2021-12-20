@@ -8,30 +8,6 @@ dataSources:
     name: BinaryOptionMarketManager
     network: kovan
     source:
-      address: '0x46d9DB2830C005e38878b241199bb09d9d355994'
-      abi: BinaryOptionMarketManager
-      startBlock: 26232668
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
-      entities:
-        - Market
-      abis:
-        - name: BinaryOptionMarketManager
-          file: ../abis/BinaryOptionMarketManager.json
-        - name: BinaryOptionMarket
-          file: '../abis/BinaryOptionMarket.json'
-      eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
-          handler: handleNewMarket
-        - event: MarketExpired(address)
-          handler: handleMarketExpired
-  - kind: ethereum/contract
-    name: BinaryOptionMarketManager_new
-    network: kovan
-    source:
       address: '0x547818b1ee8bd9a6d5854e8A9E84E066B9a07aA7'
       abi: BinaryOptionMarketManager
       startBlock: 28137065
@@ -44,9 +20,9 @@ dataSources:
         - Market
       abis:
         - name: BinaryOptionMarketManager
-          file: ../abis/BinaryOptionMarketManager_new.json
+          file: ../abis/thales/BinaryOptionMarketManager.json
         - name: BinaryOptionMarket
-          file: '../abis/BinaryOptionMarket.json'
+          file: '../abis/thales/BinaryOptionMarket.json'
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address,address)
           handler: handleNewMarket
@@ -197,7 +173,7 @@ templates:
         - HistoricalOptionPrice
       abis:
         - name: BinaryOptionMarket
-          file: ../abis/BinaryOptionMarket.json
+          file: ../abis/thales/BinaryOptionMarket.json
       eventHandlers:
         - event: Mint(uint8,indexed address,uint256)
           handler: handleMint
@@ -219,4 +195,4 @@ templates:
         - BinaryOption
       abis:
         - name: BinaryOption
-          file: ../abis/BinaryOption.json
+          file: ../abis/thales/BinaryOption.json

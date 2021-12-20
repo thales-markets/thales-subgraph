@@ -20,9 +20,9 @@ dataSources:
         - Market
       abis:
         - name: BinaryOptionMarketManager
-          file: ../abis/BinaryOptionMarketManager_new.json
+          file: ../abis/thales/BinaryOptionMarketManager.json
         - name: BinaryOptionMarket
-          file: '../abis/BinaryOptionMarket.json'
+          file: '../abis/thales/BinaryOptionMarket.json'
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
@@ -95,7 +95,7 @@ templates:
         - HistoricalOptionPrice
       abis:
         - name: BinaryOptionMarket
-          file: ../abis/BinaryOptionMarket.json
+          file: ../abis/thales/BinaryOptionMarket.json
       eventHandlers:
         - event: Mint(uint8,indexed address,uint256)
           handler: handleMint
