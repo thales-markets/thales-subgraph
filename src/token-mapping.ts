@@ -8,7 +8,8 @@ import {
   CancelUnstake as CancelUnstakeEvent,
 } from '../generated/StakingThales/StakingThales';
 import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
-import { TokenTransaction, OngoingAirdropNewRoot } from '../generated/schema';
+import { TokenTransaction, OngoingAirdropNewRoot, Staker } from '../generated/schema';
+import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -48,6 +49,21 @@ export function handleStakedEvent(event: StakedEvent): void {
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'stake';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.user.toHex());
+  if (staker === null) {
+    staker = new Staker(event.params.user.toHex());
+    staker.account = event.params.user;
+    staker.stakedAmount = event.params.amount;
+    staker.escrowedAmount = BigInt.fromI32(0);
+    staker.totalStakedAmount = event.params.amount;
+    staker.unstakingAmount = BigInt.fromI32(0);
+  } else {
+    staker.stakedAmount = staker.stakedAmount.plus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.plus(staker.escrowedAmount);
+  }
+  staker.timestamp = event.block.timestamp;
+  staker.save();
 }
 
 export function handleStartUnstakeEvent(event: StartUnstakeEvent): void {
@@ -58,6 +74,17 @@ export function handleStartUnstakeEvent(event: StartUnstakeEvent): void {
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'startUnstake';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker !== null) {
+    staker.stakedAmount = staker.stakedAmount.minus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.equals(BigInt.fromI32(0))
+      ? BigInt.fromI32(0)
+      : staker.stakedAmount.plus(staker.escrowedAmount);
+    staker.unstakingAmount = event.params.amount;
+    staker.timestamp = event.block.timestamp;
+    staker.save();
+  }
 }
 
 export function handleUnstakedEvent(event: UnstakedEvent): void {
@@ -68,6 +95,13 @@ export function handleUnstakedEvent(event: UnstakedEvent): void {
   tokenTransaction.amount = event.params.unstakeAmount;
   tokenTransaction.type = 'unstake';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker !== null) {
+    staker.unstakingAmount = BigInt.fromI32(0);
+    staker.timestamp = event.block.timestamp;
+    staker.save();
+  }
 }
 
 export function handleAddedToEscrowEvent(event: AddedToEscrowEvent): void {
@@ -78,6 +112,23 @@ export function handleAddedToEscrowEvent(event: AddedToEscrowEvent): void {
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'addToEscrow';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.acount.toHex());
+  if (staker === null) {
+    staker = new Staker(event.params.acount.toHex());
+    staker.account = event.params.acount;
+    staker.stakedAmount = BigInt.fromI32(0);
+    staker.escrowedAmount = event.params.amount;
+    staker.totalStakedAmount = BigInt.fromI32(0);
+    staker.unstakingAmount = BigInt.fromI32(0);
+  } else {
+    staker.escrowedAmount = staker.escrowedAmount.plus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.equals(BigInt.fromI32(0))
+      ? BigInt.fromI32(0)
+      : staker.stakedAmount.plus(staker.escrowedAmount);
+  }
+  staker.timestamp = event.block.timestamp;
+  staker.save();
 }
 
 export function handleVestedEvent(event: VestedEvent): void {
@@ -88,6 +139,16 @@ export function handleVestedEvent(event: VestedEvent): void {
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'vest';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker !== null) {
+    staker.escrowedAmount = staker.escrowedAmount.minus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.equals(BigInt.fromI32(0))
+      ? BigInt.fromI32(0)
+      : staker.stakedAmount.plus(staker.escrowedAmount);
+    staker.timestamp = event.block.timestamp;
+    staker.save();
+  }
 }
 
 export function handleNewRootEvent(event: NewRootEvent): void {
@@ -108,4 +169,13 @@ export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
   tokenTransaction.account = event.params.account;
   tokenTransaction.type = 'cancelUnstake';
   tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker !== null) {
+    staker.stakedAmount = staker.stakedAmount.plus(staker.unstakingAmount);
+    staker.totalStakedAmount = staker.stakedAmount.plus(staker.escrowedAmount);
+    staker.unstakingAmount = BigInt.fromI32(0);
+    staker.timestamp = event.block.timestamp;
+    staker.save();
+  }
 }

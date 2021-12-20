@@ -97,6 +97,16 @@ type BinaryOption @entity {
   side: OptionSide
 }
 
+type Staker @entity {
+  id: ID!
+  account: Bytes!
+  timestamp: BigInt!
+  stakedAmount: BigInt!
+  escrowedAmount: BigInt!
+  totalStakedAmount: BigInt!
+  unstakingAmount: BigInt!
+}
+
 type ThalesRoyaleGame @entity {
   id: ID!
   timestamp: BigInt!
