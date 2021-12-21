@@ -4,37 +4,39 @@ import { BoughtFromAmm, SoldToAMM } from '../generated/AMM/AMM';
 import { Trade } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
-  let nativeFill = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  nativeFill.transactionHash = event.transaction.hash;
-  nativeFill.timestamp = event.block.timestamp;
-  nativeFill.orderHash = event.transaction.hash;
-  nativeFill.maker = event.address;
-  nativeFill.taker = event.params.buyer;
-  nativeFill.makerToken = event.params.asset;
-  nativeFill.takerToken = event.params.susd;
-  nativeFill.makerAmount = event.params.amount;
-  nativeFill.takerAmount = event.params.sUSDPaid;
+  let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  trade.transactionHash = event.transaction.hash;
+  trade.timestamp = event.block.timestamp;
+  trade.blockNumber = event.block.number;
+  trade.orderHash = event.transaction.hash;
+  trade.maker = event.address;
+  trade.taker = event.params.buyer;
+  trade.makerToken = event.params.asset;
+  trade.takerToken = event.params.susd;
+  trade.makerAmount = event.params.amount;
+  trade.takerAmount = event.params.sUSDPaid;
 
-  nativeFill.market = event.params.market;
-  nativeFill.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
-  nativeFill.orderSide = 'buy';
-  nativeFill.save();
+  trade.market = event.params.market;
+  trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
+  trade.orderSide = 'buy';
+  trade.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
-  let nativeFill = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  nativeFill.transactionHash = event.transaction.hash;
-  nativeFill.timestamp = event.block.timestamp;
-  nativeFill.orderHash = event.transaction.hash;
-  nativeFill.maker = event.address;
-  nativeFill.taker = event.params.seller;
-  nativeFill.makerToken = event.params.susd;
-  nativeFill.takerToken = event.params.asset;
-  nativeFill.makerAmount = event.params.sUSDPaid;
-  nativeFill.takerAmount = event.params.amount;
+  let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  trade.transactionHash = event.transaction.hash;
+  trade.timestamp = event.block.timestamp;
+  trade.blockNumber = event.block.number;
+  trade.orderHash = event.transaction.hash;
+  trade.maker = event.address;
+  trade.taker = event.params.seller;
+  trade.makerToken = event.params.susd;
+  trade.takerToken = event.params.asset;
+  trade.makerAmount = event.params.sUSDPaid;
+  trade.takerAmount = event.params.amount;
 
-  nativeFill.market = event.params.market;
-  nativeFill.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
-  nativeFill.orderSide = 'buy';
-  nativeFill.save();
+  trade.market = event.params.market;
+  trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
+  trade.orderSide = 'buy';
+  trade.save();
 }

@@ -66,6 +66,7 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
 
   optionTransactionEntity.type = 'exercise';
   optionTransactionEntity.timestamp = event.block.timestamp;
+  optionTransactionEntity.blockNumber = event.block.number;
   optionTransactionEntity.account = event.params.account;
   optionTransactionEntity.market = event.address;
   optionTransactionEntity.amount = event.params.value;
@@ -83,6 +84,7 @@ export function handleMint(event: MintEvent): void {
 
   optionTransactionEntity.type = 'mint';
   optionTransactionEntity.timestamp = event.block.timestamp;
+  optionTransactionEntity.blockNumber = event.block.number;
   optionTransactionEntity.account = event.params.account;
   optionTransactionEntity.market = event.address;
   optionTransactionEntity.amount = event.params.value;

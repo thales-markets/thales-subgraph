@@ -23,6 +23,7 @@ enum OptionTransactionType {
 type OptionTransaction @entity {
   id: ID!
   timestamp: BigInt!
+  blockNumber: BigInt!
   type: OptionTransactionType!
   account: Bytes!
   market: Bytes!
@@ -47,6 +48,7 @@ type Trade @entity {
   id: ID!
   transactionHash: Bytes!
   timestamp: BigInt!
+  blockNumber: BigInt!
   orderHash: Bytes!
   maker: Bytes!
   taker: Bytes!

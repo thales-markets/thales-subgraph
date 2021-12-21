@@ -34,6 +34,7 @@ export function handleOrderFilledEvent(event: OrderFilled): void {
   );
   trade.transactionHash = event.transaction.hash;
   trade.timestamp = event.block.timestamp;
+  trade.blockNumber = event.block.number;
   trade.orderHash = event.params.orderHash;
   trade.maker = maker;
   trade.taker = event.transaction.from;
