@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0xBE086E0A2c588Ad64C8530048cE4356190D6a6F3'
       abi: BinaryOptionMarketManager
-      startBlock: 1326027
+      startBlock: 1436819
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
