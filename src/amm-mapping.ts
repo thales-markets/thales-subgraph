@@ -37,6 +37,6 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
 
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
-  trade.orderSide = 'buy';
+  trade.orderSide = 'sell';
   trade.save();
 }
