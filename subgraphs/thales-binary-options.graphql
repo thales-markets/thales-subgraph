@@ -113,15 +113,22 @@ type ThalesRoyaleGame @entity {
   id: ID!
   timestamp: BigInt!
   address: Bytes!
+  season: BigInt!
+}
+
+type ThalesRoyaleSeason @entity {
+  id: ID!
+  timestamp: BigInt!
+  season: BigInt!
 }
 
 type ThalesRoyaleRound @entity {
   id: ID!
   timestamp: BigInt!
-  game: Bytes!
   round: BigInt!
-  totalPlayersPerRound: BigInt!
-  eliminatedPerRound: BigInt!
+  season: BigInt!
+  totalPlayersPerRoundPerSeason: BigInt!
+  eliminatedPerRoundPerSeason: BigInt!
 }
 
 type ThalesRoyalePlayer @entity {
@@ -129,7 +136,7 @@ type ThalesRoyalePlayer @entity {
   number: BigInt!
   address: Bytes!
   timestamp: BigInt!
-  game: Bytes!
+  season: BigInt!
   isAlive: Boolean!
   deathRound: BigInt
 }
@@ -137,8 +144,8 @@ type ThalesRoyalePlayer @entity {
 type ThalesRoyalePosition @entity {
   id: ID!
   timestamp: BigInt!
-  game: Bytes!
   player: Bytes!
   round: BigInt!
+  season: BigInt!
   position: BigInt!
 }

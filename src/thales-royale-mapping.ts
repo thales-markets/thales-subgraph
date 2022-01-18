@@ -3,27 +3,29 @@ import {
   TookAPosition as TookAPositionEvent,
   RoyaleStarted as RoyaleStartedEvent,
   RoundClosed as RoundClosedEvent,
+  NewSeasonStarted as NewSeasonStartedEvent,
+  RewardClaimed as RewardClaimedEvent,
   ThalesRoyale,
 } from '../generated/ThalesRoyale/ThalesRoyale';
-import { ThalesRoyaleGame, ThalesRoyalePlayer, ThalesRoyalePosition, ThalesRoyaleRound } from '../generated/schema';
+import { ThalesRoyaleSeason, ThalesRoyalePlayer, ThalesRoyalePosition, ThalesRoyaleRound } from '../generated/schema';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleSignedUp(event: SignedUpEvent): void {
-  let thalesRoyaleGame = ThalesRoyaleGame.load(event.address.toHex());
-  if (thalesRoyaleGame === null) {
-    thalesRoyaleGame = new ThalesRoyaleGame(event.address.toHex());
-    thalesRoyaleGame.timestamp = event.block.timestamp;
-    thalesRoyaleGame.address = event.address;
-    thalesRoyaleGame.save();
+  let thalesRoyaleSeason = ThalesRoyaleSeason.load(event.params.season.toHex());
+  if (thalesRoyaleSeason === null) {
+    thalesRoyaleSeason = new ThalesRoyaleSeason(event.params.season.toHex());
+    thalesRoyaleSeason.timestamp = event.block.timestamp;
+    thalesRoyaleSeason.season = event.params.season;
+    thalesRoyaleSeason.save();
   }
 
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let players = thalesRoyaleContract.getPlayers();
+  let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
 
-  let thalesRoyalePlayer = new ThalesRoyalePlayer(event.address.toHex() + '-' + event.params.user.toHex());
+  let thalesRoyalePlayer = new ThalesRoyalePlayer(event.params.season.toHex() + '-' + event.params.user.toHex());
   thalesRoyalePlayer.address = event.params.user;
   thalesRoyalePlayer.timestamp = event.block.timestamp;
-  thalesRoyalePlayer.game = event.address;
+  thalesRoyalePlayer.season = event.params.season;
   thalesRoyalePlayer.isAlive = true;
   thalesRoyalePlayer.number = BigInt.fromI32(players.length);
   thalesRoyalePlayer.save();
@@ -31,13 +33,13 @@ export function handleSignedUp(event: SignedUpEvent): void {
 
 export function handleTookAPosition(event: TookAPositionEvent): void {
   let thalesRoyalePosition = ThalesRoyalePosition.load(
-    event.address.toHex() + '-' + event.params.user.toHex() + '-' + event.params.round.toString(),
+    event.params.season.toHex() + '-' + event.params.user.toHex() + '-' + event.params.round.toString(),
   );
   if (thalesRoyalePosition === null) {
     thalesRoyalePosition = new ThalesRoyalePosition(
-      event.address.toHex() + '-' + event.params.user.toHex() + '-' + event.params.round.toString(),
+      event.params.season.toHex() + '-' + event.params.user.toHex() + '-' + event.params.round.toString(),
     );
-    thalesRoyalePosition.game = event.address;
+    thalesRoyalePosition.season = event.params.season;
     thalesRoyalePosition.player = event.params.user;
     thalesRoyalePosition.round = event.params.round;
   }
@@ -47,35 +49,35 @@ export function handleTookAPosition(event: TookAPositionEvent): void {
 }
 
 export function handleRoyaleStarted(event: RoyaleStartedEvent): void {
-  let thalesRoyaleGame = ThalesRoyaleGame.load(event.address.toHex());
-  if (thalesRoyaleGame === null) {
-    thalesRoyaleGame = new ThalesRoyaleGame(event.address.toHex());
-    thalesRoyaleGame.timestamp = event.block.timestamp;
-    thalesRoyaleGame.address = event.address;
-    thalesRoyaleGame.save();
+  let thalesRoyaleSeason = ThalesRoyaleSeason.load(event.params.season.toHex());
+  if (thalesRoyaleSeason === null) {
+    thalesRoyaleSeason = new ThalesRoyaleSeason(event.params.season.toHex());
+    thalesRoyaleSeason.timestamp = event.block.timestamp;
+    thalesRoyaleSeason.season = event.params.season;
+    thalesRoyaleSeason.save();
   }
 
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let players = thalesRoyaleContract.getPlayers();
+  let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
 
-  let thalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + BigInt.fromI32(1).toHex());
-  thalesRoyaleRound.game = event.address;
+  let thalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + BigInt.fromI32(1).toHex());
+  thalesRoyaleRound.season = event.params.season;
   thalesRoyaleRound.round = BigInt.fromI32(1);
   thalesRoyaleRound.timestamp = event.block.timestamp;
-  thalesRoyaleRound.totalPlayersPerRound = BigInt.fromI32(players.length);
-  thalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
+  thalesRoyaleRound.totalPlayersPerRoundPerSeason = BigInt.fromI32(players.length);
+  thalesRoyaleRound.eliminatedPerRoundPerSeason = BigInt.fromI32(0);
   thalesRoyaleRound.save();
 }
 
 export function handleRoundClosed(event: RoundClosedEvent): void {
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let players = thalesRoyaleContract.getPlayers();
+  let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
 
   for (let index = 0; index < players.length; index++) {
     let player = players[index];
-    let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.address.toHex() + '-' + player.toHex());
+    let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.params.season.toHex() + '-' + player.toHex());
     let thalesRoyalePosition = ThalesRoyalePosition.load(
-      event.address.toHex() + '-' + player.toHex() + '-' + event.params.round.toString(),
+      event.params.season.toHex() + '-' + player.toHex() + '-' + event.params.round.toString(),
     );
     if (
       (thalesRoyalePosition === null || thalesRoyalePosition.position.notEqual(event.params.result)) &&
@@ -86,27 +88,28 @@ export function handleRoundClosed(event: RoundClosedEvent): void {
       thalesRoyalePlayer.timestamp = event.block.timestamp;
       thalesRoyalePlayer.save();
 
-      let thalesRoyaleRound = ThalesRoyaleRound.load(event.address.toHex() + '-' + event.params.round.toHex());
+      let thalesRoyaleRound = ThalesRoyaleRound.load(event.params.season.toHex() + '-' + event.params.round.toHex());
       if (thalesRoyaleRound !== null) {
-        thalesRoyaleRound.eliminatedPerRound = thalesRoyaleRound.eliminatedPerRound.plus(BigInt.fromI32(1));
+        thalesRoyaleRound.eliminatedPerRoundPerSeason = thalesRoyaleRound.eliminatedPerRoundPerSeason.plus(
+          BigInt.fromI32(1),
+        );
         thalesRoyaleRound.timestamp = event.block.timestamp;
         thalesRoyaleRound.save();
       }
     }
   }
 
-  // let alivePlayers = thalesRoyaleContract.getAlivePlayers();
   let nextRound = event.params.round.plus(BigInt.fromI32(1));
-  let thalesRoyaleLastRound = ThalesRoyaleRound.load(event.address.toHex() + '-' + event.params.round.toHex());
-  let nextRoundTotalPlayers = thalesRoyaleLastRound.totalPlayersPerRound.minus(
-    thalesRoyaleLastRound.eliminatedPerRound,
+  let thalesRoyaleLastRound = ThalesRoyaleRound.load(event.params.season.toHex() + '-' + event.params.round.toHex());
+  let nextRoundTotalPlayers = thalesRoyaleLastRound.totalPlayersPerRoundPerSeason.minus(
+    thalesRoyaleLastRound.eliminatedPerRoundPerSeason,
   );
 
-  let nextThalesRoyaleRound = new ThalesRoyaleRound(event.address.toHex() + '-' + nextRound.toHex());
-  nextThalesRoyaleRound.game = event.address;
+  let nextThalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + nextRound.toHex());
+  nextThalesRoyaleRound.season = event.params.season;
   nextThalesRoyaleRound.round = nextRound;
   nextThalesRoyaleRound.timestamp = event.block.timestamp;
-  nextThalesRoyaleRound.totalPlayersPerRound = nextRoundTotalPlayers;
-  nextThalesRoyaleRound.eliminatedPerRound = BigInt.fromI32(0);
+  nextThalesRoyaleRound.totalPlayersPerRoundPerSeason = nextRoundTotalPlayers;
+  nextThalesRoyaleRound.eliminatedPerRoundPerSeason = BigInt.fromI32(0);
   nextThalesRoyaleRound.save();
 }

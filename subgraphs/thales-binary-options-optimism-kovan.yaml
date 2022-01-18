@@ -54,9 +54,9 @@ dataSources:
     name: ThalesRoyale
     network: optimism-kovan
     source:
-      address: '0x9EE65877dE8658e95f5c893581a76CCd5bc6d35B'
+      address: '0x3A219D05a72D1c4f26DC5442baEAbe6943576D5A'
       abi: ThalesRoyale
-      startBlock: 162175
+      startBlock: 961337
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,19 +64,20 @@ dataSources:
       file: ../src/thales-royale-mapping.ts
       entities:
         - ThalesToyaleGame
+        - ThalesRoyaleSeason
         - ThalesRoyalePlayer
         - ThalesRoyalePostition
       abis:
         - name: ThalesRoyale
           file: ../abis/thales-royale/ThalesRoyale.json
       eventHandlers:
-        - event: SignedUp(address)
+        - event: SignedUp(address,uint256)
           handler: handleSignedUp
-        - event: TookAPosition(address,uint256,uint256)
+        - event: TookAPosition(address,uint256,uint256,uint256)
           handler: handleTookAPosition
-        - event: RoyaleStarted()
+        - event: RoyaleStarted(uint256,uint256,uint256)
           handler: handleRoyaleStarted
-        - event: RoundClosed(uint256,uint256)
+        - event: RoundClosed(uint256,uint256,uint256)
           handler: handleRoundClosed
 templates:
   - name: BinaryOptionMarket
