@@ -84,7 +84,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: Airdrop
-          file: ../abis/token/Airdrop.json
+          file: ../abis/token/l1-legacy/Airdrop.json
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleRetroAirdropClaimEvent
@@ -104,7 +104,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: VestingEscrow
-          file: ../abis/token/VestingEscrow.json
+          file: ../abis/token/l1-legacy/VestingEscrow.json
       eventHandlers:
         - event: Claim(indexed address,uint256)
           handler: handleRetroUnlockedClaimEvent
@@ -124,7 +124,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: OngoingAirdrop
-          file: ../abis/token/OngoingAirdrop.json
+          file: ../abis/token/l1-legacy/OngoingAirdrop.json
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
@@ -146,7 +146,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: StakingThales
-          file: ../abis/token/StakingThales.json
+          file: ../abis/token/l1-legacy/StakingThales.json
       eventHandlers:
         - event: Staked(address,uint256)
           handler: handleStakedEvent
@@ -172,7 +172,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: EscrowThales
-          file: ../abis/token/EscrowThales.json
+          file: ../abis/token/l1-legacy/EscrowThales.json
       eventHandlers:
         - event: AddedToEscrow(address,uint256)
           handler: handleAddedToEscrowEvent

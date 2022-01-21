@@ -1,5 +1,22 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_vestingToken",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -153,21 +170,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "addTotalEscrowBalanceNotIncludedInStaking",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "airdropContract",
@@ -216,15 +218,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "enableTestMode",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -313,35 +306,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "initNonReentrant",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_vestingToken",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -444,12 +408,12 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "AirdropContract",
+        "internalType": "address payable",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "setAirdropContract",
+    "name": "selfDestruct",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -460,11 +424,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_owner",
+        "name": "AirdropContract",
         "type": "address"
       }
     ],
-    "name": "setOwner",
+    "name": "setAirdropContract",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -501,21 +465,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "subtractTotalEscrowBalanceNotIncludedInStaking",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [
       {
@@ -525,21 +474,6 @@
       }
     ],
     "name": "totalAccountEscrowedAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalEscrowBalanceNotIncludedInStaking",
     "outputs": [
       {
         "internalType": "uint256",
@@ -564,21 +498,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "proxyAddress",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnershipAtInit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
