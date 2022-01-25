@@ -129,6 +129,9 @@ type ThalesRoyaleRound @entity {
   season: BigInt!
   totalPlayersPerRoundPerSeason: BigInt!
   eliminatedPerRoundPerSeason: BigInt!
+  result: BigInt
+  strikePrice: BigInt
+  finalPrice: BigInt
 }
 
 type ThalesRoyalePlayer @entity {

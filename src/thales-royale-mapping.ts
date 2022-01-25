@@ -101,6 +101,10 @@ export function handleRoundClosed(event: RoundClosedEvent): void {
 
   let nextRound = event.params.round.plus(BigInt.fromI32(1));
   let thalesRoyaleLastRound = ThalesRoyaleRound.load(event.params.season.toHex() + '-' + event.params.round.toHex());
+  thalesRoyaleLastRound.strikePrice = event.params.strikePrice;
+  thalesRoyaleLastRound.finalPrice = event.params.finalPrice;
+  thalesRoyaleLastRound.result = event.params.result;
+  thalesRoyaleLastRound.save();
   let nextRoundTotalPlayers = thalesRoyaleLastRound.totalPlayersPerRoundPerSeason.minus(
     thalesRoyaleLastRound.eliminatedPerRoundPerSeason,
   );
