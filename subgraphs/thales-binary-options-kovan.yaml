@@ -84,7 +84,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: VestingEscrow
-          file: ../abis/token/VestingEscrow.json
+          file: ../abis/token/VestingEscrow-l1.json
       eventHandlers:
         - event: Claim(indexed address,uint256)
           handler: handleRetroUnlockedClaimEvent

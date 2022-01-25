@@ -1,5 +1,4 @@
 import { Claim as AirdropClaimEvent } from '../generated/Airdrop/Airdrop';
-import { Claim as RetroRewardsClaimEvent } from '../generated/VestingEscrow/VestingEscrow';
 import { Claim as StakingRewardsClaimEvent, NewRoot as NewRootEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import {
   Staked as StakedEvent,
@@ -18,16 +17,6 @@ export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
   tokenTransaction.account = event.params.claimer;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'claimRetroAirdrop';
-  tokenTransaction.save();
-}
-
-export function handleRetroUnlockedClaimEvent(event: RetroRewardsClaimEvent): void {
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  tokenTransaction.transactionHash = event.transaction.hash;
-  tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.account = event.params._address;
-  tokenTransaction.amount = event.params._amount;
-  tokenTransaction.type = 'claimRetroUnlocked';
   tokenTransaction.save();
 }
 
