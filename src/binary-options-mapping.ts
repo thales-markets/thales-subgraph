@@ -52,6 +52,7 @@ export function handleMarketResolved(event: MarketResolvedEvent): void {
   let market = Market.load(event.address.toHex());
   market.result = event.params.result;
   market.poolSize = event.params.deposited;
+  market.finalPrice = event.params.oraclePrice;
   market.save();
 }
 

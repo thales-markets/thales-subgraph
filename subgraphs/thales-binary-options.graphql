@@ -13,6 +13,7 @@ type Market @entity {
   result: Int
   customMarket: Boolean!
   customOracle: Bytes!
+  finalPrice: BigInt
 }
 
 enum OptionTransactionType {
