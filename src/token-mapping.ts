@@ -1,13 +1,13 @@
 import { Claim as AirdropClaimEvent } from '../generated/Airdrop/Airdrop';
-import { Claim as StakingRewardsClaimEvent, NewRoot as NewRootEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import {
   Staked as StakedEvent,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
   CancelUnstake as CancelUnstakeEvent,
+  RewardsClaimed as StakingRewardsClaimEvent,
 } from '../generated/StakingThales/StakingThales';
 import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
-import { TokenTransaction, OngoingAirdropNewRoot, Staker } from '../generated/schema';
+import { TokenTransaction, Staker } from '../generated/schema';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
@@ -24,8 +24,8 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.account = event.params.claimer;
-  tokenTransaction.amount = event.params.amount;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.unclaimedReward;
   tokenTransaction.type = 'claimStakingRewards';
   tokenTransaction.save();
 }
@@ -138,17 +138,6 @@ export function handleVestedEvent(event: VestedEvent): void {
     staker.timestamp = event.block.timestamp;
     staker.save();
   }
-}
-
-export function handleNewRootEvent(event: NewRootEvent): void {
-  let tokenTransaction = new OngoingAirdropNewRoot(
-    event.transaction.hash.toHexString() + '-' + event.logIndex.toString(),
-  );
-  tokenTransaction.transactionHash = event.transaction.hash;
-  tokenTransaction.root = event.params.root;
-  tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.period = event.params.period;
-  tokenTransaction.save();
 }
 
 export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
