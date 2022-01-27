@@ -72,6 +72,7 @@ enum TokenTransactionType {
   unstake
   addToEscrow
   vest
+  claimMigratedRewards
 }
 
 type TokenTransaction @entity {

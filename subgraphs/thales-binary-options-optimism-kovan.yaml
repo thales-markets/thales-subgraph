@@ -149,6 +149,26 @@ dataSources:
           handler: handleAddedToEscrowEvent
         - event: Vested(address,uint256)
           handler: handleVestedEvent
+  - kind: ethereum/contract
+    name: OngoingAirdrop
+    network: optimism-kovan
+    source:
+      address: '0xcA8d82a30fd9dfec102eCdfb59A13e9a86C2Ee6F'
+      abi: OngoingAirdrop
+      startBlock: 1053497
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: OngoingAirdrop
+          file: ../abis/token/OngoingAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedRewardsClaimEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
