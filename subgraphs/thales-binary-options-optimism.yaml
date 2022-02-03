@@ -148,6 +148,26 @@ dataSources:
         - event: RewardsClaimed(address,uint256)
           handler: handleStakingRewardsClaimEvent
   - kind: ethereum/contract
+    name: StakingThalesMigration
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/token/StakingThales.json
+      eventHandlers:
+        - event: StakedOnBehalf(address,address,uint256)
+          handler: handleStakedOnBehalfEvent
+  - kind: ethereum/contract
     name: EscrowThales
     network: optimism
     source:
