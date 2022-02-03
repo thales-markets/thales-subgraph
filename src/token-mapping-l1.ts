@@ -9,6 +9,7 @@ export function handleRetroUnlockedClaimEvent(event: RetroRewardsClaimEvent): vo
   tokenTransaction.account = event.params._address;
   tokenTransaction.amount = event.params._amount;
   tokenTransaction.type = 'claimRetroUnlocked';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 }
 
@@ -19,6 +20,7 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   tokenTransaction.account = event.params.claimer;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 }
 

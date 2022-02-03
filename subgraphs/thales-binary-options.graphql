@@ -73,6 +73,9 @@ enum TokenTransactionType {
   addToEscrow
   vest
   claimMigratedRewards
+  lpStake
+  lpUnstake
+  lpClaimStakingRewards
 }
 
 type TokenTransaction @entity {
@@ -83,6 +86,7 @@ type TokenTransaction @entity {
   account: Bytes!
   amount: BigInt
   type: TokenTransactionType!
+  blockNumber: BigInt!
 }
 
 type OngoingAirdropNewRoot @entity {

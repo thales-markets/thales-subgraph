@@ -17,6 +17,7 @@ export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
   tokenTransaction.account = event.params.claimer;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'claimRetroAirdrop';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 }
 
@@ -27,6 +28,7 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   tokenTransaction.account = event.params.account;
   tokenTransaction.amount = event.params.unclaimedReward;
   tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 }
 
@@ -37,6 +39,7 @@ export function handleStakedEvent(event: StakedEvent): void {
   tokenTransaction.account = event.params.user;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'stake';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.user.toHex());
@@ -62,6 +65,7 @@ export function handleStartUnstakeEvent(event: StartUnstakeEvent): void {
   tokenTransaction.account = event.params.account;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'startUnstake';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.account.toHex());
@@ -83,6 +87,7 @@ export function handleUnstakedEvent(event: UnstakedEvent): void {
   tokenTransaction.account = event.params.account;
   tokenTransaction.amount = event.params.unstakeAmount;
   tokenTransaction.type = 'unstake';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.account.toHex());
@@ -100,6 +105,7 @@ export function handleAddedToEscrowEvent(event: AddedToEscrowEvent): void {
   tokenTransaction.account = event.params.acount;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'addToEscrow';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.acount.toHex());
@@ -127,6 +133,7 @@ export function handleVestedEvent(event: VestedEvent): void {
   tokenTransaction.account = event.params.account;
   tokenTransaction.amount = event.params.amount;
   tokenTransaction.type = 'vest';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.account.toHex());
@@ -146,6 +153,7 @@ export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
   tokenTransaction.timestamp = event.block.timestamp;
   tokenTransaction.account = event.params.account;
   tokenTransaction.type = 'cancelUnstake';
+  tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 
   let staker = Staker.load(event.params.account.toHex());
