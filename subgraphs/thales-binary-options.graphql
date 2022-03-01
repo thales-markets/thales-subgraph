@@ -158,3 +158,8 @@ type ThalesRoyalePosition @entity {
   season: BigInt!
   position: BigInt!
 }
+
+type ThalesRoyalePass @entity {
+  id: ID!
+  address: Bytes!
+}
