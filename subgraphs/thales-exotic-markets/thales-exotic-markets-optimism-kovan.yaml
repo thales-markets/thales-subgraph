@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+description: Thales Exotic Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ./thales-exotic-markets.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ExoticPositionalMarketManager
+    network: optimism-kovan
+    source:
+      address: '0x4eA42C9bD934e38C646a66512B1bc783BA81D812'
+      abi: ExoticPositionalMarketManager
+      startBlock: 1388950
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../../src/thales-exotic-markets/thales-exotic-markets-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: ExoticPositionalMarketManager
+          file: ../../abis/thales-exotic-markets/ExoticPositionalMarketManager.json
+      eventHandlers:
+        - event: MarketCreated(address,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
+          handler: handleMarketCreatedEvent

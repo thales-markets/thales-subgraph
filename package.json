@@ -41,7 +41,9 @@
     "deploy:options-optimism": "npm run deploy-optimism -- thales-markets/thales-optimism subgraphs/thales-binary-options-optimism.yaml",
     "create-local": "graph create --node http://localhost:8020/ thales-markets/thales-options",
     "remove-local": "graph remove --node http://localhost:8020/ thales-markets/thales-options",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thales-markets/thales-options"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thales-markets/thales-options",
+    "codegen:exotic-markets-optimism-kovan": "npm run codegen-optimism-kovan -- subgraphs/thales-exotic-markets/thales-exotic-markets-optimism-kovan.yaml",
+    "deploy:exotic-markets-optimism-kovan": "npm run deploy-optimism-kovan -- thales-markets/exotic-markets-optimism-kovan subgraphs/thales-exotic-markets/thales-exotic-markets-optimism-kovan.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "git://github.com/graphprotocol/graph-cli.git#ebeeba0009f026bacf940f25ee7b875fe7676032",

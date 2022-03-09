@@ -1,0 +1,14 @@
+type Market @entity {
+  id: ID!
+  timestamp: BigInt!
+  creator: Bytes!
+  address: Bytes!
+  question: String!
+  dataSource: String!
+  endOfPositioning: BigInt!
+  ticketPrice: BigInt!
+  isWithdrawalAllowed: Boolean!
+  tags: [BigInt!]!
+  positions: [String!]!
+  isOpen: Boolean!
+}
