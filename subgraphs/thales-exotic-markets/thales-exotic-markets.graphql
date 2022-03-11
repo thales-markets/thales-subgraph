@@ -8,7 +8,20 @@ type Market @entity {
   endOfPositioning: BigInt!
   ticketPrice: BigInt!
   isWithdrawalAllowed: Boolean!
-  tags: [BigInt!]!
   positions: [String!]!
+  tags: [BigInt!]!
+  isTicketType: Boolean!
   isOpen: Boolean!
+  numberOfDisputes: BigInt!
+  numberOfOpenDisputes: BigInt!
+}
+
+type Dispute @entity {
+  id: ID!
+  timestamp: BigInt!
+  creationDate: BigInt!
+  disputor: Bytes!
+  market: Bytes!
+  reasonForDispute: String!
+  status: String!
 }
