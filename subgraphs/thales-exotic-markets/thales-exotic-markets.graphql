@@ -20,8 +20,18 @@ type Dispute @entity {
   id: ID!
   timestamp: BigInt!
   creationDate: BigInt!
-  disputor: Bytes!
+  disputeNumber: BigInt!
+  disputer: Bytes!
   market: Bytes!
   reasonForDispute: String!
-  status: String!
+  isInPositioningPhase: Boolean!
+}
+
+type DisputeVote @entity {
+  id: ID!
+  timestamp: BigInt!
+  market: Bytes!
+  dispute: BigInt!
+  voter: Bytes!
+  vote: BigInt!
 }
