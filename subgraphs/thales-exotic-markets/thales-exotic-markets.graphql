@@ -2,6 +2,9 @@ type Market @entity {
   id: ID!
   timestamp: BigInt!
   creator: Bytes!
+  creationTime: BigInt!
+  resolver: Bytes
+  resolvedTime: BigInt
   address: Bytes!
   question: String!
   dataSource: String!
@@ -14,6 +17,14 @@ type Market @entity {
   isOpen: Boolean!
   numberOfDisputes: BigInt!
   numberOfOpenDisputes: BigInt!
+  marketClosedForDisputes: Boolean!
+  isResolved: Boolean!
+  isCancelled: Boolean!
+  winningPosition: BigInt!
+  backstopTimeout: BigInt!
+  isPaused: Boolean!
+  isDisputed: Boolean!
+  disputeClosedTime: Boolean
 }
 
 type Dispute @entity {
