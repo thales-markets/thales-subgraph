@@ -45,4 +45,15 @@ type DisputeVote @entity {
   dispute: BigInt!
   voter: Bytes!
   vote: BigInt!
+  position: BigInt!
+}
+
+type Position @entity {
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  market: Bytes!
+  position: BigInt!
+  isWithdrawn: Boolean!
+  isClaimed: Boolean!
 }

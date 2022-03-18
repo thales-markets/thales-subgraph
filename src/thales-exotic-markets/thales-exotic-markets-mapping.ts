@@ -7,13 +7,15 @@ import {
   MarketClosedForDisputes as MarketClosedForDisputesEvent,
   MarketReopenedForDisputes as MarketReopenedForDisputesEvent,
 } from '../../generated/ThalesOracleCouncil/ThalesOracleCouncil';
-import { Dispute, DisputeVote, Market } from '../../generated/schema';
+import { Dispute, DisputeVote, Market, Position } from '../../generated/schema';
 import {
   MarketResolved as MarketResolvedEvent,
   MarketReset as MarketResetEvent,
   BackstopTimeoutPeriodChanged as BackstopTimeoutPeriodChangedEvent,
   PauseChanged as PauseChangedEvent,
   MarketDisputed as MarketDisputedEvent,
+  NewPositionTaken as NewPositionTakenEvent,
+  TicketWithdrawn as TicketWithdrawnEvent,
 } from '../../generated/templates/ExoticPositionalMarket/ExoticPositionalMarket';
 import { ExoticPositionalMarket as ExoticPositionalMarketContract } from '../../generated/templates';
 
@@ -75,6 +77,7 @@ export function handleVotedAddedForDisputeEvent(event: VotedAddedForDisputeEvent
   }
   disputeVote.timestamp = event.block.timestamp;
   disputeVote.vote = event.params.disputeCodeVote;
+  disputeVote.position = event.params.winningPosition;
   disputeVote.save();
 }
 
@@ -135,4 +138,37 @@ export function handleMarketDisputedEvent(event: MarketDisputedEvent): void {
     market.disputeClosedTime = event.block.timestamp;
   }
   market.save();
+}
+
+export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+  if (position === null) {
+    position = new Position(positionId);
+    position.market = event.address;
+    position.account = event.params.account;
+  }
+  position.timestamp = event.block.timestamp;
+  position.position = event.params.position;
+  position.isWithdrawn = false;
+  position.isClaimed = false;
+  position.save();
+}
+
+export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+  position.timestamp = event.block.timestamp;
+  position.position = BigInt.fromI32(0);
+  position.isWithdrawn = true;
+  position.save();
+}
+
+export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+  position.timestamp = event.block.timestamp;
+  position.position = BigInt.fromI32(0);
+  position.isClaimed = true;
+  position.save();
 }
