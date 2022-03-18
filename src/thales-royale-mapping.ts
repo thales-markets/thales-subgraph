@@ -42,6 +42,11 @@ export function handleTookAPosition(event: TookAPositionEvent): void {
     thalesRoyalePosition.season = event.params.season;
     thalesRoyalePosition.player = event.params.user;
     thalesRoyalePosition.round = event.params.round;
+    if (event.params.round === BigInt.fromI32(1)) {
+      let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.params.season.toHex() + '-' + event.params.user.toHex());
+      thalesRoyalePlayer.defaultPosition = event.params.position;
+      thalesRoyalePlayer.save();
+    }
   }
   thalesRoyalePosition.timestamp = event.block.timestamp;
   thalesRoyalePosition.position = event.params.position;
