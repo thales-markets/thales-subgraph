@@ -15,8 +15,11 @@ import {
   PauseChanged as PauseChangedEvent,
   MarketDisputed as MarketDisputedEvent,
 } from '../../generated/templates/ExoticPositionalMarket/ExoticPositionalMarket';
+import { ExoticPositionalMarket as ExoticPositionalMarketContract } from '../../generated/templates';
 
 export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
+  ExoticPositionalMarketContract.create(event.params.marketAddress);
+
   let market = new Market(event.params.marketAddress.toHex());
   market.timestamp = event.block.timestamp;
   market.creator = event.params.marketOwner;
@@ -39,6 +42,7 @@ export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
   market.winningPosition = BigInt.fromI32(0);
   market.backstopTimeout = BigInt.fromI32(0);
   market.isPaused = false;
+  market.isDisputed = false;
   market.save();
 }
 
@@ -47,8 +51,8 @@ export function handleNewDisputeEvent(event: NewDisputeEvent): void {
   market.numberOfDisputes = market.numberOfDisputes.plus(BigInt.fromI32(1));
   market.numberOfOpenDisputes = market.numberOfOpenDisputes.plus(BigInt.fromI32(1));
   market.save();
-  let disputeNumber = market.numberOfOpenDisputes;
-  let dispute = new Dispute(event.params.market.toHex() + '-' + market.numberOfOpenDisputes.toString());
+  let disputeNumber = market.numberOfDisputes;
+  let dispute = new Dispute(event.params.market.toHex() + '-' + disputeNumber.toString());
   dispute.timestamp = event.block.timestamp;
   dispute.creationDate = event.block.timestamp;
   dispute.disputeNumber = disputeNumber;
@@ -128,7 +132,7 @@ export function handleMarketDisputedEvent(event: MarketDisputedEvent): void {
   let market = Market.load(event.address.toHex());
   market.isDisputed = event.params.disputed;
   if (!market.isDisputed) {
-    market.disputeClosedTime = event.params.disputed;
+    market.disputeClosedTime = event.block.timestamp;
   }
   market.save();
 }

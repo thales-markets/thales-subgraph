@@ -24,7 +24,7 @@ type Market @entity {
   backstopTimeout: BigInt!
   isPaused: Boolean!
   isDisputed: Boolean!
-  disputeClosedTime: Boolean
+  disputeClosedTime: BigInt
 }
 
 type Dispute @entity {
