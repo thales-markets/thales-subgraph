@@ -148,6 +148,7 @@ type ThalesRoyalePlayer @entity {
   season: BigInt!
   isAlive: Boolean!
   deathRound: BigInt
+  defaultPosition: BigInt
 }
 
 type ThalesRoyalePosition @entity {
