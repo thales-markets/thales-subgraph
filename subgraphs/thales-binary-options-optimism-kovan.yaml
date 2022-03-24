@@ -71,7 +71,7 @@ dataSources:
         - name: ThalesRoyale
           file: ../abis/thales-royale/ThalesRoyale.json
       eventHandlers:
-        - event: SignedUp(address,uint256)
+        - event: SignedUp(address,uint256,uint256)
           handler: handleSignedUp
         - event: TookAPosition(address,uint256,uint256,uint256)
           handler: handleTookAPosition

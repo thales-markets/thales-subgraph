@@ -19,21 +19,19 @@ export function handleSignedUp(event: SignedUpEvent): void {
     thalesRoyaleSeason.save();
   }
 
-  // Since default positioning is mandatory, TookAPosition event emits before SignedUp event in contract
-  // This leads to creation of Royale Player in handleTookAPosition handler as position is sent as TookAPositionEvent param
-  let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.params.season.toHex() + '-' + event.params.user.toHex());
-  if (thalesRoyalePlayer === null) {
-    let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-    let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
+  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
+  let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
 
-    let thalesRoyalePlayer = new ThalesRoyalePlayer(event.params.season.toHex() + '-' + event.params.user.toHex());
-    thalesRoyalePlayer.address = event.params.user;
-    thalesRoyalePlayer.timestamp = event.block.timestamp;
-    thalesRoyalePlayer.season = event.params.season;
-    thalesRoyalePlayer.isAlive = true;
-    thalesRoyalePlayer.number = BigInt.fromI32(players.length);
-    thalesRoyalePlayer.save();
+  let thalesRoyalePlayer = new ThalesRoyalePlayer(event.params.season.toHex() + '-' + event.params.user.toHex());
+  thalesRoyalePlayer.address = event.params.user;
+  thalesRoyalePlayer.timestamp = event.block.timestamp;
+  thalesRoyalePlayer.season = event.params.season;
+  thalesRoyalePlayer.isAlive = true;
+  thalesRoyalePlayer.number = BigInt.fromI32(players.length);
+  if (event.params.position.notEqual(BigInt.fromI32(0))) {
+    thalesRoyalePlayer.defaultPosition = event.params.position;
   }
+  thalesRoyalePlayer.save();
 }
 
 export function handleTookAPosition(event: TookAPositionEvent): void {
@@ -47,22 +45,6 @@ export function handleTookAPosition(event: TookAPositionEvent): void {
     thalesRoyalePosition.season = event.params.season;
     thalesRoyalePosition.player = event.params.user;
     thalesRoyalePosition.round = event.params.round;
-
-    if (event.params.round.equals(BigInt.fromI32(1))) {
-      let thalesRoyalePlayer = ThalesRoyalePlayer.load(event.params.season.toHex() + '-' + event.params.user.toHex());
-      if (thalesRoyalePlayer === null) {
-        let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-        let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
-        thalesRoyalePlayer = new ThalesRoyalePlayer(event.params.season.toHex() + '-' + event.params.user.toHex());
-        thalesRoyalePlayer.address = event.params.user;
-        thalesRoyalePlayer.timestamp = event.block.timestamp;
-        thalesRoyalePlayer.season = event.params.season;
-        thalesRoyalePlayer.isAlive = true;
-        thalesRoyalePlayer.number = BigInt.fromI32(players.length);
-      }
-      thalesRoyalePlayer.defaultPosition = event.params.position;
-      thalesRoyalePlayer.save();
-    }
   }
 
   thalesRoyalePosition.timestamp = event.block.timestamp;
