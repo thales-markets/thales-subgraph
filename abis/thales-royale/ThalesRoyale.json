@@ -1,6 +1,15 @@
 [
   {
     "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "_season", "type": "uint256" },
+      { "indexed": false, "internalType": "bytes32", "name": "_oracleKey", "type": "bytes32" }
+    ],
+    "name": "HistoryDataAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [{ "indexed": false, "internalType": "uint256", "name": "buyInAmount", "type": "uint256" }],
     "name": "NewBuyInAmount",
     "type": "event"
@@ -261,6 +270,17 @@
     "name": "finalPricePerRoundPerSeason",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_seasonFrom", "type": "uint256" },
+      { "internalType": "uint256", "name": "_seasonTo", "type": "uint256" },
+      { "internalType": "bytes32", "name": "_oracleKey", "type": "bytes32" }
+    ],
+    "name": "fulfillOracleKeyHistoryData",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
