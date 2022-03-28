@@ -105,7 +105,7 @@ dataSources:
     source:
       address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
       abi: ThalesRoyale
-      startBlock: 4839201
+      startBlock: 4952765
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -122,12 +122,6 @@ dataSources:
       eventHandlers:
         - event: SignedUp(address,uint256,uint256)
           handler: handleSignedUpWithPosition
-        - event: TookAPosition(address,uint256,uint256,uint256)
-          handler: handleTookAPosition
-        - event: RoyaleStarted(uint256,uint256,uint256)
-          handler: handleRoyaleStarted
-        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRoundClosed
   - kind: ethereum/contract
     name: ThalesRoyalePass
     network: optimism
