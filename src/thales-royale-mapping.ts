@@ -145,7 +145,7 @@ export function handleRoundClosed(event: RoundClosedEvent): void {
 // This handler serves only for avoiding problematic season which was caused due to contract changes
 // while the season was still running
 export function handleRoundClosedForOPKovan(event: RoundClosedEvent): void {
-  if (event.params.season.le(BigInt.fromI32(88)) && event.params.season.ge(BigInt.fromI32(91))) {
+  if (event.params.season.le(BigInt.fromI32(88))) {
     let thalesRoyaleContract = ThalesRoyale.bind(event.address);
     let players = thalesRoyaleContract.getPlayersForSeason(event.params.season);
 
