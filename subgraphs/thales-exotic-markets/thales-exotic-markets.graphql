@@ -25,6 +25,7 @@ type Market @entity {
   isPaused: Boolean!
   isDisputed: Boolean!
   disputeClosedTime: BigInt
+  poolSize: BigInt!
 }
 
 type Dispute @entity {
@@ -36,6 +37,7 @@ type Dispute @entity {
   market: Bytes!
   reasonForDispute: String!
   isInPositioningPhase: Boolean!
+  disputeCode: BigInt!
 }
 
 type DisputeVote @entity {

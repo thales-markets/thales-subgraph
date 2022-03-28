@@ -45,6 +45,7 @@ export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
   market.backstopTimeout = BigInt.fromI32(0);
   market.isPaused = false;
   market.isDisputed = false;
+  market.poolSize = BigInt.fromI32(0);
   market.save();
 }
 
@@ -62,6 +63,7 @@ export function handleNewDisputeEvent(event: NewDisputeEvent): void {
   dispute.disputer = event.params.disputorAccount;
   dispute.reasonForDispute = event.params.disputeString;
   dispute.isInPositioningPhase = event.params.disputeInPositioningPhase;
+  dispute.disputeCode = BigInt.fromI32(0);
   dispute.save();
 }
 
@@ -82,6 +84,10 @@ export function handleVotedAddedForDisputeEvent(event: VotedAddedForDisputeEvent
 }
 
 export function handleDisputeClosedEvent(event: DisputeClosedEvent): void {
+  let dispute = Dispute.load(event.params.market.toHex() + '-' + event.params.disputeIndex.toString());
+  dispute.disputeCode = event.params.decidedOption;
+  dispute.save();
+
   let market = Market.load(event.params.market.toHex());
   market.numberOfOpenDisputes = market.numberOfOpenDisputes.minus(BigInt.fromI32(1));
   market.save();
@@ -147,6 +153,10 @@ export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void 
     position = new Position(positionId);
     position.market = event.address;
     position.account = event.params.account;
+
+    let market = Market.load(event.address.toHex());
+    market.poolSize = market.poolSize.plus(market.ticketPrice);
+    market.save();
   }
   position.timestamp = event.block.timestamp;
   position.position = event.params.position;
@@ -162,6 +172,10 @@ export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
   position.position = BigInt.fromI32(0);
   position.isWithdrawn = true;
   position.save();
+
+  let market = Market.load(event.address.toHex());
+  market.poolSize = market.poolSize.minus(market.ticketPrice);
+  market.save();
 }
 
 export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
