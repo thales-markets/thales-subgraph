@@ -108,34 +108,15 @@
         "internalType": "address",
         "name": "resolverAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "noWinner",
+        "type": "bool"
       }
     ],
     "name": "MarketResolved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "openBidPositions",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "openBidAmounts",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "NewOpenBidsForPositions",
     "type": "event"
   },
   {
@@ -306,7 +287,33 @@
   },
   {
     "inputs": [],
+    "name": "canCreatorCancelMarket",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "canMarketBeResolved",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "canMarketBeResolvedByOwner",
     "outputs": [
       {
         "internalType": "bool",
@@ -419,19 +426,6 @@
     "name": "claimWinningTicketOnBehalf",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "claimableOpenBidAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -600,161 +594,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getAllMarketData",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "marketQuestion",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "marketSource",
-            "type": "string"
-          },
-          {
-            "internalType": "enum ExoticPositionalMarket.TicketType",
-            "name": "ticketType",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint256",
-            "name": "endOfPositioning",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "fixedTicketPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "creationTime",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "withdrawalAllowed",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "disputed",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "resolved",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "resolvedTime",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string[]",
-            "name": "positionPhrasesList",
-            "type": "string[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "tags",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "totalPlacedAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "totalClaimableAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "amountsPerPosition",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "bool",
-            "name": "canUsersPlacePosition",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "canMarketBeResolved",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "canMarketBeResolvedByPDAO",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "canUsersClaim",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "isCancelled",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "paused",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "winningPosition",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "creatorAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "resolverAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "fixedBondAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "disputePrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "safeBoxLowAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "arbitraryRewardForDisputor",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ExoticPositionalMarket.MarketData",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -768,19 +607,6 @@
         "internalType": "uint256[]",
         "name": "",
         "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAlreadyClaimedTickets",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -827,12 +653,43 @@
   {
     "inputs": [
       {
+        "internalType": "bool",
+        "name": "forNewUserView",
+        "type": "bool"
+      },
+      {
         "internalType": "uint256",
-        "name": "_position",
+        "name": "userAlreadyTakenPosition",
         "type": "uint256"
       }
     ],
-    "name": "getPotentialWinningAmountForPosition",
+    "name": "getPotentialWinningAmountForAllPosition",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTags",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTagsCount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -845,7 +702,7 @@
   },
   {
     "inputs": [],
-    "name": "getTagsCount",
+    "name": "getTicketType",
     "outputs": [
       {
         "internalType": "uint256",
@@ -920,92 +777,6 @@
         "internalType": "address",
         "name": "_account",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_position",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUserOpenBidPositionPlacedAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_position",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUserOpenBidPotentialWinningForPosition",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "getUserOpenBidTotalClaimableAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "getUserOpenBidTotalPlacedAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
       }
     ],
     "name": "getUserPosition",
@@ -1033,6 +804,25 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "getUserPotentialWinningAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -1205,6 +995,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "noWinners",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -1452,19 +1255,27 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[]",
-        "name": "_positions",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_amounts",
-        "type": "uint256[]"
+        "internalType": "uint256",
+        "name": "_position",
+        "type": "uint256"
       }
     ],
-    "name": "takeOpenBidPositions",
+    "name": "takeCreatorInitialPosition",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "thalesBonds",
+    "outputs": [
+      {
+        "internalType": "contract IThalesBonds",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1472,7 +1283,7 @@
     "name": "ticketType",
     "outputs": [
       {
-        "internalType": "enum ExoticPositionalMarket.TicketType",
+        "internalType": "enum ExoticPositionalFixedMarket.TicketType",
         "name": "",
         "type": "uint8"
       }
@@ -1514,38 +1325,6 @@
   },
   {
     "inputs": [],
-    "name": "totalOpenBidAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "totalOpenBidAmountPerPosition",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "totalUsersTakenPositions",
     "outputs": [
       {
@@ -1561,42 +1340,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferBondToMarket",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_recepient",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFromBondAmountToRecepient",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "proxyAddress",
         "type": "address"
       }
@@ -1604,48 +1347,6 @@
     "name": "transferOwnershipAtInit",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferToMarket",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "userOpenBidPosition",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1683,19 +1384,6 @@
   {
     "inputs": [],
     "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_openBidPosition",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdrawFromOpenBidPosition",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
