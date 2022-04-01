@@ -26,6 +26,8 @@ dataSources:
       eventHandlers:
         - event: MarketCreated(address,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
           handler: handleMarketCreatedEvent
+        - event: MarketCanceled(address)
+          handler: handleMarketCanceledEvent
   - kind: ethereum/contract
     name: ThalesOracleCouncil
     network: optimism-kovan

@@ -1,5 +1,8 @@
 import { BigInt } from '@graphprotocol/graph-ts';
-import { MarketCreated as MarketCreatedEvent } from '../../generated/ExoticPositionalMarketManager/ExoticPositionalMarketManager';
+import {
+  MarketCreated as MarketCreatedEvent,
+  MarketCanceled as MarketCanceledEvent,
+} from '../../generated/ExoticPositionalMarketManager/ExoticPositionalMarketManager';
 import {
   NewDispute as NewDisputeEvent,
   VotedAddedForDispute as VotedAddedForDisputeEvent,
@@ -47,7 +50,8 @@ export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
   market.isDisputed = false;
   market.poolSize = BigInt.fromI32(0);
   market.numberOfParticipants = BigInt.fromI32(0);
-  market.noWinner = false;
+  market.noWinners = false;
+  market.cancelledByCreator = false;
   market.save();
 }
 
@@ -126,7 +130,7 @@ export function handleMarketResolvedEvent(event: MarketResolvedEvent): void {
     market.winningPosition = event.params.winningPosition;
     market.resolver = event.params.resolverAddress;
     market.resolvedTime = event.block.timestamp;
-    market.noWinner = event.params.noWinner;
+    market.noWinners = event.params.noWinner;
     market.save();
   }
 }
@@ -138,7 +142,7 @@ export function handleMarketResetEvent(event: MarketResetEvent): void {
     market.isOpen = true;
     market.isCancelled = false;
     market.winningPosition = BigInt.fromI32(0);
-    market.noWinner = false;
+    market.noWinners = false;
     market.save();
   }
 }
@@ -220,5 +224,13 @@ export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): vo
     position.position = BigInt.fromI32(0);
     position.isClaimed = true;
     position.save();
+  }
+}
+
+export function handleMarketCanceledEvent(event: MarketCanceledEvent): void {
+  let market = Market.load(event.params.marketAddress.toHex());
+  if (market !== null) {
+    market.cancelledByCreator = market.creator.equals(event.transaction.from);
+    market.save();
   }
 }

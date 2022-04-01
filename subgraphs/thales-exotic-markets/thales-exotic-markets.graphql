@@ -27,7 +27,8 @@ type Market @entity {
   disputeClosedTime: BigInt
   poolSize: BigInt!
   numberOfParticipants: BigInt!
-  noWinner: Boolean!
+  noWinners: Boolean!
+  cancelledByCreator: Boolean!
 }
 
 type Dispute @entity {
