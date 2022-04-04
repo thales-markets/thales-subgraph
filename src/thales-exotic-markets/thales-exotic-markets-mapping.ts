@@ -10,7 +10,7 @@ import {
   MarketClosedForDisputes as MarketClosedForDisputesEvent,
   MarketReopenedForDisputes as MarketReopenedForDisputesEvent,
 } from '../../generated/ThalesOracleCouncil/ThalesOracleCouncil';
-import { Dispute, DisputeVote, Market, Position } from '../../generated/schema';
+import { Dispute, DisputeVote, Market, MarketTransaction, Position } from '../../generated/schema';
 import {
   MarketResolved as MarketResolvedEvent,
   MarketReset as MarketResetEvent,
@@ -196,6 +196,16 @@ export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void 
   position.isWithdrawn = false;
   position.isClaimed = false;
   position.save();
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = position === null ? 'bid' : 'changePosition';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.fixedTicketAmount;
+  marketTransaction.save();
 }
 
 export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
@@ -214,6 +224,16 @@ export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
       market.save();
     }
   }
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'withdrawal';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.amount;
+  marketTransaction.save();
 }
 
 export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
@@ -225,6 +245,16 @@ export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): vo
     position.isClaimed = true;
     position.save();
   }
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'claim';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.amount;
+  marketTransaction.save();
 }
 
 export function handleMarketCanceledEvent(event: MarketCanceledEvent): void {
