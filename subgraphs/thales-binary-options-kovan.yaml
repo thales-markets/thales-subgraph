@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0x547818b1ee8bd9a6d5854e8A9E84E066B9a07aA7'
       abi: BinaryOptionMarketManager
-      startBlock: 28137065
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -20,11 +20,11 @@ dataSources:
         - Market
       abis:
         - name: BinaryOptionMarketManager
-          file: ../abis/thales/BinaryOptionMarketManager.json
+          file: ../abis/thales/l1-legacy/BinaryOptionMarketManager.json
         - name: BinaryOptionMarket
-          file: '../abis/thales/BinaryOptionMarket.json'
+          file: '../abis/thales/l1-legacy/BinaryOptionMarket.json'
       eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address,address)
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired
@@ -34,7 +34,7 @@ dataSources:
     source:
       address: '0xdef1c0ded9bec7f1a1670819833240f027b25eff'
       abi: ExchangeProxy
-      startBlock: 19020005
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -54,7 +54,7 @@ dataSources:
     source:
       address: '0xD9ceC0F5b2B43C74DFA4A87117968808b95d9018'
       abi: Airdrop
-      startBlock: 27136267
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,27 +64,47 @@ dataSources:
         - TokenTransaction
       abis:
         - name: Airdrop
-          file: ../abis/token/Airdrop.json
+          file: ../abis/token/l1-legacy/Airdrop.json
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleRetroAirdropClaimEvent
+  - kind: ethereum/contract
+    name: UnclaimedInvestorsRetroAirdrop
+    network: kovan
+    source:
+      address: '0x686525728323b10bF611C6d260604c02946792ab'
+      abi: UnclaimedInvestorsRetroAirdrop
+      startBlock: 30858383
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-l1.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: UnclaimedInvestorsRetroAirdrop
+          file: ../abis/token/l1-legacy/UnclaimedInvestorsRetroAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedInvestorsRetroRewardsClaimEvent
   - kind: ethereum/contract
     name: VestingEscrow
     network: kovan
     source:
       address: '0xaF05693d2c336b40055F6531556aB6D0Ebf003D8'
       abi: VestingEscrow
-      startBlock: 26759339
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
+      file: ../src/token-mapping-l1.ts
       entities:
         - TokenTransaction
       abis:
         - name: VestingEscrow
-          file: ../abis/token/VestingEscrow-l1.json
+          file: ../abis/token/l1-legacy/VestingEscrow.json
       eventHandlers:
         - event: Claim(indexed address,uint256)
           handler: handleRetroUnlockedClaimEvent
@@ -94,7 +114,7 @@ dataSources:
     source:
       address: '0xd9112fC9396d38D024D1369e72f039d542000f80'
       abi: OngoingAirdrop
-      startBlock: 27135589
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -104,7 +124,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: OngoingAirdrop
-          file: ../abis/token/OngoingAirdrop.json
+          file: ../abis/token/l1-legacy/OngoingAirdrop.json
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
@@ -116,7 +136,7 @@ dataSources:
     source:
       address: '0x8d178B3Dd7B29dfB38f55FdFE6518cabe6B31059'
       abi: StakingThales
-      startBlock: 27135615
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -126,7 +146,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: StakingThales
-          file: ../abis/token/StakingThales.json
+          file: ../abis/token/l1-legacy/StakingThales.json
       eventHandlers:
         - event: Staked(address,uint256)
           handler: handleStakedEvent
@@ -140,7 +160,7 @@ dataSources:
     source:
       address: '0xcE9c1aAb41b18b24355138776186484B260B9cf0'
       abi: EscrowThales
-      startBlock: 27135591
+      startBlock: 30858383
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -150,7 +170,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: EscrowThales
-          file: ../abis/token/EscrowThales.json
+          file: ../abis/token/l1-legacy/EscrowThales.json
       eventHandlers:
         - event: AddedToEscrow(address,uint256)
           handler: handleAddedToEscrowEvent
@@ -173,7 +193,7 @@ templates:
         - HistoricalOptionPrice
       abis:
         - name: BinaryOptionMarket
-          file: ../abis/thales/BinaryOptionMarket.json
+          file: ../abis/thales/l1-legacy/BinaryOptionMarket.json
       eventHandlers:
         - event: Mint(uint8,indexed address,uint256)
           handler: handleMint
@@ -195,4 +215,4 @@ templates:
         - BinaryOption
       abis:
         - name: BinaryOption
-          file: ../abis/thales/BinaryOption.json
+          file: ../abis/thales/l1-legacy/BinaryOption.json

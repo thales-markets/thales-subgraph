@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0x6382660BF24f5e7BeC43a7D47591F823488FDB8D'
       abi: BinaryOptionMarketManager
-      startBlock: 476204
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -34,7 +34,7 @@ dataSources:
     source:
       address: '0xB0437C95551738FC48e2656017B70344d269f337'
       abi: AMM
-      startBlock: 476272
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -56,7 +56,7 @@ dataSources:
     source:
       address: '0x8f73e225Df3cacD7e6F62AE75538E72feA52d58F'
       abi: ThalesRoyale
-      startBlock: 1756877
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -85,7 +85,7 @@ dataSources:
     source:
       address: '0x288eF27eC4fEaD97F81A6F578152fd00DdFBB448'
       abi: ThalesRoyalePass
-      startBlock: 1258872
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -105,7 +105,7 @@ dataSources:
     source:
       address: '0xA84062253E6FBC0c03Ab100A7953Ebe88BE86415'
       abi: Airdrop
-      startBlock: 887835
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -125,7 +125,7 @@ dataSources:
     source:
       address: '0x09F9FBA4C2A2f51182e90888df6B954C68288200'
       abi: StakingThales
-      startBlock: 981326
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -153,7 +153,7 @@ dataSources:
     source:
       address: '0xcCD32f7EB77574bb6929e2dA9CE6c608E45BA54F'
       abi: EscrowThales
-      startBlock: 981324
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -175,7 +175,7 @@ dataSources:
     source:
       address: '0xcA8d82a30fd9dfec102eCdfb59A13e9a86C2Ee6F'
       abi: OngoingAirdrop
-      startBlock: 1053497
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -189,6 +189,26 @@ dataSources:
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleMigratedRewardsClaimEvent
+  - kind: ethereum/contract
+    name: UnclaimedRetroAirdrop
+    network: optimism-kovan
+    source:
+      address: '0xAC1A4F1d912d30e3a546dcf6fc0F27c44CB1A058'
+      abi: UnclaimedRetroAirdrop
+      startBlock: 1912110
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: UnclaimedRetroAirdrop
+          file: ../abis/token/UnclaimedRetroAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedRetroRewardsClaimEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
