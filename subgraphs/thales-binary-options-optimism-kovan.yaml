@@ -67,7 +67,8 @@ dataSources:
         - ThalesRoyaleSeason
         - ThalesRoyalePlayer
         - ThalesRoyalePostition
-        - ThalesRoyaleTokenPlayer
+        - ThalesRoyalePassportPlayer
+        - ThalesRoyalePassportPosition
       abis:
         - name: ThalesRoyale
           file: ../abis/thales-royale/ThalesRoyaleWithPassport.json
