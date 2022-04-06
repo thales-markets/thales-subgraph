@@ -189,26 +189,6 @@ dataSources:
       eventHandlers:
         - event: Claim(address,uint256,uint256)
           handler: handleMigratedRewardsClaimEvent
-  - kind: ethereum/contract
-    name: UnclaimedRetroAirdrop
-    network: optimism-kovan
-    source:
-      address: '0xAC1A4F1d912d30e3a546dcf6fc0F27c44CB1A058'
-      abi: UnclaimedRetroAirdrop
-      startBlock: 1912110
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/token-mapping-l2.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: UnclaimedRetroAirdrop
-          file: ../abis/token/UnclaimedRetroAirdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleMigratedRetroRewardsClaimEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
