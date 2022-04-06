@@ -40,30 +40,6 @@ export function handleSignedUp(event: SignedUpEvent): void {
   thalesRoyalePlayer.save();
 }
 
-export function handleSignedUpPassport(event: SignedUpPassportEvent): void {
-  let thalesRoyaleSeason = ThalesRoyaleSeason.load(event.params.season.toHex());
-  if (thalesRoyaleSeason === null) {
-    thalesRoyaleSeason = new ThalesRoyaleSeason(event.params.season.toHex());
-    thalesRoyaleSeason.timestamp = event.block.timestamp;
-    thalesRoyaleSeason.season = event.params.season;
-    thalesRoyaleSeason.save();
-  }
-
-  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let players = thalesRoyaleContract.getTokensForSeason(event.params.season);
-
-  let thalesRoyalePassportPlayer = new ThalesRoyalePassportPlayer(event.params.tokenId.toHex());
-  thalesRoyalePassportPlayer.timestamp = event.block.timestamp;
-  thalesRoyalePassportPlayer.owner = event.params.user;
-  thalesRoyalePassportPlayer.season = event.params.season;
-  thalesRoyalePassportPlayer.isAlive = true;
-  thalesRoyalePassportPlayer.number = BigInt.fromI32(players.length);
-  let positions = [];
-  event.params.positions.forEach((position: BigInt) => positions.push(position.toHex()));
-  thalesRoyalePassportPlayer.defaultPositions = positions;
-  thalesRoyalePassportPlayer.save();
-}
-
 export function handleSignedUpWithPosition(event: SignedUpEvent): void {
   let thalesRoyaleSeason = ThalesRoyaleSeason.load(event.params.season.toHex());
   if (thalesRoyaleSeason === null) {
@@ -86,6 +62,28 @@ export function handleSignedUpWithPosition(event: SignedUpEvent): void {
     thalesRoyalePlayer.defaultPosition = event.params.position;
   }
   thalesRoyalePlayer.save();
+}
+
+export function handleSignedUpPassport(event: SignedUpPassportEvent): void {
+  let thalesRoyaleSeason = ThalesRoyaleSeason.load(event.params.season.toHex());
+  if (thalesRoyaleSeason === null) {
+    thalesRoyaleSeason = new ThalesRoyaleSeason(event.params.season.toHex());
+    thalesRoyaleSeason.timestamp = event.block.timestamp;
+    thalesRoyaleSeason.season = event.params.season;
+    thalesRoyaleSeason.save();
+  }
+
+  let thalesRoyaleContract = ThalesRoyale.bind(event.address);
+  let players = thalesRoyaleContract.getTokensForSeason(event.params.season);
+
+  let thalesRoyalePassportPlayer = new ThalesRoyalePassportPlayer(event.params.tokenId.toHex());
+  thalesRoyalePassportPlayer.timestamp = event.block.timestamp;
+  thalesRoyalePassportPlayer.owner = event.params.user;
+  thalesRoyalePassportPlayer.season = event.params.season;
+  thalesRoyalePassportPlayer.isAlive = true;
+  thalesRoyalePassportPlayer.number = BigInt.fromI32(players.length);
+  thalesRoyalePassportPlayer.defaultPositions = event.params.positions;
+  thalesRoyalePassportPlayer.save();
 }
 
 export function handleTookAPosition(event: TookAPositionEvent): void {
@@ -153,19 +151,25 @@ export function handleRoyaleStartedOPMainnet(event: RoyaleStartedEvent): void {
   }
 
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  let tokenPlayers: any[];
   if (event.params.season.gt(BigInt.fromI32(6))) {
-    tokenPlayers = thalesRoyaleContract.getTokensForSeason(event.params.season);
+    let tokenPlayers = thalesRoyaleContract.getTokensForSeason(event.params.season);
+    let thalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + BigInt.fromI32(1).toHex());
+    thalesRoyaleRound.season = event.params.season;
+    thalesRoyaleRound.round = BigInt.fromI32(1);
+    thalesRoyaleRound.timestamp = event.block.timestamp;
+    thalesRoyaleRound.totalPlayersPerRoundPerSeason = BigInt.fromI32(tokenPlayers.length);
+    thalesRoyaleRound.eliminatedPerRoundPerSeason = BigInt.fromI32(0);
+    thalesRoyaleRound.save();
   } else {
-    tokenPlayers = thalesRoyaleContract.getPlayersForSeason(event.params.season);
+    let tokenPlayers = thalesRoyaleContract.getPlayersForSeason(event.params.season);
+    let thalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + BigInt.fromI32(1).toHex());
+    thalesRoyaleRound.season = event.params.season;
+    thalesRoyaleRound.round = BigInt.fromI32(1);
+    thalesRoyaleRound.timestamp = event.block.timestamp;
+    thalesRoyaleRound.totalPlayersPerRoundPerSeason = BigInt.fromI32(tokenPlayers.length);
+    thalesRoyaleRound.eliminatedPerRoundPerSeason = BigInt.fromI32(0);
+    thalesRoyaleRound.save();
   }
-  let thalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + BigInt.fromI32(1).toHex());
-  thalesRoyaleRound.season = event.params.season;
-  thalesRoyaleRound.round = BigInt.fromI32(1);
-  thalesRoyaleRound.timestamp = event.block.timestamp;
-  thalesRoyaleRound.totalPlayersPerRoundPerSeason = BigInt.fromI32(tokenPlayers.length);
-  thalesRoyaleRound.eliminatedPerRoundPerSeason = BigInt.fromI32(0);
-  thalesRoyaleRound.save();
 }
 
 export function handleRoundClosedOPKovan(event: RoundClosedEvent): void {

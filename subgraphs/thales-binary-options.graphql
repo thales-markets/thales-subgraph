@@ -169,12 +169,12 @@ type ThalesRoyalePass @entity {
 type ThalesRoyalePassportPlayer @entity {
   id: ID!
   owner: Bytes!
-  number: BigInt!
-  timestamp: BigInt!
-  season: BigInt!
-  isAlive: Boolean!
+  number: BigInt
+  timestamp: BigInt
+  season: BigInt
+  isAlive: Boolean
   deathRound: BigInt
-  defaultPositions: [BigInt!]!
+  defaultPositions: [BigInt!]
 }
 
 type ThalesRoyalePassportPosition @entity {

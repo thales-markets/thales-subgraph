@@ -63,10 +63,10 @@ dataSources:
       language: wasm/assemblyscript
       file: ../src/thales-royale-with-passport-mapping.ts
       entities:
-        - ThalesToyaleGame
+        - ThalesRoyaleGame
         - ThalesRoyaleSeason
         - ThalesRoyalePlayer
-        - ThalesRoyalePostition
+        - ThalesRoyalePosition
         - ThalesRoyalePassportPlayer
         - ThalesRoyalePassportPosition
       abis:
