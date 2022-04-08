@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0x4eA42C9bD934e38C646a66512B1bc783BA81D812'
       abi: ExoticPositionalMarketManager
-      startBlock: 1615368
+      startBlock: 1882041
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -26,13 +26,15 @@ dataSources:
       eventHandlers:
         - event: MarketCreated(address,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
           handler: handleMarketCreatedEvent
+        - event: MarketCanceled(address)
+          handler: handleMarketCanceledEvent
   - kind: ethereum/contract
     name: ThalesOracleCouncil
     network: optimism-kovan
     source:
       address: '0x61118647A361CBaFE9119D5d7e08Be5026A20dC4'
       abi: ThalesOracleCouncil
-      startBlock: 1615368
+      startBlock: 1882041
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -71,7 +73,7 @@ templates:
         - name: ExoticPositionalMarket
           file: ../../abis/thales-exotic-markets/ExoticPositionalMarket.json
       eventHandlers:
-        - event: MarketResolved(uint256,address)
+        - event: MarketResolved(uint256,address,bool)
           handler: handleMarketResolvedEvent
         - event: MarketReset()
           handler: handleMarketResetEvent

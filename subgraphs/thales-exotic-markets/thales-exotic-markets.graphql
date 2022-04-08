@@ -25,6 +25,10 @@ type Market @entity {
   isPaused: Boolean!
   isDisputed: Boolean!
   disputeClosedTime: BigInt
+  poolSize: BigInt!
+  numberOfParticipants: BigInt!
+  noWinners: Boolean!
+  cancelledByCreator: Boolean!
 }
 
 type Dispute @entity {
@@ -36,6 +40,7 @@ type Dispute @entity {
   market: Bytes!
   reasonForDispute: String!
   isInPositioningPhase: Boolean!
+  disputeCode: BigInt!
 }
 
 type DisputeVote @entity {
@@ -56,4 +61,22 @@ type Position @entity {
   position: BigInt!
   isWithdrawn: Boolean!
   isClaimed: Boolean!
+}
+
+enum MarketTransactionType {
+  bid
+  changePosition
+  withdrawal
+  claim
+}
+
+type MarketTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  type: MarketTransactionType!
+  account: Bytes!
+  market: Bytes!
+  amount: BigInt!
 }

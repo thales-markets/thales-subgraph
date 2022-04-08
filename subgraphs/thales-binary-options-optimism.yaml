@@ -71,7 +71,7 @@ dataSources:
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
   - kind: ethereum/contract
-    name: ThalesRoyale
+    name: ThalesRoyale_old
     network: optimism
     source:
       address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
@@ -89,7 +89,7 @@ dataSources:
         - ThalesRoyalePostition
       abis:
         - name: ThalesRoyale
-          file: ../abis/thales-royale/ThalesRoyale.json
+          file: ../abis/thales-royale/ThalesRoyale_old.json
       eventHandlers:
         - event: SignedUp(address,uint256)
           handler: handleSignedUp
@@ -99,6 +99,29 @@ dataSources:
           handler: handleRoyaleStarted
         - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleRoundClosed
+  - kind: ethereum/contract
+    name: ThalesRoyale
+    network: optimism
+    source:
+      address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
+      abi: ThalesRoyale
+      startBlock: 4952765
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-mapping.ts
+      entities:
+        - ThalesToyaleGame
+        - ThalesRoyaleSeason
+        - ThalesRoyalePlayer
+        - ThalesRoyalePostition
+      abis:
+        - name: ThalesRoyale
+          file: ../abis/thales-royale/ThalesRoyale.json
+      eventHandlers:
+        - event: SignedUp(address,uint256,uint256)
+          handler: handleSignedUpWithPosition
   - kind: ethereum/contract
     name: ThalesRoyalePass
     network: optimism

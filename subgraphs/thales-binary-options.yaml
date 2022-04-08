@@ -89,12 +89,32 @@ dataSources:
         - event: Claim(address,uint256,uint256)
           handler: handleRetroAirdropClaimEvent
   - kind: ethereum/contract
+    name: UnclaimedInvestorsRetroAirdrop
+    network: mainnet
+    source:
+      address: '0x4f896abE9E28C2Db248a8DdAC205ca1cf84A2771'
+      abi: UnclaimedInvestorsRetroAirdrop
+      startBlock: 14531990
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-l1.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: UnclaimedInvestorsRetroAirdrop
+          file: ../abis/token/l1-legacy/UnclaimedInvestorsRetroAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedInvestorsRetroRewardsClaimEvent
+  - kind: ethereum/contract
     name: VestingEscrow
     network: mainnet
     source:
-      address: '0xbaE14FAf280FB293e6f3D6c0b5E80eD5D477b161'
+      address: '0x088c6Ad16ba124F1d40fD2A3EDe63ef2E8dAe39f'
       abi: VestingEscrow
-      startBlock: 13210181
+      startBlock: 14532006
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
