@@ -151,7 +151,7 @@ export function handleRoyaleStartedOPMainnet(event: RoyaleStartedEvent): void {
   }
 
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  if (event.params.season.gt(BigInt.fromI32(6))) {
+  if (event.params.season.gt(BigInt.fromI32(5))) {
     let tokenPlayers = thalesRoyaleContract.getTokensForSeason(event.params.season);
     let thalesRoyaleRound = new ThalesRoyaleRound(event.params.season.toHex() + '-' + BigInt.fromI32(1).toHex());
     thalesRoyaleRound.season = event.params.season;
@@ -223,7 +223,7 @@ export function handleRoundClosedOPKovan(event: RoundClosedEvent): void {
 
 export function handleRoundClosedOPMainnet(event: RoundClosedEvent): void {
   let thalesRoyaleContract = ThalesRoyale.bind(event.address);
-  if (event.params.season.gt(BigInt.fromI32(6))) {
+  if (event.params.season.gt(BigInt.fromI32(5))) {
     let tokenPlayers = thalesRoyaleContract.getTokensForSeason(event.params.season);
 
     for (let index = 0; index < tokenPlayers.length; index++) {

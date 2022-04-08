@@ -81,12 +81,14 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/thales-royale-mapping.ts
+      file: ../src/thales-royale-with-passport-mapping.ts
       entities:
         - ThalesToyaleGame
         - ThalesRoyaleSeason
         - ThalesRoyalePlayer
         - ThalesRoyalePostition
+        - ThalesRoyalePassportPlayer
+        - ThalesRoyalePassportPosition
       abis:
         - name: ThalesRoyale
           file: ../abis/thales-royale/ThalesRoyale_old.json
@@ -96,9 +98,9 @@ dataSources:
         - event: TookAPosition(address,uint256,uint256,uint256)
           handler: handleTookAPosition
         - event: RoyaleStarted(uint256,uint256,uint256)
-          handler: handleRoyaleStarted
+          handler: handleRoyaleStartedOPMainnet
         - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRoundClosed
+          handler: handleRoundClosedOPMainnet
   - kind: ethereum/contract
     name: ThalesRoyale
     network: optimism
@@ -110,18 +112,24 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/thales-royale-mapping.ts
+      file: ../src/thales-royale-with-passport-mapping.ts
       entities:
-        - ThalesToyaleGame
+        - ThalesRoyaleGame
         - ThalesRoyaleSeason
         - ThalesRoyalePlayer
         - ThalesRoyalePostition
+        - ThalesRoyalePassportPlayer
+        - ThalesRoyalePassportPosition
       abis:
         - name: ThalesRoyale
-          file: ../abis/thales-royale/ThalesRoyale.json
+          file: ../abis/thales-royale/ThalesRoyaleWithPassport.json
       eventHandlers:
         - event: SignedUp(address,uint256,uint256)
           handler: handleSignedUpWithPosition
+        - event: SignedUpPassport(address,uint256,uint256,uint256[])
+          handler: handleSignedUpPassport
+        - event: TookAPositionPassport(address,uint256,uint256,uint256,uint256)
+          handler: handleTookAPositionPassport
   - kind: ethereum/contract
     name: ThalesRoyalePass
     network: optimism
