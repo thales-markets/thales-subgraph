@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: BinaryOptionMarketManager
-    network: mumbai
+    network: matic
     source:
-      address: '0x924364736B2e1c3d84656591a84bFA4aF1dc1291'
+      address: '0x85f1B57A1D3Ac7605de3Df8AdA056b3dB9676eCE'
       abi: BinaryOptionMarketManager
-      startBlock: 25429730
+      startBlock: 26851419
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -30,11 +30,11 @@ dataSources:
           handler: handleMarketExpired
   - kind: ethereum/contract
     name: AMM
-    network: mumbai
+    network: matic
     source:
-      address: '0xdf0A5bf80E8009f2702E7d164A7bdeaa79013eba'
+      address: '0x9b6d76B1C6140FbB0ABc9C4a348BFf4e4e8a1213'
       abi: AMM
-      startBlock: 25428748
+      startBlock: 26852537
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -50,59 +50,59 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
-  - kind: ethereum/contract
-    name: ThalesRoyale
-    network: mumbai
-    source:
-      address: '0xF28fb48647bAa9dc434187bded9433D3436c2621'
-      abi: ThalesRoyale
-      startBlock: 25427711
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/thales-royale-mapping.ts
-      entities:
-        - ThalesToyaleGame
-        - ThalesRoyaleSeason
-        - ThalesRoyalePlayer
-        - ThalesRoyalePostition
-      abis:
-        - name: ThalesRoyale
-          file: ../abis/thales-royale/ThalesRoyale.json
-      eventHandlers:
-        - event: SignedUp(address,uint256)
-          handler: handleSignedUp
-        - event: TookAPosition(address,uint256,uint256,uint256)
-          handler: handleTookAPosition
-        - event: RoyaleStarted(uint256,uint256,uint256)
-          handler: handleRoyaleStarted
-        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRoundClosed
-  - kind: ethereum/contract
-    name: ThalesRoyalePass
-    network: mumbai
-    source:
-      address: '0x27aAdff477FB85855A7a753d02C44cEF3ec25BF9'
-      abi: ThalesRoyalePass
-      startBlock: 3845687
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/thales-royale-pass-mapping.ts
-      entities:
-        - ThalesRoyalePass
-      abis:
-        - name: ThalesRoyalePass
-          file: ../abis/thales-royale/ThalesRoyalePass.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
+#  - kind: ethereum/contract
+#    name: ThalesRoyale
+#    network: matic
+#    source:
+#      address: '0xF28fb48647bAa9dc434187bded9433D3436c2621'
+#      abi: ThalesRoyale
+#      startBlock: 25427711
+#    mapping:
+#      kind: ethereum/events
+#      apiVersion: 0.0.4
+#      language: wasm/assemblyscript
+#      file: ../src/thales-royale-mapping.ts
+#      entities:
+#        - ThalesToyaleGame
+#        - ThalesRoyaleSeason
+#        - ThalesRoyalePlayer
+#        - ThalesRoyalePostition
+#      abis:
+#        - name: ThalesRoyale
+#          file: ../abis/thales-royale/ThalesRoyale.json
+#      eventHandlers:
+#        - event: SignedUp(address,uint256)
+#          handler: handleSignedUp
+#        - event: TookAPosition(address,uint256,uint256,uint256)
+#          handler: handleTookAPosition
+#        - event: RoyaleStarted(uint256,uint256,uint256)
+#          handler: handleRoyaleStarted
+#        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+#          handler: handleRoundClosed
+#  - kind: ethereum/contract
+#    name: ThalesRoyalePass
+#    network: matic
+#    source:
+#      address: '0x2F71f4a2D8BAB9703fff3fF5794762bF5b6C7E29'
+#      abi: ThalesRoyalePass
+#      startBlock: 3845687
+#    mapping:
+#      kind: ethereum/events
+#      apiVersion: 0.0.4
+#      language: wasm/assemblyscript
+#      file: ../src/thales-royale-pass-mapping.ts
+#      entities:
+#        - ThalesRoyalePass
+#      abis:
+#        - name: ThalesRoyalePass
+#          file: ../abis/thales-royale/ThalesRoyalePass.json
+#      eventHandlers:
+#        - event: Transfer(indexed address,indexed address,indexed uint256)
+#          handler: handleTransfer
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
-    network: mumbai
+    network: matic
     source:
       abi: BinaryOptionMarket
     mapping:
