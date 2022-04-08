@@ -151,6 +151,26 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
+    name: ThalesRoyalePassport
+    network: optimism
+    source:
+      address: '0xf534848023ba851c6265e8F99a919c4d5fd05CD0'
+      abi: ThalesRoyalePassport
+      startBlock: 5536421
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-passport-mapping.ts
+      entities:
+        - ThalesRoyalePassport
+      abis:
+        - name: ThalesRoyalePassport
+          file: ../abis/thales-royale/ThalesRoyalePassport.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
     name: Airdrop
     network: optimism
     source:
