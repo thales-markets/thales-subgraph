@@ -79,4 +79,5 @@ type MarketTransaction @entity {
   account: Bytes!
   market: Bytes!
   amount: BigInt!
+  position: BigInt!
 }

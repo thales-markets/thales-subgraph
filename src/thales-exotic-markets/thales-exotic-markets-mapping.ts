@@ -177,12 +177,25 @@ export function handleMarketDisputedEvent(event: MarketDisputedEvent): void {
 export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void {
   let positionId = event.address.toHex() + '-' + event.params.account.toHex();
   let position = Position.load(positionId);
+
   if (position === null) {
     position = new Position(positionId);
     position.market = event.address;
     position.account = event.params.account;
     position.position = BigInt.fromI32(0);
   }
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = position.position.equals(BigInt.fromI32(0)) ? 'bid' : 'changePosition';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.fixedTicketAmount;
+  marketTransaction.position = event.params.position;
+  marketTransaction.save();
+
   if (position.position.equals(BigInt.fromI32(0))) {
     let market = Market.load(event.address.toHex());
     if (market !== null) {
@@ -196,21 +209,23 @@ export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void 
   position.isWithdrawn = false;
   position.isClaimed = false;
   position.save();
-
-  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  marketTransaction.hash = event.transaction.hash;
-  marketTransaction.type = position === null ? 'bid' : 'changePosition';
-  marketTransaction.timestamp = event.block.timestamp;
-  marketTransaction.blockNumber = event.block.number;
-  marketTransaction.account = event.params.account;
-  marketTransaction.market = event.address;
-  marketTransaction.amount = event.params.fixedTicketAmount;
-  marketTransaction.save();
 }
 
 export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
   let positionId = event.address.toHex() + '-' + event.params.account.toHex();
   let position = Position.load(positionId);
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'withdrawal';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.amount;
+  marketTransaction.position = position !== null ? position.position : BigInt.fromI32(0);
+  marketTransaction.save();
+
   if (position !== null) {
     position.timestamp = event.block.timestamp;
     position.position = BigInt.fromI32(0);
@@ -224,27 +239,11 @@ export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
       market.save();
     }
   }
-
-  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-  marketTransaction.hash = event.transaction.hash;
-  marketTransaction.type = 'withdrawal';
-  marketTransaction.timestamp = event.block.timestamp;
-  marketTransaction.blockNumber = event.block.number;
-  marketTransaction.account = event.params.account;
-  marketTransaction.market = event.address;
-  marketTransaction.amount = event.params.amount;
-  marketTransaction.save();
 }
 
 export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
   let positionId = event.address.toHex() + '-' + event.params.account.toHex();
   let position = Position.load(positionId);
-  if (position !== null) {
-    position.timestamp = event.block.timestamp;
-    position.position = BigInt.fromI32(0);
-    position.isClaimed = true;
-    position.save();
-  }
 
   let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
   marketTransaction.hash = event.transaction.hash;
@@ -254,7 +253,15 @@ export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): vo
   marketTransaction.account = event.params.account;
   marketTransaction.market = event.address;
   marketTransaction.amount = event.params.amount;
+  marketTransaction.position = position !== null ? position.position : BigInt.fromI32(0);
   marketTransaction.save();
+
+  if (position !== null) {
+    position.timestamp = event.block.timestamp;
+    position.position = BigInt.fromI32(0);
+    position.isClaimed = true;
+    position.save();
+  }
 }
 
 export function handleMarketCanceledEvent(event: MarketCanceledEvent): void {
