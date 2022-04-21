@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0x4eA42C9bD934e38C646a66512B1bc783BA81D812'
       abi: ExoticPositionalMarketManager
-      startBlock: 1882041
+      startBlock: 2156429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -34,7 +34,7 @@ dataSources:
     source:
       address: '0x61118647A361CBaFE9119D5d7e08Be5026A20dC4'
       abi: ThalesOracleCouncil
-      startBlock: 1882041
+      startBlock: 2156429
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
