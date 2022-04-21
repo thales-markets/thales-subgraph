@@ -4,12 +4,103 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "_exoticMarketMastercopy",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_exoticMarketOpenBidMastercopy",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_oracleCouncilAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_paymentToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_tagsAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_theRundownConsumerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_marketDataAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_exoticRewards",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_safeBoxAddress",
+        "type": "address"
+      }
+    ],
+    "name": "AddressesUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "creatorPercentage",
+        "name": "minFixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "disputePrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fixedBondAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "safeBoxLowAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "arbitraryRewardForDisputor",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxAmountForOpenBidPosition",
         "type": "uint256"
       }
     ],
-    "name": "CreatorPercentageChanged",
+    "name": "AmountsUpdated",
     "type": "event"
   },
   {
@@ -18,11 +109,170 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_exoticMastercopy",
+        "name": "marketAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "marketQuestion",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "marketSource",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endOfPositioning",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "withdrawalAllowed",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "tags",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "positionCount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "positionPhrases",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "marketOwner",
         "type": "address"
       }
     ],
-    "name": "ExoticMarketMastercopyChanged",
+    "name": "CLMarketCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "backstopTimeout",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minimumPositioningDuration",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawalTimePeriod",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pDAOResolveTimePeriod",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "claimTimeoutDefaultPeriod",
+        "type": "uint256"
+      }
+    ],
+    "name": "DurationsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "_creationRestrictedToOwner",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "_openBidAllowed",
+        "type": "bool"
+      }
+    ],
+    "name": "FlagsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "marketQuestionStringLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "marketSourceStringLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "marketPositionStringLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "disputeStringLengthLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maximumPositionsAllowed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxNumberOfTags",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxOracleCouncilMembers",
+        "type": "uint256"
+      }
+    ],
+    "name": "LimitsUpdated",
     "type": "event"
   },
   {
@@ -115,19 +365,6 @@
         "type": "address"
       }
     ],
-    "name": "MarketPaused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "marketAddress",
-        "type": "address"
-      }
-    ],
     "name": "MarketReset",
     "type": "event"
   },
@@ -148,201 +385,6 @@
       }
     ],
     "name": "MarketResolved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "MinimumMarketMaturityDurationChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "MinimumPositionDurationChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "arbitraryRewardForDisputor",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewArbitraryRewardForDisputor",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "claimTimeout",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewClaimTimeoutDefaultPeriod",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timeout",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewDefaultBackstopTimeout",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "disputePrice",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewDisputePrice",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "fixedBond",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewFixedBondAmount",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "maxNumberOfTags",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewMaxNumberOfTags",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "maxOracleCouncilMembers",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewMaxOracleCouncilMembers",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "maximumPositionsAllowed",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewMaximumPositionsAllowed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "oracleCouncilAddress",
-        "type": "address"
-      }
-    ],
-    "name": "NewOracleCouncilAddress",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "paymentTokenAddress",
-        "type": "address"
-      }
-    ],
-    "name": "NewPaymentToken",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "safeBox",
-        "type": "address"
-      }
-    ],
-    "name": "NewSafeBoxAddress",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "safeBoxLowAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewSafeBoxLowAmount",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "tagsAddress",
-        "type": "address"
-      }
-    ],
-    "name": "NewTagsAddress",
     "type": "event"
   },
   {
@@ -435,49 +477,35 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "resolverPercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "ResolverPercentageChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "market",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "disputorAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "RewardSentToDisputorForMarket",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "safeBoxPercentage",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "creatorPercentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "resolverPercentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawalPercentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxFinalWithdrawPercentage",
+        "type": "uint256"
       }
     ],
-    "name": "SafeBoxPercentageChanged",
+    "name": "PercentagesUpdated",
     "type": "event"
   },
   {
@@ -494,55 +522,10 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "withdrawalPercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawalPercentageChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "pDAOResolveTimePeriod",
-        "type": "uint256"
-      }
-    ],
-    "name": "setPDAOResolveTimePeriodChanged",
-    "type": "event"
-  },
-  {
     "inputs": [],
     "name": "acceptOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "activeMarkets",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -611,6 +594,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "cancelledByCreator",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "claimTimeoutDefaultPeriod",
     "outputs": [
@@ -674,6 +676,64 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256[]",
+        "name": "_positionsOfCreator",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_positionPhrases",
+        "type": "string[]"
+      }
+    ],
+    "name": "createCLMarket",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_marketQuestion",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_marketSource",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_endOfPositioning",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_withdrawalAllowed",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_tags",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_positionCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_positionOfCreator",
+        "type": "uint256"
+      },
+      {
         "internalType": "string[]",
         "name": "_positionPhrases",
         "type": "string[]"
@@ -682,6 +742,19 @@
     "name": "createExoticMarket",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "creationRestrictedToOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -749,7 +822,46 @@
   },
   {
     "inputs": [],
+    "name": "disputeStringLengthLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "exoticMarketMastercopy",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "exoticMarketOpenBidMastercopy",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "exoticRewards",
     "outputs": [
       {
         "internalType": "address",
@@ -793,44 +905,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_marketAddress",
-        "type": "address"
-      }
-    ],
-    "name": "getActiveMarketIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_market",
-        "type": "address"
-      }
-    ],
-    "name": "getMarketBondAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "initNonReentrant",
     "outputs": [],
@@ -842,16 +916,6 @@
       {
         "internalType": "address",
         "name": "_owner",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minimumPositioningDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_paymentToken",
         "type": "address"
       }
     ],
@@ -883,6 +947,25 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "isChainLinkMarket",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_pauser",
         "type": "address"
       }
@@ -893,6 +976,97 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_marketAddress",
+        "type": "address"
+      }
+    ],
+    "name": "issueBondsBackToCreatorAndResolver",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketDataAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketPositionStringLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketQuestionStringLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketSourceStringLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxAmountForOpenBidPosition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxFinalWithdrawPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -927,6 +1101,19 @@
   {
     "inputs": [],
     "name": "maximumPositionsAllowed",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minFixedTicketPrice",
     "outputs": [
       {
         "internalType": "uint256",
@@ -978,12 +1165,25 @@
   },
   {
     "inputs": [],
-    "name": "numOfActiveMarkets",
+    "name": "numberOfActiveMarkets",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "openBidAllowed",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -1229,29 +1429,6 @@
       },
       {
         "internalType": "address",
-        "name": "_recepient",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "sendMarketBondAmountTo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_market",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_disputorAddress",
         "type": "address"
       },
@@ -1269,12 +1446,90 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_exoticMarketMastercopy",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_exoticMarketOpenBidMastercopy",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_oracleCouncilAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_paymentToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tagsAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_theRundownConsumerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_marketDataAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_exoticRewards",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_safeBoxAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minFixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_disputePrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fixedBondAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_safeBoxLowAmount",
+        "type": "uint256"
+      },
+      {
         "internalType": "uint256",
         "name": "_arbitraryRewardForDisputor",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxAmountForOpenBidPosition",
+        "type": "uint256"
       }
     ],
-    "name": "setArbitraryRewardForDisputor",
+    "name": "setAmounts",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1288,32 +1543,6 @@
       }
     ],
     "name": "setBackstopTimeout",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_claimTimeout",
-        "type": "uint256"
-      }
-    ],
-    "name": "setClaimTimeoutDefaultPeriod",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_creatorPercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "setCreatorPercentage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1340,11 +1569,49 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_timeout",
+        "name": "_backstopTimeout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minimumPositioningDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_withdrawalTimePeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_pDAOResolveTimePeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_claimTimeoutDefaultPeriod",
         "type": "uint256"
       }
     ],
-    "name": "setDefaultBackstopTimeout",
+    "name": "setDurations",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_creationRestrictedToOwner",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "_openBidAllowed",
+        "type": "bool"
+      }
+    ],
+    "name": "setFlags",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1353,102 +1620,41 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_disputePrice",
+        "name": "_marketQuestionStringLimit",
         "type": "uint256"
-      }
-    ],
-    "name": "setDisputePrice",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_exoticMastercopy",
-        "type": "address"
-      }
-    ],
-    "name": "setExoticMarketMastercopy",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "_bond",
+        "name": "_marketSourceStringLimit",
         "type": "uint256"
-      }
-    ],
-    "name": "setFixedBondAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
+      {
+        "internalType": "uint256",
+        "name": "_marketPositionStringLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_disputeStringLengthLimit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maximumPositionsAllowed",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxNumberOfTags",
         "type": "uint256"
-      }
-    ],
-    "name": "setMaxNumberOfTags",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "uint256",
         "name": "_maxOracleCouncilMembers",
         "type": "uint256"
       }
     ],
-    "name": "setMaxOracleCouncilMembers",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_maximumPositionsAllowed",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaximumPositionsAllowed",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMinimumPositioningDuration",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_councilAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setOracleCouncilAddress",
+    "name": "setLimits",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1470,89 +1676,31 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_pDAOResolveTimePeriod",
+        "name": "_safeBoxPercentage",
         "type": "uint256"
-      }
-    ],
-    "name": "setPDAOResolveTimePeriod",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
-        "internalType": "address",
-        "name": "_paymentToken",
-        "type": "address"
-      }
-    ],
-    "name": "setPaymentToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "uint256",
+        "name": "_creatorPercentage",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_resolverPercentage",
         "type": "uint256"
-      }
-    ],
-    "name": "setResolverPercentage",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_safeBoxAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setSafeBoxAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "_safeBoxLowAmount",
+        "name": "_withdrawalPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxFinalWithdrawPercentage",
         "type": "uint256"
       }
     ],
-    "name": "setSafeBoxLowAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_safeBoxPercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "setSafeBoxPercentage",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tagsAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setTagsAddress",
+    "name": "setPercentages",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1566,19 +1714,6 @@
       }
     ],
     "name": "setThalesBonds",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_withdrawalPercentage",
-        "type": "uint256"
-      }
-    ],
-    "name": "setWithdrawalPercentage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1610,6 +1745,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "theRundownConsumerAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1625,6 +1773,19 @@
   {
     "inputs": [],
     "name": "withdrawalPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawalTimePeriod",
     "outputs": [
       {
         "internalType": "uint256",
