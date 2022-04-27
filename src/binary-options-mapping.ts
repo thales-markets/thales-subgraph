@@ -8,8 +8,11 @@ import {
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { Market, OptionTransaction, BinaryOption } from '../generated/schema';
+import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
+import { Market, OptionTransaction, Position, PositionBalance } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
+import { Position as PositionContract } from '../generated/templates';
+import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
@@ -30,16 +33,41 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.poolSize = binaryOptionContract.deposited();
   entity.save();
 
-  let longEntity = new BinaryOption(event.params.long.toHex());
-  longEntity.market = event.params.market;
-  longEntity.timestamp = event.block.timestamp;
-  longEntity.side = 'long';
-  longEntity.save();
-  let shortEntity = new BinaryOption(event.params.short.toHex());
-  shortEntity.market = event.params.market;
-  shortEntity.timestamp = event.block.timestamp;
-  shortEntity.side = 'short';
-  shortEntity.save();
+  let upPosition = new Position(event.params.long.toHex());
+  upPosition.side = 'long';
+  upPosition.market = entity.id;
+  upPosition.save();
+
+  let downPosition = new Position(event.params.short.toHex());
+  downPosition.side = 'short';
+  downPosition.market = entity.id;
+  downPosition.save();
+
+  PositionContract.create(event.params.long);
+  PositionContract.create(event.params.short);
+}
+
+export function handleTransfer(event: TransferEvent): void {
+  let position = Position.load(event.address.toHex());
+  let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
+  if (userBalanceFrom === null) {
+    userBalanceFrom = new PositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
+    userBalanceFrom.account = event.params.from;
+    userBalanceFrom.amount = BigInt.fromI32(0);
+    userBalanceFrom.position = position.id;
+  }
+  userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
+  userBalanceFrom.save();
+
+  let userBalanceTo = PositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
+  if (userBalanceTo === null) {
+    userBalanceTo = new PositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
+    userBalanceTo.account = event.params.to;
+    userBalanceTo.amount = BigInt.fromI32(0);
+    userBalanceTo.position = position.id;
+  }
+  userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
+  userBalanceTo.save();
 }
 
 export function handleMarketExpired(event: MarketExpiredEvent): void {

@@ -185,3 +185,16 @@ type ThalesRoyalePassportPosition @entity {
   season: BigInt!
   position: BigInt!
 }
+
+type Position @entity {
+  id: ID!
+  market: Market!
+  side: OptionSide!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}
