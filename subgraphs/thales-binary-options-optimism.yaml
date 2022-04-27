@@ -29,6 +29,30 @@ dataSources:
         - event: MarketExpired(address)
           handler: handleMarketExpired
   - kind: ethereum/contract
+    name: NewPositionaMarketManager
+    network: optimism
+    source:
+      address: '0x9227334352A890e51e980BeB7A56Bbdd01499B54'
+      abi: BinaryOptionMarketManager
+      startBlock: 6481303
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/thales/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../abis/thales/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
     name: LimitOrderProtocol
     network: optimism
     source:
