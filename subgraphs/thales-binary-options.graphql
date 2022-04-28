@@ -16,6 +16,17 @@ type Market @entity {
   finalPrice: BigInt
 }
 
+type RangedMarket @entity {
+  id: ID!
+  timestamp: BigInt!
+  inAddress: Bytes!
+  outAddress: Bytes!
+  rightMarket: Market!
+  leftMarket: Market!
+  result: Int
+  finalPrice: BigInt
+}
+
 enum OptionTransactionType {
   mint
   exercise

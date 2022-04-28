@@ -8,9 +8,9 @@ dataSources:
     name: BinaryOptionMarketManager
     network: optimism-kovan
     source:
-      address: '0x6382660BF24f5e7BeC43a7D47591F823488FDB8D'
+      address: '0xAfBA2e76B4580Ab88c07Beb2Ca884ca733fD4dD4'
       abi: BinaryOptionMarketManager
-      startBlock: 1912110
+      startBlock: 1186043
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,6 +28,28 @@ dataSources:
           handler: handleNewMarket
         - event: MarketExpired(address)
           handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: RangedMarketsAMM
+    network: optimism-kovan
+    source:
+      address: '0x5C024Dc8aD40918cf2587673b90f214a41D3Cb92'
+      abi: RangedMarketsAMM
+      startBlock: 2316826
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - RangeMarket
+      abis:
+        - name: RangedMarket
+          file: ../abis/thales/range-markets/RangedMarket.json
+        - name: RangedMarketsAMM
+          file: ../abis/thales/range-markets/RangedMarketsAMM.json
+      eventHandlers:
+        - event: RangedMarketCreated(address,address,address)
+          handler: handleRangedMarket
   - kind: ethereum/contract
     name: AMM
     network: optimism-kovan
@@ -126,26 +148,6 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
-    name: Airdrop
-    network: optimism-kovan
-    source:
-      address: '0xA84062253E6FBC0c03Ab100A7953Ebe88BE86415'
-      abi: Airdrop
-      startBlock: 1912110
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: Airdrop
-          file: ../abis/token/Airdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleRetroAirdropClaimEvent
-  - kind: ethereum/contract
     name: StakingThales
     network: optimism-kovan
     source:
@@ -195,26 +197,6 @@ dataSources:
           handler: handleAddedToEscrowEvent
         - event: Vested(address,uint256)
           handler: handleVestedEvent
-  - kind: ethereum/contract
-    name: OngoingAirdrop
-    network: optimism-kovan
-    source:
-      address: '0xcA8d82a30fd9dfec102eCdfb59A13e9a86C2Ee6F'
-      abi: OngoingAirdrop
-      startBlock: 1912110
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../src/token-mapping-l2.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: OngoingAirdrop
-          file: ../abis/token/OngoingAirdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleMigratedRewardsClaimEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
