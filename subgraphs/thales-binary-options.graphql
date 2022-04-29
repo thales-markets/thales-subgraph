@@ -19,10 +19,15 @@ type Market @entity {
 type RangedMarket @entity {
   id: ID!
   timestamp: BigInt!
+  currencyKey: Bytes!
+  maturityDate: BigInt!
+  leftPrice: BigInt!
+  rightPrice: BigInt!
   inAddress: Bytes!
   outAddress: Bytes!
   rightMarket: Market!
   leftMarket: Market!
+  isOpen: Boolean!
   result: Int
   finalPrice: BigInt
 }

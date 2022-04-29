@@ -2,7 +2,7 @@ import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
 } from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
-import { RangedMarketCreated } from '../generated/RangedMarketsAMM/RangedMarketsAMM'
+import { RangedMarketCreated } from '../generated/RangedMarketsAMM/RangedMarketsAMM';
 import { RangedMarket as RangedMarketContract } from '../generated/RangedMarketsAMM/RangedMarket';
 import {
   Mint as MintEvent,
@@ -24,10 +24,14 @@ export function handleRangedMarket(event: RangedMarketCreated): void {
 
   let rangedMarketContract = RangedMarketContract.bind(event.params.market);
 
-
   rangedMarket.timestamp = event.block.timestamp;
+  rangedMarket.currencyKey = leftMarket.currencyKey;
+  rangedMarket.maturityDate = leftMarket.maturityDate;
+  rangedMarket.leftPrice = leftMarket.strikePrice;
+  rangedMarket.rightPrice = rightMarket.strikePrice;
   rangedMarket.inAddress = rangedMarketContract.positions().value0;
   rangedMarket.outAddress = rangedMarketContract.positions().value1;
+  rangedMarket.isOpen = true;
   rangedMarket.leftMarket = leftMarket.id;
   rangedMarket.rightMarket = rightMarket.id;
 

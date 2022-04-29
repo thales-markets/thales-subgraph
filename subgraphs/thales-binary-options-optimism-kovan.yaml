@@ -32,9 +32,9 @@ dataSources:
     name: RangedMarketsAMM
     network: optimism-kovan
     source:
-      address: '0x5C024Dc8aD40918cf2587673b90f214a41D3Cb92'
+      address: '0x0690F410FB54d76268e4fa97486CBD605e68dC62'
       abi: RangedMarketsAMM
-      startBlock: 2316826
+      startBlock: 2368355 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
