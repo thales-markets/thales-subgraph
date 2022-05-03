@@ -53,6 +53,8 @@ type OptionTransaction @entity {
 enum OptionSide {
   long
   short
+  in
+  out
 }
 
 enum OrderSide {

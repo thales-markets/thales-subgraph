@@ -29,7 +29,7 @@ dataSources:
         - event: MarketExpired(address)
           handler: handleMarketExpired
   - kind: ethereum/contract
-    name: RangedMarketsAMM
+    name: RangedMarkets
     network: optimism-kovan
     source:
       address: '0x0690F410FB54d76268e4fa97486CBD605e68dC62'
@@ -39,9 +39,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
+      file: ../src/ranged-markets-mapping.ts
       entities:
-        - RangeMarket
+        - RangedMarket
+        - Trade
+        - OptionTransaction
       abis:
         - name: RangedMarket
           file: ../abis/thales/range-markets/RangedMarket.json
@@ -50,6 +52,10 @@ dataSources:
       eventHandlers:
         - event: RangedMarketCreated(address,address,address)
           handler: handleRangedMarket
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
   - kind: ethereum/contract
     name: AMM
     network: optimism-kovan
@@ -222,3 +228,25 @@ templates:
           handler: handleMarketResolved
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
+  - name: RangedMarket
+    kind: ethereum/contract
+    network: optimism-kovan
+    source:
+      abi: RangedMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+      abis:
+        - name: RangedMarket
+          file: ../abis/thales/range-markets/RangedMarket.json
+      eventHandlers:
+        - event: Mint(address,uint256,uint8)
+          handler: handleMint
+        - event: Exercised(address,uint256)
+          handler: handleExercised
