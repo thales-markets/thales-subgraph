@@ -1,12 +1,14 @@
 import { RangedMarketCreated, BoughtFromAmm, SoldToAMM } from '../generated/RangedMarkets/RangedMarketsAMM';
 
 import { Market, Trade, RangedMarket, OptionTransaction } from '../generated/schema';
+import { RangedMarket as RangedMarketTemplate } from '../generated/templates';
 
 import { Exercised, Mint, RangedMarket as RangedMarketContract } from '../generated/RangedMarkets/RangedMarket';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleRangedMarket(event: RangedMarketCreated): void {
     let rangedMarket = new RangedMarket(event.params.market.toHex());
+    RangedMarketTemplate.create(event.params.market);
 
     let leftMarket = Market.load(event.params.leftMarket.toHex());
     let rightMarket = Market.load(event.params.rightMarket.toHex());
