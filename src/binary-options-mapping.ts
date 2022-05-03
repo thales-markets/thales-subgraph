@@ -2,8 +2,6 @@ import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
 } from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
-import { RangedMarketCreated } from '../generated/RangedMarketsAMM/RangedMarketsAMM';
-import { RangedMarket as RangedMarketContract } from '../generated/RangedMarketsAMM/RangedMarket';
 import {
   Mint as MintEvent,
   MarketResolved as MarketResolvedEvent,
@@ -11,32 +9,33 @@ import {
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
-import { Market, OptionTransaction, Position, PositionBalance, RangedMarket } from '../generated/schema';
+import { Market, OptionTransaction, Position, PositionBalance } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
+import { Position as PositionContract } from '../generated/templates';
 // import { Position as PositionContract } from '../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
 
-export function handleRangedMarket(event: RangedMarketCreated): void {
-  let rangedMarket = new RangedMarket(event.params.market.toHex());
+// export function handleRangedMarket(event: RangedMarketCreated): void {
+//   let rangedMarket = new RangedMarket(event.params.market.toHex());
 
-  let leftMarket = Market.load(event.params.leftMarket.toHex());
-  let rightMarket = Market.load(event.params.rightMarket.toHex());
+//   let leftMarket = Market.load(event.params.leftMarket.toHex());
+//   let rightMarket = Market.load(event.params.rightMarket.toHex());
 
-  let rangedMarketContract = RangedMarketContract.bind(event.params.market);
+//   let rangedMarketContract = RangedMarketContract.bind(event.params.market);
 
-  rangedMarket.timestamp = event.block.timestamp;
-  rangedMarket.currencyKey = leftMarket.currencyKey;
-  rangedMarket.maturityDate = leftMarket.maturityDate;
-  rangedMarket.leftPrice = leftMarket.strikePrice;
-  rangedMarket.rightPrice = rightMarket.strikePrice;
-  rangedMarket.inAddress = rangedMarketContract.positions().value0;
-  rangedMarket.outAddress = rangedMarketContract.positions().value1;
-  rangedMarket.isOpen = true;
-  rangedMarket.leftMarket = leftMarket.id;
-  rangedMarket.rightMarket = rightMarket.id;
+//   rangedMarket.timestamp = event.block.timestamp;
+//   rangedMarket.currencyKey = leftMarket.currencyKey;
+//   rangedMarket.maturityDate = leftMarket.maturityDate;
+//   rangedMarket.leftPrice = leftMarket.strikePrice;
+//   rangedMarket.rightPrice = rightMarket.strikePrice;
+//   rangedMarket.inAddress = rangedMarketContract.positions().value0;
+//   rangedMarket.outAddress = rangedMarketContract.positions().value1;
+//   rangedMarket.isOpen = true;
+//   rangedMarket.leftMarket = leftMarket.id;
+//   rangedMarket.rightMarket = rightMarket.id;
 
-  rangedMarket.save();
-}
+//   rangedMarket.save();
+// }
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
@@ -57,18 +56,18 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.poolSize = binaryOptionContract.deposited();
   entity.save();
 
-  // let upPosition = new Position(event.params.long.toHex());
-  // upPosition.side = 'long';
-  // upPosition.market = entity.id;
-  // upPosition.save();
+  let upPosition = new Position(event.params.long.toHex());
+  upPosition.side = 'long';
+  upPosition.market = entity.id;
+  upPosition.save();
 
-  // let downPosition = new Position(event.params.short.toHex());
-  // downPosition.side = 'short';
-  // downPosition.market = entity.id;
-  // downPosition.save();
+  let downPosition = new Position(event.params.short.toHex());
+  downPosition.side = 'short';
+  downPosition.market = entity.id;
+  downPosition.save();
 
-  // PositionContract.create(event.params.long);
-  // PositionContract.create(event.params.short);
+  PositionContract.create(event.params.long);
+  PositionContract.create(event.params.short);
 }
 
 export function handleTransfer(event: TransferEvent): void {

@@ -18,6 +18,7 @@ dataSources:
       file: ../src/binary-options-mapping.ts
       entities:
         - Market
+        - Position
       abis:
         - name: BinaryOptionMarketManager
           file: ../abis/thales/BinaryOptionMarketManager.json
@@ -42,6 +43,7 @@ dataSources:
       file: ../src/binary-options-mapping.ts
       entities:
         - Market
+        - Position
       abis:
         - name: BinaryOptionMarketManager
           file: ../abis/thales/BinaryOptionMarketManager.json
@@ -353,3 +355,21 @@ templates:
           handler: handleMarketResolved
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
+  - name: Position
+    kind: ethereum/contract
+    network: optimism
+    source:
+      abi: Position
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - PositionBalance
+      abis:
+        - name: Position
+          file: ../abis/thales/Position.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
