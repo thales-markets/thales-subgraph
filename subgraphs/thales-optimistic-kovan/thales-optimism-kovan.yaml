@@ -2,7 +2,7 @@ specVersion: 0.0.2
 description: Thales Binary Options API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
-  file: ./thales-binary-options.graphql
+  file: ./thales-optimism-kovan.graphql
 dataSources:
   - kind: ethereum/contract
     name: BinaryOptionMarketManager
@@ -15,14 +15,14 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
+      file: ./mappings/binary-options-mapping.ts
       entities:
         - Market
       abis:
         - name: BinaryOptionMarketManager
-          file: ../abis/thales/BinaryOptionMarketManager.json
+          file: ../../abis/thales/BinaryOptionMarketManager.json
         - name: BinaryOptionMarket
-          file: '../abis/thales/BinaryOptionMarket.json'
+          file: "../../abis/thales/BinaryOptionMarket.json"
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
@@ -39,16 +39,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/ranged-markets-mapping.ts
+      file: ./mappings/ranged-markets-mapping.ts
       entities:
         - RangedMarket
         - Trade
         - OptionTransaction
       abis:
         - name: RangedMarket
-          file: ../abis/thales/range-markets/RangedMarket.json
+          file: ../../abis/thales/range-markets/RangedMarket.json
         - name: RangedMarketsAMM
-          file: ../abis/thales/range-markets/RangedMarketsAMM.json
+          file: ../../abis/thales/range-markets/RangedMarketsAMM.json
       eventHandlers:
         - event: RangedMarketCreated(address,address,address)
           handler: handleRangedMarket
@@ -67,12 +67,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/amm-mapping.ts
+      file: ./mappings/amm-mapping.ts
       entities:
         - Trade
       abis:
         - name: AMM
-          file: ../abis/thales/AMM.json
+          file: ../../abis/thales/AMM.json
       eventHandlers:
         - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmEvent
@@ -89,7 +89,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/thales-royale-with-passport-mapping.ts
+      file: ./mappings/thales-royale-with-passport-mapping.ts
       entities:
         - ThalesRoyaleGame
         - ThalesRoyaleSeason
@@ -99,7 +99,7 @@ dataSources:
         - ThalesRoyalePassportPosition
       abis:
         - name: ThalesRoyale
-          file: ../abis/thales-royale/ThalesRoyaleWithPassport.json
+          file: ../../abis/thales-royale/ThalesRoyaleWithPassport.json
       eventHandlers:
         - event: SignedUp(address,uint256,uint256)
           handler: handleSignedUpWithPosition
@@ -124,12 +124,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/thales-royale-pass-mapping.ts
+      file: ./mappings/thales-royale-pass-mapping.ts
       entities:
         - ThalesRoyalePass
       abis:
         - name: ThalesRoyalePass
-          file: ../abis/thales-royale/ThalesRoyalePass.json
+          file: ../../abis/thales-royale/ThalesRoyalePass.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -144,12 +144,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/thales-royale-passport-mapping.ts
+      file: ./mappings/thales-royale-passport-mapping.ts
       entities:
         - ThalesRoyalePassport
       abis:
         - name: ThalesRoyalePassport
-          file: ../abis/thales-royale/ThalesRoyalePassport.json
+          file: ../../abis/thales-royale/ThalesRoyalePassport.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -164,12 +164,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
+      file: ./mappings/token-mapping.ts
       entities:
         - TokenTransaction
       abis:
         - name: StakingThales
-          file: ../abis/token/StakingThales.json
+          file: ../../abis/token/StakingThales.json
       eventHandlers:
         - event: Staked(address,uint256)
           handler: handleStakedEvent
@@ -192,12 +192,12 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
+      file: ./mappings/token-mapping.ts
       entities:
         - TokenTransaction
       abis:
         - name: EscrowThales
-          file: ../abis/token/EscrowThales.json
+          file: ../../abis/token/EscrowThales.json
       eventHandlers:
         - event: AddedToEscrow(address,uint256)
           handler: handleAddedToEscrowEvent
@@ -213,14 +213,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
+      file: ./mappings/binary-options-mapping.ts
       entities:
         - Market
         - OptionTransaction
         - HistoricalOptionPrice
       abis:
         - name: BinaryOptionMarket
-          file: ../abis/thales/BinaryOptionMarket.json
+          file: ../../abis/thales/BinaryOptionMarket.json
       eventHandlers:
         - event: Mint(uint8,indexed address,uint256)
           handler: handleMint
@@ -237,14 +237,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../src/ranged-markets-mapping.ts
+      file: ./mappings/ranged-markets-mapping.ts
       entities:
         - RangedMarket
         - Trade
         - OptionTransaction
       abis:
         - name: RangedMarket
-          file: ../abis/thales/range-markets/RangedMarket.json
+          file: "../../abis/thales/range-markets/RangedMarket.json"
       eventHandlers:
         - event: Mint(address,uint256,uint8)
           handler: handleMint

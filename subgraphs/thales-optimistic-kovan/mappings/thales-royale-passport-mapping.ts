@@ -1,5 +1,5 @@
-import { Transfer as TransferEvent } from '../generated/ThalesRoyalePassport/ThalesRoyalePassport';
-import { ThalesRoyalePassportPlayer } from '../generated/schema';
+import { Transfer as TransferEvent } from '../../../generated/ThalesRoyalePassport/ThalesRoyalePassport';
+import { ThalesRoyalePassportPlayer } from '../../../generated/schema';
 
 export function handleTransfer(event: TransferEvent): void {
     let thalesRoyalePassportPlayer = ThalesRoyalePassportPlayer.load(event.params.tokenId.toHex());
