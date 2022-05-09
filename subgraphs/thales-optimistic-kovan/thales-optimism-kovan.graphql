@@ -21,6 +21,7 @@ type RangedMarket @entity {
   timestamp: BigInt!
   currencyKey: Bytes!
   maturityDate: BigInt!
+  expiryDate: BigInt!
   leftPrice: BigInt!
   rightPrice: BigInt!
   inAddress: Bytes!
