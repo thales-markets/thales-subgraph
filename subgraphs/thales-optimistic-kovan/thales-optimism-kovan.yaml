@@ -60,7 +60,7 @@ dataSources:
     name: AMM
     network: optimism-kovan
     source:
-      address: '0xfaDAa3E704acB3f82DC769C34518d4f306C55FAf'
+      address: '0xfed727f37e921Faac22e36E0bbaA8504B45F6e3f'
       abi: AMM
       startBlock: 1912110
     mapping:
