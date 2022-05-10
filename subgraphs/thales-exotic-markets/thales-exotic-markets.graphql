@@ -68,6 +68,10 @@ enum MarketTransactionType {
   changePosition
   withdrawal
   claim
+  claimRefund
+  resolveMarket
+  resetMarketResult
+  openDispute
 }
 
 type MarketTransaction @entity {

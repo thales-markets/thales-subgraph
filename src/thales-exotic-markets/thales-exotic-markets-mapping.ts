@@ -73,6 +73,17 @@ export function handleNewDisputeEvent(event: NewDisputeEvent): void {
     dispute.disputeCode = BigInt.fromI32(0);
     dispute.save();
   }
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'openDispute';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.disputorAccount;
+  marketTransaction.market = event.params.market;
+  marketTransaction.amount = BigInt.fromI32(0);
+  marketTransaction.position = BigInt.fromI32(0);
+  marketTransaction.save();
 }
 
 export function handleVotedAddedForDisputeEvent(event: VotedAddedForDisputeEvent): void {
@@ -133,6 +144,16 @@ export function handleMarketResolvedEvent(event: MarketResolvedEvent): void {
     market.noWinners = event.params.noWinner;
     market.save();
   }
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'resolveMarket';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.resolverAddress;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = BigInt.fromI32(0);
+  marketTransaction.position = event.params.winningPosition;
+  marketTransaction.save();
 }
 
 export function handleMarketResetEvent(event: MarketResetEvent): void {
@@ -145,6 +166,17 @@ export function handleMarketResetEvent(event: MarketResetEvent): void {
     market.noWinners = false;
     market.save();
   }
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'resetMarketResult';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.address;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = BigInt.fromI32(0);
+  marketTransaction.position = BigInt.fromI32(0);
+  marketTransaction.save();
 }
 
 export function handleBackstopTimeoutPeriodChangedEvent(event: BackstopTimeoutPeriodChangedEvent): void {
@@ -244,16 +276,22 @@ export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
 export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
   let positionId = event.address.toHex() + '-' + event.params.account.toHex();
   let position = Position.load(positionId);
+  let market = Market.load(event.address.toHex());
 
   let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
   marketTransaction.hash = event.transaction.hash;
-  marketTransaction.type = 'claim';
+  marketTransaction.type = market !== null && market.isCancelled ? 'claimRefund' : 'claim';
   marketTransaction.timestamp = event.block.timestamp;
   marketTransaction.blockNumber = event.block.number;
   marketTransaction.account = event.params.account;
   marketTransaction.market = event.address;
   marketTransaction.amount = event.params.amount;
-  marketTransaction.position = position !== null ? position.position : BigInt.fromI32(0);
+  marketTransaction.position =
+    market !== null && market.isCancelled
+      ? BigInt.fromI32(0)
+      : position !== null
+      ? position.position
+      : BigInt.fromI32(0);
   marketTransaction.save();
 
   if (position !== null) {
