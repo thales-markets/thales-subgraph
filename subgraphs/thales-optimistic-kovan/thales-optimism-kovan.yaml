@@ -248,5 +248,7 @@ templates:
       eventHandlers:
         - event: Mint(address,uint256,uint8)
           handler: handleMint
+        - event: Resolved(uint8,uint256)
+          handler: handleMarketResolved
         - event: Exercised(address,uint256)
           handler: handleExercised
