@@ -33,6 +33,32 @@ type RangedMarket @entity {
   finalPrice: BigInt
 }
 
+type Position @entity {
+  id: ID!
+  market: Market!
+  side: OptionSide!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}
+
+type RangedPosition @entity {
+  id: ID!
+  market: RangedMarket!
+  side: OptionSide!
+}
+
+type RangedPositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: RangedPosition!
+}
+
 enum OptionTransactionType {
   mint
   exercise

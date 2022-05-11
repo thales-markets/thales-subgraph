@@ -18,11 +18,12 @@ dataSources:
       file: ./mappings/binary-options-mapping.ts
       entities:
         - Market
+        - Position
       abis:
         - name: BinaryOptionMarketManager
           file: ../../abis/thales/BinaryOptionMarketManager.json
         - name: BinaryOptionMarket
-          file: "../../abis/thales/BinaryOptionMarket.json"
+          file: '../../abis/thales/BinaryOptionMarket.json'
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
           handler: handleNewMarket
@@ -34,7 +35,7 @@ dataSources:
     source:
       address: '0x0690F410FB54d76268e4fa97486CBD605e68dC62'
       abi: RangedMarketsAMM
-      startBlock: 2410842 
+      startBlock: 2410842
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -44,6 +45,7 @@ dataSources:
         - RangedMarket
         - Trade
         - OptionTransaction
+        - RangedPosition
       abis:
         - name: RangedMarket
           file: ../../abis/thales/range-markets/RangedMarket.json
@@ -242,9 +244,10 @@ templates:
         - RangedMarket
         - Trade
         - OptionTransaction
+        - RangedPosition
       abis:
         - name: RangedMarket
-          file: "../../abis/thales/range-markets/RangedMarket.json"
+          file: '../../abis/thales/range-markets/RangedMarket.json'
       eventHandlers:
         - event: Mint(address,uint256,uint8)
           handler: handleMint
@@ -252,3 +255,39 @@ templates:
           handler: handleMarketResolved
         - event: Exercised(address,uint256)
           handler: handleExercised
+  - name: Position
+    kind: ethereum/contract
+    network: optimism-kovan
+    source:
+      abi: Position
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/binary-options-mapping.ts
+      entities:
+        - PositionBalance
+      abis:
+        - name: Position
+          file: ../../abis/thales/Position.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+  - name: RangedPosition
+    kind: ethereum/contract
+    network: optimism-kovan
+    source:
+      abi: RangedPosition
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/ranged-markets-mapping.ts
+      entities:
+        - RangedPositionBalance
+      abis:
+        - name: RangedPosition
+          file: ../../abis/thales/RangedPosition.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
