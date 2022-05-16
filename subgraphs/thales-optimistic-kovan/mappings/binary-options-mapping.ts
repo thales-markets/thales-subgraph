@@ -8,36 +8,12 @@ import {
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
 } from '../../../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { RangedMarket as RangedMarketContract } from '../../../generated/RangedMarkets/RangedMarket';
 import { Transfer as TransferEvent } from '../../../generated/templates/Position/Position';
 import { Position, PositionBalance } from '../../../generated/schema';
-import { Market, OptionTransaction, RangedMarket } from '../../../generated/schema';
+import { Market, OptionTransaction } from '../../../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../../../generated/templates';
-import { RangedMarketCreated } from '../../../generated/RangedMarkets/RangedMarketsAMM';
 import { Position as PositionContract } from '../../../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
-
-export function handleRangedMarket(event: RangedMarketCreated): void {
-  let rangedMarket = new RangedMarket(event.params.market.toHex());
-
-  let leftMarket = Market.load(event.params.leftMarket.toHex());
-  let rightMarket = Market.load(event.params.rightMarket.toHex());
-
-  let rangedMarketContract = RangedMarketContract.bind(event.params.market);
-
-  rangedMarket.timestamp = event.block.timestamp;
-  rangedMarket.currencyKey = leftMarket.currencyKey;
-  rangedMarket.maturityDate = leftMarket.maturityDate;
-  rangedMarket.leftPrice = leftMarket.strikePrice;
-  rangedMarket.rightPrice = rightMarket.strikePrice;
-  rangedMarket.inAddress = rangedMarketContract.positions().value0;
-  rangedMarket.outAddress = rangedMarketContract.positions().value1;
-  rangedMarket.isOpen = true;
-  rangedMarket.leftMarket = leftMarket.id;
-  rangedMarket.rightMarket = rightMarket.id;
-
-  rangedMarket.save();
-}
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);

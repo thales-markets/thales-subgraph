@@ -28,15 +28,15 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
-        "name": "account",
+        "name": "burner",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "value",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -47,19 +47,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
-        "name": "account",
+        "name": "minter",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "value",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "Issued",
+    "name": "Mint",
     "type": "event"
   },
   {
@@ -155,32 +155,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "decimals",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "claimant",
-        "type": "address"
-      }
-    ],
-    "name": "exercise",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -193,22 +167,22 @@
         "type": "uint256"
       }
     ],
-    "name": "exerciseWithAmount",
+    "name": "burn",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [
       {
-        "internalType": "address payable",
-        "name": "beneficiary",
-        "type": "address"
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
       }
     ],
-    "name": "expire",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -246,6 +220,11 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "market",
+        "type": "address"
+      },
+      {
         "internalType": "string",
         "name": "_name",
         "type": "string"
@@ -257,12 +236,7 @@
       },
       {
         "internalType": "address",
-        "name": "_limitOrderProvider",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_thalesAMM",
+        "name": "_thalesRangedAMM",
         "type": "address"
       }
     ],
@@ -279,32 +253,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "limitOrderProvider",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "market",
-    "outputs": [
-      {
-        "internalType": "contract PositionalMarket",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -343,6 +291,19 @@
   },
   {
     "inputs": [],
+    "name": "rangedMarket",
+    "outputs": [
+      {
+        "internalType": "contract RangedMarket",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "symbol",
     "outputs": [
       {
@@ -356,7 +317,7 @@
   },
   {
     "inputs": [],
-    "name": "thalesAMM",
+    "name": "thalesRangedAMM",
     "outputs": [
       {
         "internalType": "address",

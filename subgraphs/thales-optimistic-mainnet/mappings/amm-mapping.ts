@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
-import { BoughtFromAmm, SoldToAMM } from '../generated/AMM/AMM';
-import { Trade } from '../generated/schema';
+import { BoughtFromAmm, SoldToAMM } from '../../../generated/AMM/AMM';
+import { Trade } from '../../../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());

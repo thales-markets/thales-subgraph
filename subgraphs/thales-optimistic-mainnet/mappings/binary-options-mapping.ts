@@ -1,17 +1,17 @@
 import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
-} from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
+} from '../../../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
 import {
   Mint as MintEvent,
   MarketResolved as MarketResolvedEvent,
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
-} from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
-import { Market, OptionTransaction, Position, PositionBalance } from '../generated/schema';
-import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
-import { Position as PositionContract } from '../generated/templates';
+} from '../../../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
+import { Transfer as TransferEvent } from '../../../generated/templates/Position/Position';
+import { Market, OptionTransaction, Position, PositionBalance } from '../../../generated/schema';
+import { BinaryOptionMarket as BinaryOptionMarketContract } from '../../../generated/templates';
+import { Position as PositionContract } from '../../../generated/templates';
 // import { Position as PositionContract } from '../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
 

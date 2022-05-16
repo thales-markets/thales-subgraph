@@ -2,15 +2,15 @@ specVersion: 0.0.2
 description: Thales Binary Options API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
-  file: ./thales-optimism-kovan.graphql
+  file: ./thales-optimism.graphql
 dataSources:
   - kind: ethereum/contract
     name: BinaryOptionMarketManager
-    network: optimism-kovan
+    network: optimism
     source:
-      address: '0xAfBA2e76B4580Ab88c07Beb2Ca884ca733fD4dD4'
+      address: '0xBE086E0A2c588Ad64C8530048cE4356190D6a6F3'
       abi: BinaryOptionMarketManager
-      startBlock: 1186043
+      startBlock: 1436819
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -31,11 +31,11 @@ dataSources:
           handler: handleMarketExpired
   - kind: ethereum/contract
     name: RangedMarkets
-    network: optimism-kovan
+    network: optimism
     source:
-      address: '0x0690F410FB54d76268e4fa97486CBD605e68dC62'
+      address: '0x64cb6EF981e5E432d4362F6A561A31B22E328cC5'
       abi: RangedMarketsAMM
-      startBlock: 2410842
+      startBlock: 8142185
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -59,12 +59,57 @@ dataSources:
         - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmEvent
   - kind: ethereum/contract
-    name: AMM
-    network: optimism-kovan
+    name: NewPositionaMarketManager
+    network: optimism
     source:
-      address: '0xfed727f37e921Faac22e36E0bbaA8504B45F6e3f'
+      address: '0x9227334352A890e51e980BeB7A56Bbdd01499B54'
+      abi: BinaryOptionMarketManager
+      startBlock: 6481303
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/binary-options-mapping.ts
+      entities:
+        - Market
+        - Position
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../../abis/thales/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../../abis/thales/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: LimitOrderProtocol
+    network: optimism
+    source:
+      address: '0xb707d89d29c189421163515c59e42147371d6857'
+      abi: LimitOrderProtocol
+      startBlock: 1436819
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/1inch-limit-order-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: LimitOrderProtocol
+          file: ../../abis/1inch/LimitOrderProtocol.json
+      eventHandlers:
+        - event: OrderFilled(indexed address,bytes32,uint256)
+          handler: handleOrderFilledEvent
+  - kind: ethereum/contract
+    name: AMM
+    network: optimism
+    source:
+      address: '0x5ae7454827D83526261F3871C1029792644Ef1B1'
       abi: AMM
-      startBlock: 1912110
+      startBlock: 1436819
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -81,12 +126,39 @@ dataSources:
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
   - kind: ethereum/contract
-    name: ThalesRoyale
-    network: optimism-kovan
+    name: ThalesRoyale_old
+    network: optimism
     source:
-      address: '0x5De27390C8280Db5732Ee6aA7f7aBC4e2a476B30'
+      address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
       abi: ThalesRoyale
-      startBlock: 1916739
+      startBlock: 2941851
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/thales-royale-with-passport-mapping.ts
+      entities:
+        - ThalesToyaleGame
+        - ThalesRoyaleSeason
+        - ThalesRoyalePlayer
+        - ThalesRoyalePostition
+        - ThalesRoyalePassportPlayer
+        - ThalesRoyalePassportPosition
+      abis:
+        - name: ThalesRoyale
+          file: ../../abis/thales-royale/ThalesRoyale_old.json
+      eventHandlers:
+        - event: SignedUp(address,uint256)
+          handler: handleSignedUp
+        - event: TookAPosition(address,uint256,uint256,uint256)
+          handler: handleTookAPosition
+  - kind: ethereum/contract
+    name: ThalesRoyale
+    network: optimism
+    source:
+      address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
+      abi: ThalesRoyale
+      startBlock: 2941851
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -96,7 +168,7 @@ dataSources:
         - ThalesRoyaleGame
         - ThalesRoyaleSeason
         - ThalesRoyalePlayer
-        - ThalesRoyalePosition
+        - ThalesRoyalePostition
         - ThalesRoyalePassportPlayer
         - ThalesRoyalePassportPosition
       abis:
@@ -107,21 +179,19 @@ dataSources:
           handler: handleSignedUpWithPosition
         - event: SignedUpPassport(address,uint256,uint256,uint256[])
           handler: handleSignedUpPassport
-        - event: TookAPosition(address,uint256,uint256,uint256)
-          handler: handleTookAPosition
         - event: TookAPositionPassport(address,uint256,uint256,uint256,uint256)
           handler: handleTookAPositionPassport
         - event: RoyaleStarted(uint256,uint256,uint256)
-          handler: handleRoyaleStartedOPKovan
+          handler: handleRoyaleStartedOPMainnet
         - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRoundClosedOPKovan
+          handler: handleRoundClosedOPMainnet
   - kind: ethereum/contract
     name: ThalesRoyalePass
-    network: optimism-kovan
+    network: optimism
     source:
-      address: '0x288eF27eC4fEaD97F81A6F578152fd00DdFBB448'
+      address: '0x2F71f4a2D8BAB9703fff3fF5794762bF5b6C7E29'
       abi: ThalesRoyalePass
-      startBlock: 1912110
+      startBlock: 3845687
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -137,11 +207,11 @@ dataSources:
           handler: handleTransfer
   - kind: ethereum/contract
     name: ThalesRoyalePassport
-    network: optimism-kovan
+    network: optimism
     source:
-      address: '0x8363a01892dE85BC871005570B481c374f2aB3e6'
+      address: '0xf534848023ba851c6265e8F99a919c4d5fd05CD0'
       abi: ThalesRoyalePassport
-      startBlock: 1880462
+      startBlock: 5536421
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -156,12 +226,32 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
-    name: StakingThales
-    network: optimism-kovan
+    name: Airdrop
+    network: optimism
     source:
-      address: '0x09F9FBA4C2A2f51182e90888df6B954C68288200'
+      address: '0x42B6e9b5Bb96a02E02e651d3104Fc3546E1313F2'
+      abi: Airdrop
+      startBlock: 3115834
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: Airdrop
+          file: ../../abis/token/Airdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleRetroAirdropClaimEvent
+  - kind: ethereum/contract
+    name: StakingThales
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
       abi: StakingThales
-      startBlock: 1912110
+      startBlock: 2901896
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -184,12 +274,32 @@ dataSources:
         - event: RewardsClaimed(address,uint256)
           handler: handleStakingRewardsClaimEvent
   - kind: ethereum/contract
-    name: EscrowThales
-    network: optimism-kovan
+    name: StakingThalesMigration
+    network: optimism
     source:
-      address: '0xcCD32f7EB77574bb6929e2dA9CE6c608E45BA54F'
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../../abis/token/StakingThales.json
+      eventHandlers:
+        - event: StakedOnBehalf(address,address,uint256)
+          handler: handleStakedOnBehalfEvent
+  - kind: ethereum/contract
+    name: EscrowThales
+    network: optimism
+    source:
+      address: '0xa25816b9605009aa446d4d597F0AA46FD828f056'
       abi: EscrowThales
-      startBlock: 1912110
+      startBlock: 2901873
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -205,10 +315,54 @@ dataSources:
           handler: handleAddedToEscrowEvent
         - event: Vested(address,uint256)
           handler: handleVestedEvent
+  - kind: ethereum/contract
+    name: OngoingAirdrop
+    network: optimism
+    source:
+      address: '0x8D47b12ce25E2dc6866e8aAC0DbD823Da09fADd6'
+      abi: OngoingAirdrop
+      startBlock: 3119010
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: OngoingAirdrop
+          file: ../../abis/token/OngoingAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedRewardsClaimEvent
+  - kind: ethereum/contract
+    name: LPStakingRewards
+    network: optimism
+    source:
+      address: '0x31a20E5b7b1b067705419D57Ab4F72E81cC1F6Bf'
+      abi: LPStakingRewards
+      startBlock: 3130453
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping-l2.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: LPStakingRewards
+          file: ../../abis/token/LPStakingRewards.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256)
+          handler: handleStakedEvent
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawnEvent
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaidEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
-    network: optimism-kovan
+    network: optimism
     source:
       abi: BinaryOptionMarket
     mapping:
@@ -232,7 +386,7 @@ templates:
           handler: handleOptionsExercised
   - name: RangedMarket
     kind: ethereum/contract
-    network: optimism-kovan
+    network: optimism
     source:
       abi: RangedMarket
     mapping:
@@ -253,11 +407,11 @@ templates:
           handler: handleMint
         - event: Resolved(uint8,uint256)
           handler: handleMarketResolved
-        - event: Exercised(address,uint256)
+        - event: Exercised(address,uint256,uint8)
           handler: handleExercised
   - name: Position
     kind: ethereum/contract
-    network: optimism-kovan
+    network: optimism
     source:
       abi: Position
     mapping:
@@ -275,7 +429,7 @@ templates:
           handler: handleTransfer
   - name: RangedPosition
     kind: ethereum/contract
-    network: optimism-kovan
+    network: optimism
     source:
       abi: RangedPosition
     mapping:
