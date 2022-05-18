@@ -58,9 +58,11 @@ type Position @entity {
   timestamp: BigInt!
   account: Bytes!
   market: Bytes!
-  position: BigInt!
   isWithdrawn: Boolean!
   isClaimed: Boolean!
+  position: BigInt!
+  positions: [BigInt!]!
+  amount: BigInt!
 }
 
 enum MarketTransactionType {
@@ -72,6 +74,7 @@ enum MarketTransactionType {
   resolveMarket
   resetMarketResult
   openDispute
+  updatePositions
 }
 
 type MarketTransaction @entity {
@@ -84,4 +87,5 @@ type MarketTransaction @entity {
   market: Bytes!
   amount: BigInt!
   position: BigInt!
+  positions: [BigInt!]
 }

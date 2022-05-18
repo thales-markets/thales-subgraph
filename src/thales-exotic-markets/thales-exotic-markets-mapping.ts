@@ -17,13 +17,28 @@ import {
   BackstopTimeoutPeriodChanged as BackstopTimeoutPeriodChangedEvent,
   PauseChanged as PauseChangedEvent,
   MarketDisputed as MarketDisputedEvent,
+} from '../../generated/templates/ExoticPositionalMarket/ExoticPositionalMarket';
+import {
   NewPositionTaken as NewPositionTakenEvent,
   TicketWithdrawn as TicketWithdrawnEvent,
-} from '../../generated/templates/ExoticPositionalMarket/ExoticPositionalMarket';
-import { ExoticPositionalMarket as ExoticPositionalMarketContract } from '../../generated/templates';
+  WinningTicketClaimed as WinningTicketClaimedEvent,
+} from '../../generated/templates/ExoticPositionalTicketMarket/ExoticPositionalTicketMarket';
+import {
+  NewOpenBidsForPositions as NewOpenBidsForPositionsEvent,
+  OpenBidUserWithdrawn as OpenBidUserWithdrawnEvent,
+  WinningOpenBidAmountClaimed as WinningOpenBidAmountClaimedEvent,
+} from '../../generated/templates/ExoticPositionalOpenBidMarket/ExoticPositionalOpenBidMarket';
+import {
+  ExoticPositionalTicketMarket as ExoticPositionalTicketMarketContract,
+  ExoticPositionalOpenBidMarket as ExoticPositionalOpenBidMarketContract,
+} from '../../generated/templates';
 
 export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
-  ExoticPositionalMarketContract.create(event.params.marketAddress);
+  if (event.params.fixedTicketPrice.gt(BigInt.fromI32(0))) {
+    ExoticPositionalTicketMarketContract.create(event.params.marketAddress);
+  } else {
+    ExoticPositionalOpenBidMarketContract.create(event.params.marketAddress);
+  }
 
   let market = new Market(event.params.marketAddress.toHex());
   market.timestamp = event.block.timestamp;
@@ -179,6 +194,14 @@ export function handleMarketResetEvent(event: MarketResetEvent): void {
   marketTransaction.save();
 }
 
+export function handleMarketCanceledEvent(event: MarketCanceledEvent): void {
+  let market = Market.load(event.params.marketAddress.toHex());
+  if (market !== null) {
+    market.cancelledByCreator = market.creator.equals(event.transaction.from);
+    market.save();
+  }
+}
+
 export function handleBackstopTimeoutPeriodChangedEvent(event: BackstopTimeoutPeriodChangedEvent): void {
   let market = Market.load(event.address.toHex());
   if (market !== null) {
@@ -237,9 +260,14 @@ export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void 
     }
   }
   position.timestamp = event.block.timestamp;
-  position.position = event.params.position;
   position.isWithdrawn = false;
   position.isClaimed = false;
+  position.position = event.params.position;
+
+  // not used for ticket
+  position.amount = BigInt.fromI32(0);
+  position.positions = [BigInt.fromI32(0)];
+
   position.save();
 }
 
@@ -273,7 +301,7 @@ export function handleTicketWithdrawnEvent(event: TicketWithdrawnEvent): void {
   }
 }
 
-export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): void {
+export function handleWinningTicketClaimedEvent(event: WinningTicketClaimedEvent): void {
   let positionId = event.address.toHex() + '-' + event.params.account.toHex();
   let position = Position.load(positionId);
   let market = Market.load(event.address.toHex());
@@ -302,10 +330,138 @@ export function handleWinningTicketClaimedEvent(event: TicketWithdrawnEvent): vo
   }
 }
 
-export function handleMarketCanceledEvent(event: MarketCanceledEvent): void {
-  let market = Market.load(event.params.marketAddress.toHex());
+export function handleNewOpenBidsForPositionsEvent(event: NewOpenBidsForPositionsEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+  let market = Market.load(event.address.toHex());
+
   if (market !== null) {
-    market.cancelledByCreator = market.creator.equals(event.transaction.from);
+    let isNewPosition = false;
+    if (position === null) {
+      position = new Position(positionId);
+      position.market = event.address;
+      position.account = event.params.account;
+      position.isWithdrawn = false;
+      position.positions = new Array<BigInt>(market.positions.length);
+      market.numberOfParticipants = market.numberOfParticipants.plus(BigInt.fromI32(1));
+      isNewPosition = true;
+    } else {
+      market.poolSize = market.poolSize.minus(position.amount);
+      let openBidPositions = position.positions;
+      for (let index = 0; index < position.positions.length; index++) {
+        openBidPositions[index] = BigInt.fromI32(0);
+      }
+      position.positions = openBidPositions;
+    }
+
+    let totalBidAmount = BigInt.fromI32(0);
+    let paramsOpenBidPositions = event.params.openBidPositions;
+    let paramsOpenBidAmounts = event.params.openBidAmounts;
+    let openBidPositions = position.positions;
+
+    for (let index = 0; index < paramsOpenBidPositions.length; index++) {
+      let positionIndex = paramsOpenBidPositions[index].minus(BigInt.fromI32(1));
+      let positionAmount = paramsOpenBidAmounts[index];
+      totalBidAmount = totalBidAmount.plus(positionAmount);
+      openBidPositions[positionIndex.toI32()] = positionAmount;
+    }
+
+    let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+    marketTransaction.hash = event.transaction.hash;
+    marketTransaction.type = isNewPosition || position.isWithdrawn ? 'bid' : 'updatePositions';
+    marketTransaction.timestamp = event.block.timestamp;
+    marketTransaction.blockNumber = event.block.number;
+    marketTransaction.account = event.params.account;
+    marketTransaction.market = event.address;
+    marketTransaction.amount = totalBidAmount;
+    marketTransaction.positions = openBidPositions;
+    marketTransaction.position = BigInt.fromI32(0);
+    marketTransaction.save();
+
+    position.positions = openBidPositions;
+    position.timestamp = event.block.timestamp;
+    position.isWithdrawn = false;
+    position.isClaimed = false;
+    position.amount = totalBidAmount;
+    // not used for open bid
+    position.position = BigInt.fromI32(0);
+    position.save();
+
+    market.poolSize = market.poolSize.plus(totalBidAmount);
     market.save();
+  }
+}
+
+export function handleOpenBidUserWithdrawnEvent(event: OpenBidUserWithdrawnEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = 'withdrawal';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.withdrawnAmount;
+  marketTransaction.position = event.params.position;
+  marketTransaction.save();
+
+  if (position !== null) {
+    let openBidPositions = position.positions;
+    if (event.params.position.gt(BigInt.fromI32(0))) {
+      let positionIndex = event.params.position.minus(BigInt.fromI32(1));
+      openBidPositions[positionIndex.toI32()] = BigInt.fromI32(0);
+      position.amount = position.amount.minus(event.params.withdrawnAmount);
+    } else {
+      for (let index = 0; index < openBidPositions.length; index++) {
+        openBidPositions[index] = BigInt.fromI32(0);
+      }
+      position.amount = BigInt.fromI32(0);
+    }
+    position.positions = openBidPositions;
+    position.timestamp = event.block.timestamp;
+    position.position = BigInt.fromI32(0);
+    position.isWithdrawn = position.amount.equals(BigInt.fromI32(0));
+    position.save();
+
+    let market = Market.load(event.address.toHex());
+    if (market !== null) {
+      market.poolSize = market.poolSize.minus(event.params.withdrawnAmount);
+      if (position.isWithdrawn) {
+        market.numberOfParticipants = market.numberOfParticipants.minus(BigInt.fromI32(1));
+      }
+      market.save();
+    }
+  }
+}
+
+export function handleWinningOpenBidAmountClaimedEvent(event: WinningOpenBidAmountClaimedEvent): void {
+  let positionId = event.address.toHex() + '-' + event.params.account.toHex();
+  let position = Position.load(positionId);
+  let market = Market.load(event.address.toHex());
+
+  let marketTransaction = new MarketTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  marketTransaction.hash = event.transaction.hash;
+  marketTransaction.type = market !== null && market.isCancelled ? 'claimRefund' : 'claim';
+  marketTransaction.timestamp = event.block.timestamp;
+  marketTransaction.blockNumber = event.block.number;
+  marketTransaction.account = event.params.account;
+  marketTransaction.market = event.address;
+  marketTransaction.amount = event.params.amount;
+  marketTransaction.position =
+    market !== null && market.isCancelled
+      ? BigInt.fromI32(0)
+      : market !== null
+      ? market.winningPosition
+      : BigInt.fromI32(0);
+  marketTransaction.save();
+
+  if (position !== null) {
+    position.timestamp = event.block.timestamp;
+    position.positions = new Array<BigInt>(market.positions.length);
+    position.amount = BigInt.fromI32(0);
+    position.isClaimed = true;
+    position.save();
   }
 }
