@@ -343,7 +343,6 @@ export function handleNewOpenBidsForPositionsEvent(event: NewOpenBidsForPosition
       position.account = event.params.account;
       position.isWithdrawn = false;
       position.positions = new Array<BigInt>(market.positions.length);
-      market.numberOfParticipants = market.numberOfParticipants.plus(BigInt.fromI32(1));
       isNewPosition = true;
     } else {
       market.poolSize = market.poolSize.minus(position.amount);
@@ -352,6 +351,10 @@ export function handleNewOpenBidsForPositionsEvent(event: NewOpenBidsForPosition
         openBidPositions[index] = BigInt.fromI32(0);
       }
       position.positions = openBidPositions;
+    }
+
+    if (isNewPosition || position.isWithdrawn) {
+      market.numberOfParticipants = market.numberOfParticipants.plus(BigInt.fromI32(1));
     }
 
     let totalBidAmount = BigInt.fromI32(0);
@@ -409,25 +412,27 @@ export function handleOpenBidUserWithdrawnEvent(event: OpenBidUserWithdrawnEvent
 
   if (position !== null) {
     let openBidPositions = position.positions;
+    let positionAmount = BigInt.fromI32(0);
     if (event.params.position.gt(BigInt.fromI32(0))) {
       let positionIndex = event.params.position.minus(BigInt.fromI32(1));
+      positionAmount = openBidPositions[positionIndex.toI32()];
       openBidPositions[positionIndex.toI32()] = BigInt.fromI32(0);
-      position.amount = position.amount.minus(event.params.withdrawnAmount);
+      position.amount = position.amount.minus(positionAmount);
     } else {
       for (let index = 0; index < openBidPositions.length; index++) {
         openBidPositions[index] = BigInt.fromI32(0);
       }
+      positionAmount = position.amount;
       position.amount = BigInt.fromI32(0);
     }
     position.positions = openBidPositions;
     position.timestamp = event.block.timestamp;
-    position.position = BigInt.fromI32(0);
     position.isWithdrawn = position.amount.equals(BigInt.fromI32(0));
     position.save();
 
     let market = Market.load(event.address.toHex());
     if (market !== null) {
-      market.poolSize = market.poolSize.minus(event.params.withdrawnAmount);
+      market.poolSize = market.poolSize.minus(positionAmount);
       if (position.isWithdrawn) {
         market.numberOfParticipants = market.numberOfParticipants.minus(BigInt.fromI32(1));
       }
