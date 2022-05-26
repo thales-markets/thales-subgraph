@@ -2,6 +2,7 @@ import { SportMarket } from '../../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
+  ResolveSportsMarket as ResolveSportsMarketEvent,
 } from '../../generated/TheRundownConsumer/TheRundownConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
@@ -30,6 +31,16 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
     market.homeOdds = BigInt.fromI32(event.params._game.homeOdds);
     market.awayOdds = BigInt.fromI32(event.params._game.awayOdds);
     market.drawOdds = BigInt.fromI32(event.params._game.drawOdds);
+    market.save();
+  }
+}
+
+export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.isResolved = true;
+    market.isOpen = false;
+    market.finalResult = event.params._outcome;
     market.save();
   }
 }
