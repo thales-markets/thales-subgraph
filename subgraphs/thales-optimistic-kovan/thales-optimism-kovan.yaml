@@ -46,6 +46,7 @@ dataSources:
         - Trade
         - OptionTransaction
         - RangedPosition
+        - Referral
       abis:
         - name: RangedMarket
           file: ../../abis/thales/range-markets/RangedMarket.json
@@ -58,6 +59,8 @@ dataSources:
           handler: handleSoldToAMMEvent
         - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
   - kind: ethereum/contract
     name: AMM
     network: optimism-kovan
@@ -72,6 +75,7 @@ dataSources:
       file: ./mappings/amm-mapping.ts
       entities:
         - Trade
+        - Referral
       abis:
         - name: AMM
           file: ../../abis/thales/AMM.json
@@ -80,6 +84,8 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
   - kind: ethereum/contract
     name: ThalesRoyale
     network: optimism-kovan
@@ -253,7 +259,7 @@ templates:
           handler: handleMint
         - event: Resolved(uint8,uint256)
           handler: handleMarketResolved
-        - event: Exercised(address,uint256)
+        - event: Exercised(address,uint256,uint8)
           handler: handleExercised
   - name: Position
     kind: ethereum/contract

@@ -16,6 +16,15 @@ type Market @entity {
   finalPrice: BigInt
 }
 
+type Referral @entity {
+  id: ID!
+  refferer: Bytes!
+  trader: Bytes!
+  amount: BigInt!
+  volume: BigInt!
+  timestamp: BigInt!
+}
+
 type RangedMarket @entity {
   id: ID!
   timestamp: BigInt!

@@ -1,4 +1,9 @@
-import { RangedMarketCreated, BoughtFromAmm, SoldToAMM } from '../../../generated/RangedMarkets/RangedMarketsAMM';
+import {
+  RangedMarketCreated,
+  BoughtFromAmm,
+  SoldToAMM,
+  ReferrerPaid,
+} from '../../../generated/RangedMarkets/RangedMarketsAMM';
 
 import {
   Market,
@@ -7,6 +12,7 @@ import {
   OptionTransaction,
   RangedPosition,
   RangedPositionBalance,
+  Referral,
 } from '../../../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../../../generated/templates';
 import { RangedPosition as RangedPositionContract } from '../../../generated/templates';
@@ -124,6 +130,7 @@ export function handleExercised(event: Exercised): void {
   optionTransactionEntity.account = event.params.exerciser;
   optionTransactionEntity.market = event.address;
   optionTransactionEntity.amount = event.params.amount;
+  optionTransactionEntity.side = event.params._position;
   optionTransactionEntity.save();
 }
 
@@ -145,4 +152,15 @@ export function handleMarketResolved(event: Resolved): void {
   market.result = event.params.winningPosition;
   market.finalPrice = event.params.finalPrice;
   market.save();
+}
+
+export function handleReferrerPaid(event: ReferrerPaid): void {
+  let referral = new Referral(event.transaction.hash.toHexString());
+  referral.amount = event.params.amount;
+  referral.refferer = event.params.refferer;
+  referral.trader = event.params.trader;
+  referral.timestamp = event.block.timestamp;
+  referral.volume = event.params.volume;
+
+  referral.save();
 }
