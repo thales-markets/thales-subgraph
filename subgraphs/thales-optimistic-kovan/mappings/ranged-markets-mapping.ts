@@ -170,8 +170,8 @@ export function handleReferrerPaid(event: ReferrerPaid): void {
 
   if (referrer == null) {
     referrer = new Referrer(event.params.refferer.toHex());
-    referrer.totalVolume = BigInt.fromI32(0);
-    referrer.totalEarned = BigInt.fromI32(0);
+    referrer.totalVolume = event.params.volume;
+    referrer.totalEarned = event.params.amount;
     referrer.trades = BigInt.fromI32(1);
     referrer.timestamp = event.block.timestamp;
   } else {
