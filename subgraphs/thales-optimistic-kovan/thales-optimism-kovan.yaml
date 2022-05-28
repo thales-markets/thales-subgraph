@@ -48,6 +48,7 @@ dataSources:
         - RangedPosition
         - ReferralTransfer
         - Referrer
+        - ReferredTrader
       abis:
         - name: RangedMarket
           file: ../../abis/thales/range-markets/RangedMarket.json
@@ -78,6 +79,7 @@ dataSources:
         - Trade
         - ReferralTransfer
         - Referrer
+        - ReferredTrader
       abis:
         - name: AMM
           file: ../../abis/thales/AMM.json

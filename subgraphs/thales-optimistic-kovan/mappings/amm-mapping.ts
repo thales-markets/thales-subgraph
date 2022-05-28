@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, ReferrerPaid, SoldToAMM } from '../../../generated/AMM/AMM';
-import { ReferralTransfer, Referrer, Trade } from '../../../generated/schema';
+import { ReferralTransfer, ReferredTrader, Referrer, Trade } from '../../../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -55,8 +55,8 @@ export function handleReferrerPaid(event: ReferrerPaid): void {
 
   if (referrer == null) {
     referrer = new Referrer(event.params.refferer.toHex());
-    referrer.totalVolume = BigInt.fromI32(0);
-    referrer.totalEarned = BigInt.fromI32(0);
+    referrer.totalVolume = event.params.volume;
+    referrer.totalEarned = event.params.amount;
     referrer.trades = BigInt.fromI32(1);
     referrer.timestamp = event.block.timestamp;
   } else {
@@ -66,4 +66,21 @@ export function handleReferrerPaid(event: ReferrerPaid): void {
   }
 
   referrer.save();
+
+  let referredTrader = ReferredTrader.load(event.params.trader.toHex());
+
+  if (referredTrader == null) {
+    referredTrader = new ReferredTrader(event.params.trader.toHex());
+    referredTrader.trades = BigInt.fromI32(1);
+    referredTrader.totalVolume = event.params.volume;
+    referredTrader.totalEarned = event.params.amount;
+    referredTrader.refferer = event.params.refferer.toHex();
+    referredTrader.timestamp = event.block.timestamp;
+  } else {
+    referredTrader.trades = referredTrader.trades.plus(BigInt.fromI32(1));
+    referredTrader.totalVolume = referredTrader.totalVolume.plus(event.params.volume);
+    referredTrader.totalEarned = referredTrader.totalEarned.plus(event.params.amount);
+  }
+
+  referredTrader.save();
 }

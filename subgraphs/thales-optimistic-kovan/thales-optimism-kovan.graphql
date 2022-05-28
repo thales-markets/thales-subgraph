@@ -33,6 +33,15 @@ type Referrer @entity {
   timestamp: BigInt!
 }
 
+type ReferredTrader @entity {
+  id: ID!
+  trades: BigInt!
+  totalVolume: BigInt!
+  totalEarned: BigInt!
+  refferer: Referrer!
+  timestamp: BigInt!
+}
+
 type RangedMarket @entity {
   id: ID!
   timestamp: BigInt!

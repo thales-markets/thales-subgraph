@@ -14,6 +14,7 @@ import {
   RangedPositionBalance,
   ReferralTransfer,
   Referrer,
+  ReferredTrader,
 } from '../../../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../../../generated/templates';
 import { RangedPosition as RangedPositionContract } from '../../../generated/templates';
@@ -180,4 +181,21 @@ export function handleReferrerPaid(event: ReferrerPaid): void {
   }
 
   referrer.save();
+
+  let referredTrader = ReferredTrader.load(event.params.trader.toHex());
+
+  if (referredTrader == null) {
+    referredTrader = new ReferredTrader(event.params.trader.toHex());
+    referredTrader.trades = BigInt.fromI32(1);
+    referredTrader.totalVolume = event.params.volume;
+    referredTrader.totalEarned = event.params.amount;
+    referredTrader.refferer = event.params.refferer.toHex();
+    referredTrader.timestamp = event.block.timestamp;
+  } else {
+    referredTrader.trades = referredTrader.trades.plus(BigInt.fromI32(1));
+    referredTrader.totalVolume = referredTrader.totalVolume.plus(event.params.volume);
+    referredTrader.totalEarned = referredTrader.totalEarned.plus(event.params.amount);
+  }
+
+  referredTrader.save();
 }
