@@ -10,7 +10,7 @@ dataSources:
   #   source:
   #     address: '0x9bb5430261Cfb68cf0b65bF891C30d73Fc779Fe5'
   #     abi: SportPositionalMarketManager
-  #     startBlock: 3184126 //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA VIDECEMO KOJI
+  #     startBlock: 3184126
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.4
@@ -48,3 +48,5 @@ dataSources:
           handler: handleGameOddsAddedEvent
         - event: ResolveSportsMarket(address,bytes32,uint256)
           handler: handleResolveSportsMarketEvent
+        - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8),uint256)
+          handler: handleGameResolvedEvent
