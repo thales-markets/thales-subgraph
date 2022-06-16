@@ -17,3 +17,23 @@ type SportMarket @entity {
   homeScore: BigInt
   awayScore: BigInt
 }
+
+type SportMarketOddsHistory @entity {
+  id: ID!
+  timestamp: BigInt!
+  address: Bytes!
+  maturityDate: BigInt!
+  tags: [BigInt!]!
+  isOpen: Boolean!
+  isResolved: Boolean!
+  finalResult: BigInt!
+  poolSize: BigInt!
+  numberOfParticipants: BigInt!
+  homeTeam: String!
+  awayTeam: String!
+  homeOdds: [BigInt!]!
+  awayOdds: [BigInt!]!
+  drawOdds: [BigInt!]!
+  homeScore: BigInt
+  awayScore: BigInt
+}
