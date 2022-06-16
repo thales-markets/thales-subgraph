@@ -4,6 +4,7 @@ import {
   GameOddsAdded as GameOddsAddedHistoricalEvent,
   ResolveSportsMarket as ResolveSportsMarketEvent,
   GameResolved as GameResolvedEvent,
+  TheRundownConsumer_historical_test,
 } from '../../generated/TheRundownConsumer_historical_test/TheRundownConsumer_historical_test';
 import { GameOddsAdded as GameOddsAddedEvent } from '../../generated/TheRundownConsumer/TheRundownConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
@@ -55,16 +56,34 @@ export function handleGameOddsAddedHistoricalEvent(event: GameOddsAddedHistorica
 
   let marketHistory = SportMarketOddsHistory.load(event.params._id.toHex());
   if (marketHistory !== null) {
-    let homeOdds = marketHistory.homeOdds;
-    homeOdds.push(BigInt.fromI32(event.params._game.homeOdds));
-    let awayOdds = marketHistory.awayOdds;
-    awayOdds.push(BigInt.fromI32(event.params._game.awayOdds));
-    let drawOdds = marketHistory.drawOdds;
-    drawOdds.push(BigInt.fromI32(event.params._game.drawOdds));
-    marketHistory.homeOdds = homeOdds;
-    marketHistory.awayOdds = awayOdds;
-    marketHistory.drawOdds = drawOdds;
-    marketHistory.save();
+    if (
+      event.params._game.homeOdds != event.params._game.awayOdds &&
+      event.params._game.homeOdds != event.params._game.drawOdds
+    ) {
+      let theRundownConsumerContract = TheRundownConsumer_historical_test.bind(event.address);
+      let normalizedOdds = theRundownConsumerContract.getNormalizedOdds(event.params._id);
+      let homeOdds = marketHistory.homeOdds;
+      homeOdds.push(normalizedOdds[0]);
+      let awayOdds = marketHistory.awayOdds;
+      awayOdds.push(normalizedOdds[1]);
+      let drawOdds = marketHistory.drawOdds;
+      drawOdds.push(normalizedOdds[2]);
+      marketHistory.homeOdds = homeOdds;
+      marketHistory.awayOdds = awayOdds;
+      marketHistory.drawOdds = drawOdds;
+      marketHistory.save();
+    } else {
+      let homeOdds = marketHistory.homeOdds;
+      homeOdds.push(BigInt.fromI32(event.params._game.homeOdds));
+      let awayOdds = marketHistory.awayOdds;
+      awayOdds.push(BigInt.fromI32(event.params._game.awayOdds));
+      let drawOdds = marketHistory.drawOdds;
+      drawOdds.push(BigInt.fromI32(event.params._game.drawOdds));
+      marketHistory.homeOdds = homeOdds;
+      marketHistory.awayOdds = awayOdds;
+      marketHistory.drawOdds = drawOdds;
+      marketHistory.save();
+    }
   }
 }
 
