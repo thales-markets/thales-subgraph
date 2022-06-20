@@ -6,6 +6,7 @@ import {
   GameResolved as GameResolvedEvent,
   TheRundownConsumer_historical_test,
 } from '../../generated/TheRundownConsumer_historical_test/TheRundownConsumer_historical_test';
+import { CreateSportsMarket as CreateSportsMarketNewEvent } from '../../generated/TheRundownConsumer_newCreateMarketEvent/TheRundownConsumer_newCreateMarketEvent';
 import { GameOddsAdded as GameOddsAddedEvent } from '../../generated/TheRundownConsumer/TheRundownConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
@@ -130,4 +131,41 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
     marketHistory.drawOdds = drawOdds;
     marketHistory.save();
   }
+}
+
+export function handleNewCreateSportsMarketEvent(event: CreateSportsMarketNewEvent): void {
+  let normalizedOdds = event.params._normalizedOdds;
+  let market = new SportMarket(event.params._id.toHex());
+  market.timestamp = event.block.timestamp;
+  market.address = event.params._marketAddress;
+  market.maturityDate = event.params._game.startTime;
+  market.tags = event.params._tags;
+  market.isOpen = true;
+  market.isResolved = false;
+  market.finalResult = BigInt.fromI32(0);
+  market.poolSize = BigInt.fromI32(0);
+  market.numberOfParticipants = BigInt.fromI32(0);
+  market.homeTeam = event.params._game.homeTeam;
+  market.awayTeam = event.params._game.awayTeam;
+  market.homeOdds = normalizedOdds[0];
+  market.awayOdds = normalizedOdds[1];
+  market.drawOdds = normalizedOdds[2];
+  market.save();
+
+  let marketHistory = new SportMarketOddsHistory(event.params._id.toHex());
+  marketHistory.timestamp = event.block.timestamp;
+  marketHistory.address = event.params._marketAddress;
+  marketHistory.maturityDate = event.params._game.startTime;
+  marketHistory.tags = event.params._tags;
+  marketHistory.isOpen = true;
+  marketHistory.isResolved = false;
+  marketHistory.finalResult = BigInt.fromI32(0);
+  marketHistory.poolSize = BigInt.fromI32(0);
+  marketHistory.numberOfParticipants = BigInt.fromI32(0);
+  marketHistory.homeTeam = event.params._game.homeTeam;
+  marketHistory.awayTeam = event.params._game.awayTeam;
+  market.homeOdds = normalizedOdds[0];
+  market.awayOdds = normalizedOdds[1];
+  market.drawOdds = normalizedOdds[2];
+  marketHistory.save();
 }
