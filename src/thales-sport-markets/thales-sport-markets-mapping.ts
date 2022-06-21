@@ -38,9 +38,9 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.numberOfParticipants = BigInt.fromI32(0);
   marketHistory.homeTeam = event.params._game.homeTeam;
   marketHistory.awayTeam = event.params._game.awayTeam;
-  market.homeOdds = normalizedOdds[0];
-  market.awayOdds = normalizedOdds[1];
-  market.drawOdds = normalizedOdds[2];
+  marketHistory.homeOdds = [normalizedOdds[0]];
+  marketHistory.awayOdds = [normalizedOdds[1]];
+  marketHistory.drawOdds = [normalizedOdds[2]];
   marketHistory.save();
 }
 
