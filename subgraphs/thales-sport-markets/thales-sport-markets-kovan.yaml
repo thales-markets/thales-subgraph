@@ -31,3 +31,25 @@ dataSources:
           handler: handleResolveSportsMarketEvent
         - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8),uint256)
           handler: handleGameResolvedEvent
+  - kind: ethereum/contract
+    name: SportsAMM
+    network: kovan
+    source:
+      address: '0xc058844b73975458B8562F2CA0688aae8e18c076'
+      abi: SportsAMM
+      startBlock: 32296896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../../src/thales-sport-markets/amm-mapping.ts
+      entities:
+        - MarketTransaction
+      abis:
+        - name: SportsAMM
+          file: ../../abis/thales-sport-markets/SportsAMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent

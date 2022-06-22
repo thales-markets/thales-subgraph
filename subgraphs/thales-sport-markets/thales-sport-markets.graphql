@@ -37,3 +37,20 @@ type SportMarketOddsHistory @entity {
   homeScore: BigInt
   awayScore: BigInt
 }
+
+enum MarketTransactionType {
+  buy
+  sell
+}
+
+type MarketTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  type: MarketTransactionType!
+  account: Bytes!
+  market: Bytes!
+  amount: BigInt!
+  position: BigInt!
+}
