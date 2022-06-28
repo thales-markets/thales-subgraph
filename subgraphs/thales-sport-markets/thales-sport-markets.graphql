@@ -6,6 +6,7 @@ type SportMarket @entity {
   tags: [BigInt!]!
   isOpen: Boolean!
   isResolved: Boolean!
+  isCanceled: Boolean!
   finalResult: BigInt!
   poolSize: BigInt!
   numberOfParticipants: BigInt!
@@ -26,6 +27,7 @@ type SportMarketOddsHistory @entity {
   tags: [BigInt!]!
   isOpen: Boolean!
   isResolved: Boolean!
+  isCanceled: Boolean!
   finalResult: BigInt!
   poolSize: BigInt!
   numberOfParticipants: BigInt!

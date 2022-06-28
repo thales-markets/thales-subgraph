@@ -4,6 +4,7 @@ import {
   GameOddsAdded as GameOddsAddedEvent,
   ResolveSportsMarket as ResolveSportsMarketEvent,
   GameResolved as GameResolvedEvent,
+  CancelSportsMarket as CancelSportsMarketEvent,
 } from '../../generated/TheRundownConsumer/TheRundownConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
@@ -16,6 +17,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   market.tags = event.params._tags;
   market.isOpen = true;
   market.isResolved = false;
+  market.isCanceled = false;
   market.finalResult = BigInt.fromI32(0);
   market.poolSize = BigInt.fromI32(0);
   market.numberOfParticipants = BigInt.fromI32(0);
@@ -33,6 +35,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.tags = event.params._tags;
   marketHistory.isOpen = true;
   marketHistory.isResolved = false;
+  marketHistory.isCanceled = false;
   marketHistory.finalResult = BigInt.fromI32(0);
   marketHistory.poolSize = BigInt.fromI32(0);
   marketHistory.numberOfParticipants = BigInt.fromI32(0);
@@ -86,5 +89,13 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
     marketHistory.awayOdds = awayOdds;
     marketHistory.drawOdds = drawOdds;
     marketHistory.save();
+  }
+}
+
+export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.isCanceled = true;
+    market.save();
   }
 }

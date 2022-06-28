@@ -31,6 +31,8 @@ dataSources:
           handler: handleResolveSportsMarketEvent
         - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8),uint256)
           handler: handleGameResolvedEvent
+        - event: CancelSportsMarket(address,bytes32)
+          handler: handleCancelSportsMarket
   - kind: ethereum/contract
     name: SportsAMM
     network: kovan
