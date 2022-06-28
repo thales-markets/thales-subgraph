@@ -8,7 +8,7 @@ dataSources:
     name: TheRundownConsumer
     network: kovan
     source:
-      address: '0xd03f473caC24767134A86A298FeC38294986EcE6'
+      address: '0x2C19a76baAc63b136784308f667CB54046efAd0A'
       abi: TheRundownConsumer
       startBlock: 32294449
     mapping:
@@ -35,7 +35,7 @@ dataSources:
     name: SportsAMM
     network: kovan
     source:
-      address: '0xc058844b73975458B8562F2CA0688aae8e18c076'
+      address: '0x763143FeB8d6A26275Fdb441dBf408a2c43AA7F3'
       abi: SportsAMM
       startBlock: 32296896
     mapping:
