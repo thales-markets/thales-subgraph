@@ -8,9 +8,9 @@ dataSources:
     name: TheRundownConsumer
     network: kovan
     source:
-      address: '0x2C19a76baAc63b136784308f667CB54046efAd0A'
+      address: '0x594FD9E527418Bde7F265aE7D422607C64ad1A8a'
       abi: TheRundownConsumer
-      startBlock: 32294449
+      startBlock: 32542481
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -37,9 +37,9 @@ dataSources:
     name: SportsAMM
     network: kovan
     source:
-      address: '0x763143FeB8d6A26275Fdb441dBf408a2c43AA7F3'
+      address: '0x2d6455eE8615B8B5EA5CBc33c06E8376d70762A1'
       abi: SportsAMM
-      startBlock: 32296896
+      startBlock: 32540183
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

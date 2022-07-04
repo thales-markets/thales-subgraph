@@ -55,7 +55,9 @@
     "codegen:exotic-markets-optimism": "npm run codegen-optimism -- subgraphs/thales-exotic-markets/thales-exotic-markets-optimism.yaml",
     "deploy:exotic-markets-optimism": "npm run deploy-optimism -- thales-markets/exotic-markets-optimism subgraphs/thales-exotic-markets/thales-exotic-markets-optimism.yaml",
     "codegen:sport-markets-kovan": "npm run codegen-kovan -- subgraphs/thales-sport-markets/thales-sport-markets-kovan.yaml",
-    "deploy:sport-markets-kovan": "npm run deploy-kovan -- thales-markets/sport-markets-kovan subgraphs/thales-sport-markets/thales-sport-markets-kovan.yaml"
+    "deploy:sport-markets-kovan": "npm run deploy-kovan -- thales-markets/sport-markets-kovan subgraphs/thales-sport-markets/thales-sport-markets-kovan.yaml",
+    "codegen:sport-markets-optimism": "npm run codegen-optimism -- subgraphs/thales-sport-markets/thales-sport-markets-optimism.yaml",
+    "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/sport-markets-optimism subgraphs/thales-sport-markets/thales-sport-markets-optimism.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "git://github.com/graphprotocol/graph-cli.git#ebeeba0009f026bacf940f25ee7b875fe7676032",
