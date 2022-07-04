@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: TheRundownConsumer
-    network: kovan
+    network: optimism
     source:
       address: '0x2B91c14Ce9aa828eD124D12541452a017d8a2148'
       abi: TheRundownConsumer
@@ -35,7 +35,7 @@ dataSources:
           handler: handleCancelSportsMarket
   - kind: ethereum/contract
     name: SportsAMM
-    network: kovan
+    network: optimism
     source:
       address: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1'
       abi: SportsAMM
