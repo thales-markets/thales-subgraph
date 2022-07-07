@@ -19,9 +19,12 @@ dataSources:
       entities:
         - SportMarket
         - SportMarketOddsHistory
+        - Position
       abis:
         - name: TheRundownConsumer
           file: ../../abis/thales-sport-markets/TheRundownConsumer.json
+        - name: SportMarket
+          file: ../../abis/thales-sport-markets/SportMarket.json
       eventHandlers:
         - event: CreateSportsMarket(address,bytes32,(bytes32,uint256,int24,int24,int24,string,string),uint256[],uint256[])
           handler: handleCreateSportsMarketEvent
@@ -55,3 +58,38 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+templates:
+  - name: SportMarket
+    kind: ethereum/contract
+    network: kovan
+    source:
+      abi: SportMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - Position
+      abis:
+        - name: SportMarket
+          file: ../../abis/thales-sport-markets/SportMarket.json
+  - name: Position
+    kind: ethereum/contract
+    network: kovan
+    source:
+      abi: Position
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      entities:
+        - PositionBalance
+      abis:
+        - name: Position
+          file: ../../abis/thales-sport-markets/SportPosition.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer

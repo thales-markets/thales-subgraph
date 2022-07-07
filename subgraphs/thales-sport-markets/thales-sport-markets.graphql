@@ -56,3 +56,23 @@ type MarketTransaction @entity {
   amount: BigInt!
   position: BigInt!
 }
+
+enum PositionType {
+  home
+  away
+  draw
+}
+
+type Position @entity {
+  id: ID!
+  market: SportMarket!
+  side: PositionType!
+  claimable: Boolean!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}

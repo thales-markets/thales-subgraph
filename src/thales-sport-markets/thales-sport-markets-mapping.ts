@@ -1,4 +1,4 @@
-import { SportMarket, SportMarketOddsHistory } from '../../generated/schema';
+import { Position, SportMarket, SportMarketOddsHistory, PositionBalance } from '../../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
@@ -6,11 +6,17 @@ import {
   GameResolved as GameResolvedEvent,
   CancelSportsMarket as CancelSportsMarketEvent,
 } from '../../generated/TheRundownConsumer/TheRundownConsumer';
+import { Transfer as TransferEvent } from '../../generated/templates/Position/Position';
+import { Position as PositionTemplate } from '../../generated/templates';
+import { SportMarket as SportMarketTemplate } from '../../generated/templates';
+import { SportMarket as SportMarketContract } from '../../generated/templates/SportMarket/SportMarket';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
   let normalizedOdds = event.params._normalizedOdds;
+  SportMarketTemplate.create(event.params._marketAddress);
   let market = new SportMarket(event.params._id.toHex());
+
   market.timestamp = event.block.timestamp;
   market.address = event.params._marketAddress;
   market.maturityDate = event.params._game.startTime;
@@ -45,6 +51,50 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.awayOdds = [normalizedOdds[1]];
   marketHistory.drawOdds = [normalizedOdds[2]];
   marketHistory.save();
+
+  let marketContract = SportMarketContract.bind(event.params._marketAddress);
+
+  let positionHome = new Position(marketContract.getOptions().value0.toHex());
+  positionHome.market = market.id;
+  positionHome.claimable = false;
+  positionHome.side = 'home';
+  positionHome.save();
+  PositionTemplate.create(marketContract.getOptions().value0);
+  let positionAway = new Position(marketContract.getOptions().value1.toHex());
+  positionAway.market = market.id;
+  positionAway.claimable = false;
+  positionAway.side = 'away';
+  positionAway.save();
+  PositionTemplate.create(marketContract.getOptions().value1);
+  let positionDraw = new Position(marketContract.getOptions().value2.toHex());
+  positionDraw.market = market.id;
+  positionDraw.claimable = false;
+  positionDraw.side = 'draw';
+  positionDraw.save();
+  PositionTemplate.create(marketContract.getOptions().value2);
+}
+
+export function handleTransfer(event: TransferEvent): void {
+  let position = Position.load(event.address.toHex());
+  let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
+  if (userBalanceFrom === null) {
+    userBalanceFrom = new PositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
+    userBalanceFrom.account = event.params.from;
+    userBalanceFrom.amount = BigInt.fromI32(0);
+    userBalanceFrom.position = position.id;
+  }
+  userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
+  userBalanceFrom.save();
+
+  let userBalanceTo = PositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
+  if (userBalanceTo === null) {
+    userBalanceTo = new PositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
+    userBalanceTo.account = event.params.to;
+    userBalanceTo.amount = BigInt.fromI32(0);
+    userBalanceTo.position = position.id;
+  }
+  userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
+  userBalanceTo.save();
 }
 
 export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
