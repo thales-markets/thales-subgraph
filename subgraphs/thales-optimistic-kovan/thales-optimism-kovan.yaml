@@ -169,7 +169,7 @@ dataSources:
     name: StakingThales
     network: optimism-kovan
     source:
-      address: '0x09F9FBA4C2A2f51182e90888df6B954C68288200'
+      address: '0x8417D248274439360CC38Be84CfFDc01226600F8'
       abi: StakingThales
       startBlock: 1912110
     mapping:
@@ -197,7 +197,7 @@ dataSources:
     name: EscrowThales
     network: optimism-kovan
     source:
-      address: '0xcCD32f7EB77574bb6929e2dA9CE6c608E45BA54F'
+      address: '0xEeDe0f1D1d70009348f3D9a66Fe03BA3CA0Aeef7'
       abi: EscrowThales
       startBlock: 1912110
     mapping:
