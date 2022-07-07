@@ -100,9 +100,34 @@ export function handleTransfer(event: TransferEvent): void {
 export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
+    let marketContract = SportMarketContract.bind(event.params._marketAddress);
+
     market.isResolved = true;
     market.isOpen = false;
     market.finalResult = event.params._outcome;
+
+    if (market.finalResult === BigInt.fromI32(1)) {
+      let position = Position.load(marketContract.getOptions().value0.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
+    if (market.finalResult === BigInt.fromI32(2)) {
+      let position = Position.load(marketContract.getOptions().value1.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
+    if (market.finalResult === BigInt.fromI32(3)) {
+      let position = Position.load(marketContract.getOptions().value2.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
+
     market.save();
   }
 }
@@ -147,5 +172,22 @@ export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
   if (market !== null) {
     market.isCanceled = true;
     market.save();
+
+    let marketContract = SportMarketContract.bind(event.params._marketAddress);
+    let position = Position.load(marketContract.getOptions().value0.toHex());
+    if (position !== null) {
+      position.claimable = true;
+      position.save();
+    }
+    let position1 = Position.load(marketContract.getOptions().value1.toHex());
+    if (position1 !== null) {
+      position1.claimable = true;
+      position1.save();
+    }
+    let position2 = Position.load(marketContract.getOptions().value2.toHex());
+    if (position2 !== null) {
+      position2.claimable = true;
+      position2.save();
+    }
   }
 }
