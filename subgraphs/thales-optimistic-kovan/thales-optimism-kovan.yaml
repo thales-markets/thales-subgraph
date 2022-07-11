@@ -193,6 +193,8 @@ dataSources:
           handler: handleCancelUnstakeEvent
         - event: RewardsClaimed(address,uint256)
           handler: handleStakingRewardsClaimEvent
+        - event: AccountMerged(address,address)
+          handler: handleAccountMergedEvent
   - kind: ethereum/contract
     name: EscrowThales
     network: optimism-kovan
