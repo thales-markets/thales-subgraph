@@ -7,6 +7,7 @@ import {
   RewardsClaimed as StakingRewardsClaimEvent,
   AccountMerged as AccountMergedEvent,
 } from '../../../generated/StakingThales/StakingThales';
+import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../../../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
 import {
   AddedToEscrow as AddedToEscrowEvent,
   Vested as VestedEvent,
@@ -26,6 +27,17 @@ export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
 }
 
 export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.unclaimedReward;
+  tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleOldStakingRewardsClaimEvent(event: OldStakingRewardsClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;
