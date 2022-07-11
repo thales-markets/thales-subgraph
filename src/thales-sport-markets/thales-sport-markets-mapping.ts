@@ -106,21 +106,21 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
     market.isOpen = false;
     market.finalResult = event.params._outcome;
 
-    if (market.finalResult === BigInt.fromI32(1)) {
+    if (market.finalResult == BigInt.fromI32(1)) {
       let position = Position.load(marketContract.getOptions().value0.toHex());
       if (position !== null) {
         position.claimable = true;
         position.save();
       }
     }
-    if (market.finalResult === BigInt.fromI32(2)) {
+    if (market.finalResult == BigInt.fromI32(2)) {
       let position = Position.load(marketContract.getOptions().value1.toHex());
       if (position !== null) {
         position.claimable = true;
         position.save();
       }
     }
-    if (market.finalResult === BigInt.fromI32(3)) {
+    if (market.finalResult == BigInt.fromI32(3)) {
       let position = Position.load(marketContract.getOptions().value2.toHex());
       if (position !== null) {
         position.claimable = true;
