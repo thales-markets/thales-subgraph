@@ -271,7 +271,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: StakingThales
-          file: ../../abis/token/StakingThales.json
+          file: ../../abis/token/StakingThales_OldRewardsClaimed.json
       eventHandlers:
         - event: Staked(address,uint256)
           handler: handleStakedEvent
@@ -369,6 +369,8 @@ dataSources:
           handler: handleWithdrawnEvent
         - event: RewardPaid(indexed address,uint256)
           handler: handleRewardPaidEvent
+        - event: SecondRewardTokenPaid(indexed address,uint256)
+          handler: handleSecondRewardTokenPaidEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract

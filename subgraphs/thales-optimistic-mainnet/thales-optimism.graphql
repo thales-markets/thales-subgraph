@@ -147,6 +147,7 @@ enum TokenTransactionType {
   lpStake
   lpUnstake
   lpClaimStakingRewards
+  lpClaimStakingRewardsSecond
   claimMigratedRetroRewards
 }
 
