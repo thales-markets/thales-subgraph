@@ -4,6 +4,7 @@ import {
   Staked as StakedEvent,
   Withdrawn as WithdrawnEvent,
   RewardPaid as RewardPaidEvent,
+  SecondRewardTokenPaid as SecondRewardTokenPaidEvent,
 } from '../../../generated/LPStakingRewards/LPStakingRewards';
 import { StakedOnBehalf as StakedOnBehalfEvent } from '../../../generated/StakingThales/StakingThales';
 import { BigInt } from '@graphprotocol/graph-ts';
@@ -48,6 +49,17 @@ export function handleRewardPaidEvent(event: RewardPaidEvent): void {
   tokenTransaction.account = event.params.user;
   tokenTransaction.amount = event.params.reward;
   tokenTransaction.type = 'lpClaimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleSecondRewardTokenPaidEvent(event: SecondRewardTokenPaidEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.user;
+  tokenTransaction.amount = event.params.reward;
+  tokenTransaction.type = 'lpClaimStakingRewardsSecond';
   tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
 }
