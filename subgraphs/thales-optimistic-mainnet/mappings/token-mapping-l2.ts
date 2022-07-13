@@ -43,7 +43,9 @@ export function handleWithdrawnEvent(event: WithdrawnEvent): void {
 }
 
 export function handleRewardPaidEvent(event: RewardPaidEvent): void {
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  let tokenTransaction = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-1',
+  );
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;
   tokenTransaction.account = event.params.user;
@@ -54,7 +56,9 @@ export function handleRewardPaidEvent(event: RewardPaidEvent): void {
 }
 
 export function handleSecondRewardTokenPaidEvent(event: SecondRewardTokenPaidEvent): void {
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  let tokenTransaction = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-2',
+  );
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;
   tokenTransaction.account = event.params.user;
