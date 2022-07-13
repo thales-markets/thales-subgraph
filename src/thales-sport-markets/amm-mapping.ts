@@ -14,6 +14,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   transaction.amount = event.params.amount;
   transaction.position = BigInt.fromI32(event.params.position);
   transaction.market = event.params.market;
+  transaction.paid = event.params.sUSDPaid;
 
   transaction.save();
 }
@@ -29,6 +30,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   transaction.amount = event.params.amount;
   transaction.position = BigInt.fromI32(event.params.position);
   transaction.market = event.params.market;
+  transaction.paid = event.params.sUSDPaid;
 
   transaction.save();
 }
