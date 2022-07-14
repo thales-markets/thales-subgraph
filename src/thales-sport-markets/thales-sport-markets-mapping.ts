@@ -101,7 +101,7 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
     let marketContract = SportMarketContract.bind(event.params._marketAddress);
-
+    market.timestamp = event.block.timestamp;
     market.isResolved = true;
     market.isOpen = false;
     market.finalResult = event.params._outcome;
@@ -135,6 +135,7 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
 export function handleGameResolvedEvent(event: GameResolvedEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
+    market.timestamp = event.block.timestamp;
     market.homeScore = BigInt.fromI32(event.params._game.homeScore);
     market.awayScore = BigInt.fromI32(event.params._game.awayScore);
     market.save();
@@ -144,6 +145,7 @@ export function handleGameResolvedEvent(event: GameResolvedEvent): void {
 export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
+    market.timestamp = event.block.timestamp;
     let normalizedOdds = event.params._normalizedOdds;
     market.homeOdds = normalizedOdds[0];
     market.awayOdds = normalizedOdds[1];
@@ -153,6 +155,7 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
 
   let marketHistory = SportMarketOddsHistory.load(event.params._id.toHex());
   if (marketHistory !== null) {
+    marketHistory.timestamp = event.block.timestamp;
     let normalizedOdds = event.params._normalizedOdds;
     let homeOdds = marketHistory.homeOdds;
     homeOdds.push(normalizedOdds[0]);
@@ -170,6 +173,7 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
 export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
+    market.timestamp = event.block.timestamp;
     market.isCanceled = true;
     market.save();
 
