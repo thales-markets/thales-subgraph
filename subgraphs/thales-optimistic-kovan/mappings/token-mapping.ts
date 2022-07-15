@@ -7,6 +7,12 @@ import {
   RewardsClaimed as StakingRewardsClaimEvent,
   AccountMerged as AccountMergedEvent,
 } from '../../../generated/StakingThales/StakingThales';
+import {
+  Staked as LpStakedEvent,
+  Withdrawn as WithdrawnEvent,
+  RewardPaid as RewardPaidEvent,
+  SecondRewardTokenPaid as SecondRewardTokenPaidEvent,
+} from '../../../generated/LPStakingRewards/LPStakingRewards';
 import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../../../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
 import {
   AddedToEscrow as AddedToEscrowEvent,
@@ -181,6 +187,54 @@ export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
     staker.timestamp = event.block.timestamp;
     staker.save();
   }
+}
+
+export function handleLpStakedEvent(event: LpStakedEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.user;
+  tokenTransaction.amount = event.params.amount;
+  tokenTransaction.type = 'lpStake';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleWithdrawnEvent(event: WithdrawnEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.user;
+  tokenTransaction.amount = event.params.amount;
+  tokenTransaction.type = 'lpUnstake';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleRewardPaidEvent(event: RewardPaidEvent): void {
+  let tokenTransaction = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-1',
+  );
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.user;
+  tokenTransaction.amount = event.params.reward;
+  tokenTransaction.type = 'lpClaimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleSecondRewardTokenPaidEvent(event: SecondRewardTokenPaidEvent): void {
+  let tokenTransaction = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-2',
+  );
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.user;
+  tokenTransaction.amount = event.params.reward;
+  tokenTransaction.type = 'lpClaimStakingRewardsSecond';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
 }
 
 export function handleAccountMergedEvent(event: AccountMergedEvent): void {

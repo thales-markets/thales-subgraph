@@ -237,6 +237,32 @@ dataSources:
           handler: handleAddedToEscrowEvent
         - event: Vested(address,uint256)
           handler: handleVestedEvent
+  - kind: ethereum/contract
+    name: LPStakingRewards
+    network: optimism-kovan
+    source:
+      address: '0x44d55a58211b2120Dc9f280ae68B99ffcaC03c7C'
+      abi: LPStakingRewards
+      startBlock: 1351739
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: LPStakingRewards
+          file: ../../abis/token/LPStakingRewards.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256)
+          handler: handleLpStakedEvent
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawnEvent
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaidEvent
+        - event: SecondRewardTokenPaid(indexed address,uint256)
+          handler: handleSecondRewardTokenPaidEvent
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract

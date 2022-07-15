@@ -5,13 +5,15 @@ import {
   Unstaked as UnstakedEvent,
   CancelUnstake as CancelUnstakeEvent,
   RewardsClaimed as StakingRewardsClaimEvent,
+  AccountMerged as AccountMergedEvent,
 } from '../../../generated/StakingThales/StakingThales';
+import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../../../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
 import {
   AddedToEscrow as AddedToEscrowEvent,
   Vested as VestedEvent,
 } from '../../../generated/EscrowThales/EscrowThales';
 import { TokenTransaction, Staker } from '../../../generated/schema';
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, store } from '@graphprotocol/graph-ts';
 
 export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -25,6 +27,17 @@ export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
 }
 
 export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.unclaimedReward;
+  tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+}
+
+export function handleOldStakingRewardsClaimEvent(event: OldStakingRewardsClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;
@@ -166,5 +179,48 @@ export function handleCancelUnstakeEvent(event: CancelUnstakeEvent): void {
     staker.unstakingAmount = BigInt.fromI32(0);
     staker.timestamp = event.block.timestamp;
     staker.save();
+  }
+}
+
+export function handleAccountMergedEvent(event: AccountMergedEvent): void {
+  let tokenTransactionSrc = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-' + event.params.srcAccount.toString(),
+  );
+  tokenTransactionSrc.transactionHash = event.transaction.hash;
+  tokenTransactionSrc.timestamp = event.block.timestamp;
+  tokenTransactionSrc.account = event.params.srcAccount;
+  tokenTransactionSrc.type = 'mergeAccount';
+  tokenTransactionSrc.blockNumber = event.block.number;
+  tokenTransactionSrc.save();
+
+  let tokenTransactionDest = new TokenTransaction(
+    event.transaction.hash.toHexString() + '-' + event.logIndex.toString() + '-' + event.params.destAccount.toString(),
+  );
+  tokenTransactionDest.transactionHash = event.transaction.hash;
+  tokenTransactionDest.timestamp = event.block.timestamp;
+  tokenTransactionDest.account = event.params.destAccount;
+  tokenTransactionDest.type = 'mergeAccount';
+  tokenTransactionDest.blockNumber = event.block.number;
+  tokenTransactionDest.save();
+
+  let stakerSrc = Staker.load(event.params.srcAccount.toHex());
+  let stakerDest = Staker.load(event.params.destAccount.toHex());
+  if (stakerSrc !== null) {
+    if (stakerDest !== null) {
+      stakerDest.stakedAmount = stakerDest.stakedAmount.plus(stakerSrc.stakedAmount);
+      stakerDest.escrowedAmount = stakerDest.escrowedAmount.plus(stakerSrc.escrowedAmount);
+      stakerDest.totalStakedAmount = stakerDest.totalStakedAmount.plus(stakerSrc.totalStakedAmount);
+      stakerDest.unstakingAmount = stakerDest.unstakingAmount.plus(stakerSrc.unstakingAmount);
+    } else {
+      stakerDest = new Staker(event.params.destAccount.toHex());
+      stakerDest.account = event.params.destAccount;
+      stakerDest.stakedAmount = stakerSrc.stakedAmount;
+      stakerDest.escrowedAmount = stakerSrc.escrowedAmount;
+      stakerDest.totalStakedAmount = stakerSrc.totalStakedAmount;
+      stakerDest.unstakingAmount = stakerSrc.unstakingAmount;
+    }
+    stakerDest.timestamp = event.block.timestamp;
+    stakerDest.save();
+    store.remove('Staker', stakerSrc.id);
   }
 }
