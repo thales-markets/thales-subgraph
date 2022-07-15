@@ -158,6 +158,7 @@ type TokenTransaction @entity {
   timestamp: BigInt!
   account: Bytes!
   amount: BigInt
+  protocolRewards: BigInt
   type: TokenTransactionType!
   blockNumber: BigInt!
 }

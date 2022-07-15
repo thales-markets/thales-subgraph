@@ -34,6 +34,7 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   tokenTransaction.amount = event.params.unclaimedReward;
   tokenTransaction.type = 'claimStakingRewards';
   tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.protocolRewards = event.params.protocolBonus;
   tokenTransaction.save();
 }
 
