@@ -271,7 +271,7 @@ dataSources:
         - TokenTransaction
       abis:
         - name: StakingThales
-          file: ../../abis/token/StakingThales_OldRewardsClaimed.json
+          file: ../../abis/token/StakingThales.json
       eventHandlers:
         - event: Staked(address,uint256)
           handler: handleStakedEvent
@@ -281,8 +281,30 @@ dataSources:
           handler: handleUnstakedEvent
         - event: CancelUnstake(address)
           handler: handleCancelUnstakeEvent
-        - event: RewardsClaimed(address,uint256)
+        - event: RewardsClaimed(address,uint256,uint256,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
+        - event: AccountMerged(address,address)
+          handler: handleAccountMergedEvent
+  - kind: ethereum/contract
+    name: StakingThales_OldRewardsClaimed
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales_OldRewardsClaimed
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./mappings/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales_OldRewardsClaimed
+          file: ../../abis/token/StakingThales_OldRewardsClaimed.json
+      eventHandlers:
+        - event: RewardsClaimed(address,uint256)
+          handler: handleOldStakingRewardsClaimEvent
   - kind: ethereum/contract
     name: StakingThalesMigration
     network: optimism
