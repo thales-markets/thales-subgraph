@@ -175,6 +175,7 @@ export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
   if (market !== null) {
     market.timestamp = event.block.timestamp;
     market.isCanceled = true;
+    market.isOpen = false;
     market.save();
 
     let marketContract = SportMarketContract.bind(event.params._marketAddress);
