@@ -15,6 +15,7 @@ import {
   ReferralTransfer,
   Referrer,
   ReferredTrader,
+  TokenTransaction,
 } from '../../../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../../../generated/templates';
 import { RangedPosition as RangedPositionContract } from '../../../generated/templates';
@@ -102,6 +103,16 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'buy';
+
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.buyer;
+  tokenTransaction.amount = event.params.sUSDPaid;
+  tokenTransaction.type = 'buyRanged';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+
   trade.save();
 }
 

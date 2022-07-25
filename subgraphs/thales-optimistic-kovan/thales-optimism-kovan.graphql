@@ -150,6 +150,9 @@ enum TokenTransactionType {
   lpClaimStakingRewardsSecond
   claimMigratedRetroRewards
   mergeAccount
+  buyUp
+  buyDown
+  buyRanged
 }
 
 type TokenTransaction @entity {
