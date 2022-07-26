@@ -171,7 +171,6 @@ enum AccountBuyVolumeEnum {
 }
 
 type AccountBuyVolume @entity {
-  # tx hash - log index
   id: ID!
   timestamp: BigInt!
   account: Bytes!

@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, ReferrerPaid, SoldToAMM } from '../../../generated/AMM/AMM';
-import { Trade, ReferralTransfer, ReferredTrader, Referrer } from '../../../generated/schema';
+import { Trade, ReferralTransfer, ReferredTrader, Referrer, AccountBuyVolume } from '../../../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -20,6 +20,13 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
   trade.orderSide = 'buy';
   trade.save();
+
+  let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  accountBuyVolume.timestamp = event.block.timestamp;
+  accountBuyVolume.account = event.params.buyer;
+  accountBuyVolume.amount = event.params.sUSDPaid;
+  accountBuyVolume.type = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'buyUp' : 'buyDown';
+  accountBuyVolume.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {

@@ -152,6 +152,20 @@ enum TokenTransactionType {
   mergeAccount
 }
 
+enum AccountBuyVolumeEnum {
+  buyUp
+  buyDown
+  buyRanged
+}
+
+type AccountBuyVolume @entity {
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt!
+  type: AccountBuyVolumeEnum!
+}
+
 type TokenTransaction @entity {
   # tx hash - log index
   id: ID!

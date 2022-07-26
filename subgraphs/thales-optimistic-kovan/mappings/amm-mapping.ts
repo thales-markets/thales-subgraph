@@ -16,17 +16,17 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.makerAmount = event.params.amount;
   trade.takerAmount = event.params.sUSDPaid;
 
+  trade.market = event.params.market;
+  trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
+  trade.orderSide = 'buy';
+  trade.save();
+
   let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
   accountBuyVolume.timestamp = event.block.timestamp;
   accountBuyVolume.account = event.params.buyer;
   accountBuyVolume.amount = event.params.sUSDPaid;
   accountBuyVolume.type = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'buyUp' : 'buyDown';
   accountBuyVolume.save();
-
-  trade.market = event.params.market;
-  trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
-  trade.orderSide = 'buy';
-  trade.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {

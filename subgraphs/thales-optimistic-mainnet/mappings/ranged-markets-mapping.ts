@@ -15,6 +15,7 @@ import {
   ReferralTransfer,
   Referrer,
   ReferredTrader,
+  AccountBuyVolume,
 } from '../../../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../../../generated/templates';
 import { Transfer as TransferEvent } from '../../../generated/templates/RangedPosition/RangedPosition';
@@ -104,6 +105,13 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'buy';
   trade.save();
+
+  let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  accountBuyVolume.timestamp = event.block.timestamp;
+  accountBuyVolume.account = event.params.buyer;
+  accountBuyVolume.amount = event.params.sUSDPaid;
+  accountBuyVolume.type = 'buyRanged';
+  accountBuyVolume.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
