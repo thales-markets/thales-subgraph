@@ -150,9 +150,6 @@ enum TokenTransactionType {
   lpClaimStakingRewardsSecond
   claimMigratedRetroRewards
   mergeAccount
-  buyUp
-  buyDown
-  buyRanged
 }
 
 type TokenTransaction @entity {
@@ -165,6 +162,21 @@ type TokenTransaction @entity {
   protocolRewards: BigInt
   type: TokenTransactionType!
   blockNumber: BigInt!
+}
+
+enum AccountBuyVolumeEnum {
+  buyUp
+  buyDown
+  buyRanged
+}
+
+type AccountBuyVolume @entity {
+  # tx hash - log index
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt!
+  type: AccountBuyVolumeEnum!
 }
 
 type OngoingAirdropNewRoot @entity {

@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, ReferrerPaid, SoldToAMM } from '../../../generated/AMM/AMM';
-import { ReferralTransfer, ReferredTrader, Referrer, Trade, TokenTransaction } from '../../../generated/schema';
+import { ReferralTransfer, ReferredTrader, Referrer, Trade, AccountBuyVolume } from '../../../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -16,14 +16,12 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.makerAmount = event.params.amount;
   trade.takerAmount = event.params.sUSDPaid;
 
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  tokenTransaction.transactionHash = event.transaction.hash;
-  tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.account = event.params.buyer;
-  tokenTransaction.amount = event.params.sUSDPaid;
-  tokenTransaction.type = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'buyUp' : 'buyDown';
-  tokenTransaction.blockNumber = event.block.number;
-  tokenTransaction.save();
+  let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  accountBuyVolume.timestamp = event.block.timestamp;
+  accountBuyVolume.account = event.params.buyer;
+  accountBuyVolume.amount = event.params.sUSDPaid;
+  accountBuyVolume.type = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'buyUp' : 'buyDown';
+  accountBuyVolume.save();
 
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
