@@ -6,13 +6,14 @@ import {
   CancelUnstake as CancelUnstakeEvent,
   RewardsClaimed as StakingRewardsClaimEvent,
   AccountMerged as AccountMergedEvent,
+  CanClaimOnBehalfChanged as CanClaimOnBehalfChangedEvent,
 } from '../../../generated/StakingThales/StakingThales';
 import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../../../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
 import {
   AddedToEscrow as AddedToEscrowEvent,
   Vested as VestedEvent,
 } from '../../../generated/EscrowThales/EscrowThales';
-import { TokenTransaction, Staker } from '../../../generated/schema';
+import { TokenTransaction, Staker, CanClaimOnBehalfItem } from '../../../generated/schema';
 import { BigInt, store } from '@graphprotocol/graph-ts';
 
 export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
@@ -224,4 +225,21 @@ export function handleAccountMergedEvent(event: AccountMergedEvent): void {
     stakerDest.save();
     store.remove('Staker', stakerSrc.id);
   }
+}
+
+export function handleCanClaimOnBehalfChangedEvent(event: CanClaimOnBehalfChangedEvent): void {
+  let canClaimOnBehalfItem = CanClaimOnBehalfItem.load(
+    event.params.sender.toHexString() + '-' + event.params.account.toHexString(),
+  );
+  if (canClaimOnBehalfItem === null) {
+    canClaimOnBehalfItem = new CanClaimOnBehalfItem(
+      event.params.sender.toHexString() + '-' + event.params.account.toHexString(),
+    );
+  }
+  canClaimOnBehalfItem.transactionHash = event.transaction.hash;
+  canClaimOnBehalfItem.timestamp = event.block.timestamp;
+  canClaimOnBehalfItem.sender = event.params.sender;
+  canClaimOnBehalfItem.account = event.params.account;
+  canClaimOnBehalfItem.canClaimOnBehalf = event.params.canClaimOnBehalf;
+  canClaimOnBehalfItem.save();
 }
