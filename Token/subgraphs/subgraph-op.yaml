@@ -1,0 +1,162 @@
+specVersion: 0.0.6
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Airdrop
+    network: optimism
+    source:
+      address: '0x42B6e9b5Bb96a02E02e651d3104Fc3546E1313F2'
+      abi: Airdrop
+      startBlock: 3115834
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: Airdrop
+          file: ../abis/Airdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleRetroAirdropClaimEvent
+  - kind: ethereum/contract
+    name: StakingThales
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/StakingThales.json
+      eventHandlers:
+        - event: Staked(address,uint256)
+          handler: handleStakedEvent
+        - event: UnstakeCooldown(address,uint256,uint256)
+          handler: handleStartUnstakeEvent
+        - event: Unstaked(address,uint256)
+          handler: handleUnstakedEvent
+        - event: CancelUnstake(address)
+          handler: handleCancelUnstakeEvent
+        - event: RewardsClaimed(address,uint256,uint256,uint256,uint256)
+          handler: handleStakingRewardsClaimEvent
+        - event: AccountMerged(address,address)
+          handler: handleAccountMergedEvent
+  - kind: ethereum/contract
+    name: StakingThales_OldRewardsClaimed
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales_OldRewardsClaimed
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales_OldRewardsClaimed
+          file: ../abis/StakingThales_OldRewardsClaimed.json
+      eventHandlers:
+        - event: RewardsClaimed(address,uint256)
+          handler: handleOldStakingRewardsClaimEvent
+  - kind: ethereum/contract
+    name: StakingThalesMigration
+    network: optimism
+    source:
+      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      abi: StakingThales
+      startBlock: 2901896
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/StakingThales.json
+      eventHandlers:
+        - event: StakedOnBehalf(address,address,uint256)
+          handler: handleStakedOnBehalfEvent
+  - kind: ethereum/contract
+    name: EscrowThales
+    network: optimism
+    source:
+      address: '0xa25816b9605009aa446d4d597F0AA46FD828f056'
+      abi: EscrowThales
+      startBlock: 2901873
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: EscrowThales
+          file: ../abis/EscrowThales.json
+      eventHandlers:
+        - event: AddedToEscrow(address,uint256)
+          handler: handleAddedToEscrowEvent
+        - event: Vested(address,uint256)
+          handler: handleVestedEvent
+  - kind: ethereum/contract
+    name: OngoingAirdrop
+    network: optimism
+    source:
+      address: '0x8D47b12ce25E2dc6866e8aAC0DbD823Da09fADd6'
+      abi: OngoingAirdrop
+      startBlock: 3119010
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: OngoingAirdrop
+          file: ../abis/OngoingAirdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleMigratedRewardsClaimEvent
+  - kind: ethereum/contract
+    name: LPStakingRewards
+    network: optimism
+    source:
+      address: '0x31a20E5b7b1b067705419D57Ab4F72E81cC1F6Bf'
+      abi: LPStakingRewards
+      startBlock: 3130453
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: LPStakingRewards
+          file: ../abis/LPStakingRewards.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256)
+          handler: handleStakedEvent
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawnEvent
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaidEvent
+        - event: SecondRewardTokenPaid(indexed address,uint256)
+          handler: handleSecondRewardTokenPaidEvent
