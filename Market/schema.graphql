@@ -16,32 +16,6 @@ type Market @entity {
   finalPrice: BigInt
 }
 
-type ReferralTransfer @entity {
-  id: ID!
-  refferer: Bytes!
-  trader: Bytes!
-  amount: BigInt!
-  volume: BigInt!
-  timestamp: BigInt!
-}
-
-type Referrer @entity {
-  id: ID!
-  trades: BigInt!
-  totalVolume: BigInt!
-  totalEarned: BigInt!
-  timestamp: BigInt!
-}
-
-type ReferredTrader @entity {
-  id: ID!
-  trades: BigInt!
-  totalVolume: BigInt!
-  totalEarned: BigInt!
-  refferer: Referrer!
-  timestamp: BigInt!
-}
-
 type RangedMarket @entity {
   id: ID!
   timestamp: BigInt!
@@ -57,6 +31,13 @@ type RangedMarket @entity {
   isOpen: Boolean!
   result: Int
   finalPrice: BigInt
+}
+
+enum OptionSide {
+  long
+  short
+  in
+  out
 }
 
 type Position @entity {
@@ -83,52 +64,4 @@ type RangedPositionBalance @entity {
   account: Bytes!
   amount: BigInt!
   position: RangedPosition!
-}
-
-enum OptionTransactionType {
-  mint
-  exercise
-}
-
-type OptionTransaction @entity {
-  id: ID!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  type: OptionTransactionType!
-  account: Bytes!
-  market: Bytes!
-  amount: BigInt!
-  currencyKey: Bytes
-  side: Int
-  fee: BigInt
-}
-
-enum OptionSide {
-  long
-  short
-  in
-  out
-}
-
-enum OrderSide {
-  buy
-  sell
-}
-
-type Trade @entity {
-  # tx hash - order hash - log index
-  id: ID!
-  transactionHash: Bytes!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  orderHash: Bytes!
-  maker: Bytes!
-  taker: Bytes!
-  makerToken: Bytes!
-  takerToken: Bytes!
-  makerAmount: BigInt!
-  takerAmount: BigInt!
-  market: Bytes
-  optionSide: OptionSide
-  orderSide: OrderSide
 }

@@ -9,10 +9,9 @@ import {
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
-import { Market, OptionTransaction, Position, PositionBalance } from '../generated/schema';
+import { Market, Position, PositionBalance } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
-// import { Position as PositionContract } from '../generated/templates';
-// import { Position as PositionContract } from '../generated/templates';
+import { Position as PositionContract } from '../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
@@ -44,34 +43,34 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   downPosition.market = entity.id;
   downPosition.save();
 
-  // PositionContract.create(event.params.long);
-  // PositionContract.create(event.params.short);
+  PositionContract.create(event.params.long);
+  PositionContract.create(event.params.short);
 }
 
-// export function handleTransfer(event: TransferEvent): void {
-//   let position = Position.load(event.address.toHex());
-//   if (position !== null) {
-//     let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
-//     if (userBalanceFrom === null) {
-//       userBalanceFrom = new PositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
-//       userBalanceFrom.account = event.params.from;
-//       userBalanceFrom.amount = BigInt.fromI32(0);
-//       userBalanceFrom.position = position.id;
-//     }
-//     userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
-//     userBalanceFrom.save();
+export function handleTransfer(event: TransferEvent): void {
+  let position = Position.load(event.address.toHex());
+  if (position !== null) {
+    let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
+    if (userBalanceFrom === null) {
+      userBalanceFrom = new PositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
+      userBalanceFrom.account = event.params.from;
+      userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.position = position.id;
+    }
+    userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
+    userBalanceFrom.save();
 
-//     let userBalanceTo = PositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
-//     if (userBalanceTo === null) {
-//       userBalanceTo = new PositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
-//       userBalanceTo.account = event.params.to;
-//       userBalanceTo.amount = BigInt.fromI32(0);
-//       userBalanceTo.position = position.id;
-//     }
-//     userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
-//     userBalanceTo.save();
-//   }
-// }
+    let userBalanceTo = PositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
+    if (userBalanceTo === null) {
+      userBalanceTo = new PositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
+      userBalanceTo.account = event.params.to;
+      userBalanceTo.amount = BigInt.fromI32(0);
+      userBalanceTo.position = position.id;
+    }
+    userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
+    userBalanceTo.save();
+  }
+}
 
 export function handleMarketExpired(event: MarketExpiredEvent): void {
   let marketEntity = Market.load(event.params.market.toHex());
@@ -94,65 +93,21 @@ export function handleMarketResolved(event: MarketResolvedEvent): void {
 export function handleOptionsExercised(event: OptionsExercisedEvent): void {
   let marketEntity = Market.load(event.address.toHex());
   let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
   let poolSize = binaryOptionContract.deposited();
   if (marketEntity !== null) {
     marketEntity.poolSize = poolSize;
     marketEntity.save();
-
-    let positionUp = Position.load(marketEntity.longAddress.toHex());
-    if (positionUp !== null) {
-      let userBalanceUp = PositionBalance.load(marketEntity.longAddress.toHex() + ' - ' + event.params.account.toHex());
-      if (userBalanceUp === null) {
-        userBalanceUp = new PositionBalance(marketEntity.longAddress.toHex() + ' - ' + event.params.account.toHex());
-        userBalanceUp.account = event.params.account;
-        userBalanceUp.amount = BigInt.fromI32(0);
-        userBalanceUp.position = positionUp.id;
-      }
-      userBalanceUp.amount = BigInt.fromI32(0);
-      userBalanceUp.save();
-    }
-
-    let positionDown = Position.load(marketEntity.shortAddress.toHex());
-    if (positionDown !== null) {
-      let userBalanceDown = PositionBalance.load(
-        marketEntity.shortAddress.toHex() + ' - ' + event.params.account.toHex(),
-      );
-      if (userBalanceDown === null) {
-        userBalanceDown = new PositionBalance(marketEntity.shortAddress.toHex() + ' - ' + event.params.account.toHex());
-        userBalanceDown.account = event.params.account;
-        userBalanceDown.amount = BigInt.fromI32(0);
-        userBalanceDown.position = positionDown.id;
-      }
-      userBalanceDown.amount = BigInt.fromI32(0);
-      userBalanceDown.save();
-    }
   }
-
-  optionTransactionEntity.type = 'exercise';
-  optionTransactionEntity.timestamp = event.block.timestamp;
-  optionTransactionEntity.blockNumber = event.block.number;
-  optionTransactionEntity.account = event.params.account;
-  optionTransactionEntity.market = event.address;
-  optionTransactionEntity.amount = event.params.value;
-  optionTransactionEntity.save();
 }
 
 export function handleMint(event: MintEvent): void {
   let marketEntity = Market.load(event.address.toHex());
   let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+
   let poolSize = binaryOptionContract.deposited();
 
   if (marketEntity !== null) {
     marketEntity.poolSize = poolSize;
     marketEntity.save();
   }
-  optionTransactionEntity.type = 'mint';
-  optionTransactionEntity.timestamp = event.block.timestamp;
-  optionTransactionEntity.blockNumber = event.block.number;
-  optionTransactionEntity.account = event.params.account;
-  optionTransactionEntity.market = event.address;
-  optionTransactionEntity.amount = event.params.value;
-  optionTransactionEntity.save();
 }
