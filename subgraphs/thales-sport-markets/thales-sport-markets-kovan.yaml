@@ -5,6 +5,30 @@ schema:
   file: ./thales-sport-markets.graphql
 dataSources:
   - kind: ethereum/contract
+    name: SportPositionalMarketManager
+    network: kovan
+    source:
+      address: '0x95a38B4cA5C9187eCfbDFB501Ef61D46755BC075'
+      abi: SportPositionalMarketManager
+      startBlock: 32539184
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - SportMarketOddsHistory
+        - Position
+      abis:
+        - name: SportPositionalMarketManager
+          file: ../../abis/thales-sport-markets/SportPositionalMarketManager.json
+        - name: SportMarket
+          file: ../../abis/thales-sport-markets/SportMarket.json
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,string,uint256,uint256,address,address,address)
+          handler: handleMarketCreated
+  - kind: ethereum/contract
     name: TheRundownConsumer
     network: kovan
     source:
@@ -59,22 +83,6 @@ dataSources:
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
 templates:
-  - name: SportMarket
-    kind: ethereum/contract
-    network: kovan
-    source:
-      abi: SportMarket
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
-      entities:
-        - SportMarket
-        - Position
-      abis:
-        - name: SportMarket
-          file: ../../abis/thales-sport-markets/SportMarket.json
   - name: Position
     kind: ethereum/contract
     network: kovan

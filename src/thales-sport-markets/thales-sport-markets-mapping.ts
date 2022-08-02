@@ -8,31 +8,74 @@ import {
 } from '../../generated/TheRundownConsumer/TheRundownConsumer';
 import { Transfer as TransferEvent } from '../../generated/templates/Position/Position';
 import { Position as PositionTemplate } from '../../generated/templates';
-import { SportMarket as SportMarketTemplate } from '../../generated/templates';
 import { SportMarket as SportMarketContract } from '../../generated/templates/SportMarket/SportMarket';
-import { BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { log } from '@graphprotocol/graph-ts';
+import { MarketCreated as MarketCreatedEvent } from '../../generated/SportPositionalMarketManager/SportPositionalMarketManager';
+
+export function handleMarketCreated(event: MarketCreatedEvent): void {
+  let market = new SportMarket(event.params.gameId.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.address = event.params.market.toHexString();
+    market.maturityDate = event.params.maturityDate;
+    market.save();
+  }
+
+  if (event.params.up.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionHome = new Position(event.params.up.toHex());
+    positionHome.market = market.id;
+    positionHome.claimable = false;
+    positionHome.side = 'home';
+    positionHome.save();
+    PositionTemplate.create(event.params.up);
+  } else {
+    log.info('zero adress draw: {}', [event.params.up.toHexString()]);
+  }
+  if (event.params.down.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionAway = new Position(event.params.down.toHex());
+    positionAway.market = market.id;
+    positionAway.claimable = false;
+    positionAway.side = 'away';
+    positionAway.save();
+    PositionTemplate.create(event.params.down);
+  } else {
+    log.info('zero adress draw: {}', [event.params.down.toHexString()]);
+  }
+
+  if (event.params.draw.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionDraw = new Position(event.params.draw.toHex());
+    positionDraw.market = market.id;
+    positionDraw.claimable = false;
+    positionDraw.side = 'draw';
+    positionDraw.save();
+    PositionTemplate.create(event.params.draw);
+  } else {
+    log.info('zero adress draw: {}', [event.params.draw.toHexString()]);
+  }
+}
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
   let normalizedOdds = event.params._normalizedOdds;
-  SportMarketTemplate.create(event.params._marketAddress);
-  let market = new SportMarket(event.params._id.toHex());
-
-  market.timestamp = event.block.timestamp;
-  market.address = event.params._marketAddress;
-  market.maturityDate = event.params._game.startTime;
-  market.tags = event.params._tags;
-  market.isOpen = true;
-  market.isResolved = false;
-  market.isCanceled = false;
-  market.finalResult = BigInt.fromI32(0);
-  market.poolSize = BigInt.fromI32(0);
-  market.numberOfParticipants = BigInt.fromI32(0);
-  market.homeTeam = event.params._game.homeTeam;
-  market.awayTeam = event.params._game.awayTeam;
-  market.homeOdds = normalizedOdds[0];
-  market.awayOdds = normalizedOdds[1];
-  market.drawOdds = normalizedOdds[2];
-  market.save();
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.address = event.params._marketAddress.toHexString();
+    market.maturityDate = event.params._game.startTime;
+    market.tags = event.params._tags;
+    market.isOpen = true;
+    market.isResolved = false;
+    market.isCanceled = false;
+    market.finalResult = BigInt.fromI32(0);
+    market.poolSize = BigInt.fromI32(0);
+    market.numberOfParticipants = BigInt.fromI32(0);
+    market.homeTeam = event.params._game.homeTeam;
+    market.awayTeam = event.params._game.awayTeam;
+    market.homeOdds = normalizedOdds[0];
+    market.awayOdds = normalizedOdds[1];
+    market.drawOdds = normalizedOdds[2];
+    market.save();
+  }
 
   let marketHistory = new SportMarketOddsHistory(event.params._id.toHex());
   marketHistory.timestamp = event.block.timestamp;
@@ -51,27 +94,6 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.awayOdds = [normalizedOdds[1]];
   marketHistory.drawOdds = [normalizedOdds[2]];
   marketHistory.save();
-
-  let marketContract = SportMarketContract.bind(event.params._marketAddress);
-
-  let positionHome = new Position(marketContract.getOptions().value0.toHex());
-  positionHome.market = market.id;
-  positionHome.claimable = false;
-  positionHome.side = 'home';
-  positionHome.save();
-  PositionTemplate.create(marketContract.getOptions().value0);
-  let positionAway = new Position(marketContract.getOptions().value1.toHex());
-  positionAway.market = market.id;
-  positionAway.claimable = false;
-  positionAway.side = 'away';
-  positionAway.save();
-  PositionTemplate.create(marketContract.getOptions().value1);
-  let positionDraw = new Position(marketContract.getOptions().value2.toHex());
-  positionDraw.market = market.id;
-  positionDraw.claimable = false;
-  positionDraw.side = 'draw';
-  positionDraw.save();
-  PositionTemplate.create(marketContract.getOptions().value2);
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -99,6 +121,7 @@ export function handleTransfer(event: TransferEvent): void {
 
 export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
+  // if (event.block.number === BigInt.fromI32(33062576)) return;
   if (market !== null) {
     let marketContract = SportMarketContract.bind(event.params._marketAddress);
     market.timestamp = event.block.timestamp;
