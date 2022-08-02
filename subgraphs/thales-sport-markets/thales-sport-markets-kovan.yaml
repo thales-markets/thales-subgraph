@@ -18,7 +18,6 @@ dataSources:
       file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
       entities:
         - SportMarket
-        - SportMarketOddsHistory
         - Position
       abis:
         - name: SportPositionalMarketManager
