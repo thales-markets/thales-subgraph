@@ -1,0 +1,91 @@
+type Market @entity {
+  id: ID!
+  timestamp: BigInt!
+  creator: Bytes!
+  creationTime: BigInt!
+  resolver: Bytes
+  resolvedTime: BigInt
+  address: Bytes!
+  question: String!
+  dataSource: String!
+  endOfPositioning: BigInt!
+  ticketPrice: BigInt!
+  isWithdrawalAllowed: Boolean!
+  positions: [String!]!
+  tags: [BigInt!]!
+  isTicketType: Boolean!
+  isOpen: Boolean!
+  numberOfDisputes: BigInt!
+  numberOfOpenDisputes: BigInt!
+  marketClosedForDisputes: Boolean!
+  isResolved: Boolean!
+  isCancelled: Boolean!
+  winningPosition: BigInt!
+  backstopTimeout: BigInt!
+  isPaused: Boolean!
+  isDisputed: Boolean!
+  disputeClosedTime: BigInt
+  poolSize: BigInt!
+  numberOfParticipants: BigInt!
+  noWinners: Boolean!
+  cancelledByCreator: Boolean!
+}
+
+type Dispute @entity {
+  id: ID!
+  timestamp: BigInt!
+  creationDate: BigInt!
+  disputeNumber: BigInt!
+  disputer: Bytes!
+  market: Bytes!
+  reasonForDispute: String!
+  isInPositioningPhase: Boolean!
+  disputeCode: BigInt!
+}
+
+type DisputeVote @entity {
+  id: ID!
+  timestamp: BigInt!
+  market: Bytes!
+  dispute: BigInt!
+  voter: Bytes!
+  vote: BigInt!
+  position: BigInt!
+}
+
+type Position @entity {
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  market: Bytes!
+  isWithdrawn: Boolean!
+  isClaimed: Boolean!
+  position: BigInt!
+  positions: [BigInt!]!
+  amount: BigInt!
+}
+
+enum MarketTransactionType {
+  bid
+  changePosition
+  withdrawal
+  claim
+  claimRefund
+  resolveMarket
+  resetMarketResult
+  openDispute
+  updatePositions
+}
+
+type MarketTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  type: MarketTransactionType!
+  account: Bytes!
+  market: Bytes!
+  amount: BigInt!
+  position: BigInt!
+  positions: [BigInt!]
+}

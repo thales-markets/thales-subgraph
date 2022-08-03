@@ -1,0 +1,125 @@
+specVersion: 0.0.4
+description: Thales Exotic Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ExoticPositionalMarketManager
+    network: optimism
+    source:
+      address: '0x9a51524422ddf1b8afec04cba6451a6c50320998'
+      abi: ExoticPositionalMarketManager
+      startBlock: 6602328
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-exotic-markets-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: ExoticPositionalMarketManager
+          file: ../abis/ExoticPositionalMarketManager.json
+        - name: ExoticPositionalTicketMarket
+          file: ../abis/ExoticPositionalTicketMarket.json
+        - name: ExoticPositionalOpenBidMarket
+          file: ../abis/ExoticPositionalOpenBidMarket.json
+      eventHandlers:
+        - event: MarketCreated(address,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
+          handler: handleMarketCreatedEvent
+        - event: MarketCanceled(address)
+          handler: handleMarketCanceledEvent
+  - kind: ethereum/contract
+    name: ThalesOracleCouncil
+    network: optimism
+    source:
+      address: '0xdf3eefc2ed0f31947a67f0e817dfd92717630e38'
+      abi: ThalesOracleCouncil
+      startBlock: 6602328
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-exotic-markets-mapping.ts
+      entities:
+        - Dispute
+      abis:
+        - name: ThalesOracleCouncil
+          file: ../abis/ThalesOracleCouncil.json
+      eventHandlers:
+        - event: NewDispute(address,string,bool,address)
+          handler: handleNewDisputeEvent
+        - event: VotedAddedForDispute(address,uint256,uint256,uint256,address)
+          handler: handleVotedAddedForDisputeEvent
+        - event: DisputeClosed(address,uint256,uint256)
+          handler: handleDisputeClosedEvent
+        - event: MarketClosedForDisputes(address,uint256)
+          handler: handleMarketClosedForDisputesEvent
+        - event: MarketReopenedForDisputes(address)
+          handler: handleMarketReopenedForDisputesEvent
+templates:
+  - name: ExoticPositionalTicketMarket
+    kind: ethereum/contract
+    network: optimism
+    source:
+      abi: ExoticPositionalTicketMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-exotic-markets-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: ExoticPositionalTicketMarket
+          file: ../abis/ExoticPositionalTicketMarket.json
+      eventHandlers:
+        - event: MarketResolved(uint256,address,bool)
+          handler: handleMarketResolvedEvent
+        - event: MarketReset()
+          handler: handleMarketResetEvent
+        - event: BackstopTimeoutPeriodChanged(uint256)
+          handler: handleBackstopTimeoutPeriodChangedEvent
+        - event: PauseChanged(bool)
+          handler: handlePauseChangedEvent
+        - event: MarketDisputed(bool)
+          handler: handleMarketDisputedEvent
+        - event: NewPositionTaken(address,uint256,uint256)
+          handler: handleNewPositionTakenEvent
+        - event: TicketWithdrawn(address,uint256)
+          handler: handleTicketWithdrawnEvent
+        - event: WinningTicketClaimed(address,uint256)
+          handler: handleWinningTicketClaimedEvent
+  - name: ExoticPositionalOpenBidMarket
+    kind: ethereum/contract
+    network: optimism
+    source:
+      abi: ExoticPositionalOpenBidMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-exotic-markets-mapping.ts
+      entities:
+        - Market
+      abis:
+        - name: ExoticPositionalOpenBidMarket
+          file: ../abis/ExoticPositionalOpenBidMarket.json
+      eventHandlers:
+        - event: MarketResolved(uint256,address,bool)
+          handler: handleMarketResolvedEvent
+        - event: MarketReset()
+          handler: handleMarketResetEvent
+        - event: BackstopTimeoutPeriodChanged(uint256)
+          handler: handleBackstopTimeoutPeriodChangedEvent
+        - event: PauseChanged(bool)
+          handler: handlePauseChangedEvent
+        - event: MarketDisputed(bool)
+          handler: handleMarketDisputedEvent
+        - event: NewOpenBidsForPositions(address,uint256[],uint256[])
+          handler: handleNewOpenBidsForPositionsEvent
+        - event: OpenBidUserWithdrawn(address,uint256,uint256,uint256)
+          handler: handleOpenBidUserWithdrawnEvent
+        - event: WinningOpenBidAmountClaimed(address,uint256)
+          handler: handleWinningOpenBidAmountClaimedEvent
