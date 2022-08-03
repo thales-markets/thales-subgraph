@@ -1,20 +1,20 @@
 type SportMarket @entity {
   id: ID!
   timestamp: BigInt!
-  address: Bytes!
+  address: String!
   maturityDate: BigInt!
-  tags: [BigInt!]!
-  isOpen: Boolean!
-  isResolved: Boolean!
-  isCanceled: Boolean!
-  finalResult: BigInt!
-  poolSize: BigInt!
-  numberOfParticipants: BigInt!
-  homeTeam: String!
-  awayTeam: String!
-  homeOdds: BigInt!
-  awayOdds: BigInt!
-  drawOdds: BigInt!
+  tags: [BigInt!]
+  isOpen: Boolean
+  isResolved: Boolean
+  isCanceled: Boolean
+  finalResult: BigInt
+  poolSize: BigInt
+  numberOfParticipants: BigInt
+  homeTeam: String
+  awayTeam: String
+  homeOdds: BigInt
+  awayOdds: BigInt
+  drawOdds: BigInt
   homeScore: BigInt
   awayScore: BigInt
 }
