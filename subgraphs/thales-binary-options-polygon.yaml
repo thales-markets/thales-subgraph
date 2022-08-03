@@ -30,6 +30,40 @@ dataSources:
         - event: MarketExpired(address)
           handler: handleMarketExpired
   - kind: ethereum/contract
+    name: RangedMarkets
+    network: matic
+    source:
+      address: '0xe8e022405505a9F2b0B7452C844F1e64423849fC'
+      abi: RangedMarketsAMM
+      startBlock: 31473296
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+        - ReferralTransfer
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: RangedMarket
+          file: ../abis/thales/range-markets/RangedMarket.json
+        - name: RangedMarketsAMM
+          file: ../abis/thales/range-markets/RangedMarketsAMM.json
+      eventHandlers:
+        - event: RangedMarketCreated(address,address,address)
+          handler: handleRangedMarket
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
+  - kind: ethereum/contract
     name: AMM
     network: matic
     source:
@@ -51,55 +85,8 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
-#  - kind: ethereum/contract
-#    name: ThalesRoyale
-#    network: matic
-#    source:
-#      address: '0xF28fb48647bAa9dc434187bded9433D3436c2621'
-#      abi: ThalesRoyale
-#      startBlock: 25427711
-#    mapping:
-#      kind: ethereum/events
-#      apiVersion: 0.0.4
-#      language: wasm/assemblyscript
-#      file: ../src/thales-royale-mapping.ts
-#      entities:
-#        - ThalesToyaleGame
-#        - ThalesRoyaleSeason
-#        - ThalesRoyalePlayer
-#        - ThalesRoyalePostition
-#      abis:
-#        - name: ThalesRoyale
-#          file: ../abis/thales-royale/ThalesRoyale.json
-#      eventHandlers:
-#        - event: SignedUp(address,uint256)
-#          handler: handleSignedUp
-#        - event: TookAPosition(address,uint256,uint256,uint256)
-#          handler: handleTookAPosition
-#        - event: RoyaleStarted(uint256,uint256,uint256)
-#          handler: handleRoyaleStarted
-#        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-#          handler: handleRoundClosed
-#  - kind: ethereum/contract
-#    name: ThalesRoyalePass
-#    network: matic
-#    source:
-#      address: '0x2F71f4a2D8BAB9703fff3fF5794762bF5b6C7E29'
-#      abi: ThalesRoyalePass
-#      startBlock: 3845687
-#    mapping:
-#      kind: ethereum/events
-#      apiVersion: 0.0.4
-#      language: wasm/assemblyscript
-#      file: ../src/thales-royale-pass-mapping.ts
-#      entities:
-#        - ThalesRoyalePass
-#      abis:
-#        - name: ThalesRoyalePass
-#          file: ../abis/thales-royale/ThalesRoyalePass.json
-#      eventHandlers:
-#        - event: Transfer(indexed address,indexed address,indexed uint256)
-#          handler: handleTransfer
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
@@ -140,6 +127,49 @@ templates:
       abis:
         - name: Position
           file: ../abis/thales/Position.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+  - name: RangedMarket
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: RangedMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+      abis:
+        - name: RangedMarket
+          file: '../abis/thales/range-markets/RangedMarket.json'
+      eventHandlers:
+        - event: Mint(address,uint256,uint8)
+          handler: handleMint
+        - event: Resolved(uint8,uint256)
+          handler: handleMarketResolved
+        - event: Exercised(address,uint256,uint8)
+          handler: handleExercised
+  - name: RangedPosition
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: RangedPosition
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedPositionBalance
+      abis:
+        - name: RangedPosition
+          file: ../abis/thales/range-markets/RangedPosition.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

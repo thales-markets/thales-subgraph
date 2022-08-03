@@ -16,11 +16,38 @@ type Market @entity {
   finalPrice: BigInt
 }
 
+type ReferralTransfer @entity {
+  id: ID!
+  refferer: Bytes!
+  trader: Bytes!
+  amount: BigInt!
+  volume: BigInt!
+  timestamp: BigInt!
+}
+
+type Referrer @entity {
+  id: ID!
+  trades: BigInt!
+  totalVolume: BigInt!
+  totalEarned: BigInt!
+  timestamp: BigInt!
+}
+
+type ReferredTrader @entity {
+  id: ID!
+  trades: BigInt!
+  totalVolume: BigInt!
+  totalEarned: BigInt!
+  refferer: Referrer!
+  timestamp: BigInt!
+}
+
 type RangedMarket @entity {
   id: ID!
   timestamp: BigInt!
   currencyKey: Bytes!
   maturityDate: BigInt!
+  expiryDate: BigInt!
   leftPrice: BigInt!
   rightPrice: BigInt!
   inAddress: Bytes!
@@ -30,6 +57,32 @@ type RangedMarket @entity {
   isOpen: Boolean!
   result: Int
   finalPrice: BigInt
+}
+
+type Position @entity {
+  id: ID!
+  market: Market!
+  side: OptionSide!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}
+
+type RangedPosition @entity {
+  id: ID!
+  market: RangedMarket!
+  side: OptionSide!
+}
+
+type RangedPositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: RangedPosition!
 }
 
 enum OptionTransactionType {
@@ -202,17 +255,4 @@ type ThalesRoyalePassportPosition @entity {
   round: BigInt!
   season: BigInt!
   position: BigInt!
-}
-
-type Position @entity {
-  id: ID!
-  market: Market!
-  side: OptionSide!
-}
-
-type PositionBalance @entity {
-  id: ID!
-  account: Bytes!
-  amount: BigInt!
-  position: Position!
 }
