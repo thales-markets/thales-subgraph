@@ -2,22 +2,12 @@ import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
 } from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
-import {
-  Mint as MintEvent,
-  MarketResolved as MarketResolvedEvent,
-  OptionsExercised as OptionsExercisedEvent,
-  BinaryOptionMarket,
-} from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
 import { Market, Position, PositionBalance } from '../generated/schema';
-import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
 import { Position as PositionContract } from '../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
-  BinaryOptionMarketContract.create(event.params.market);
-  let binaryOptionContract = BinaryOptionMarket.bind(event.params.market);
-
   let entity = new Market(event.params.market.toHex());
   entity.creator = event.params.creator;
   entity.timestamp = event.block.timestamp;
@@ -30,15 +20,15 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.shortAddress = event.params.short;
   entity.customMarket = event.params.customMarket;
   entity.customOracle = event.params.customOracle;
-  entity.poolSize = binaryOptionContract.deposited();
+  entity.poolSize = BigInt.fromI32(0);
   entity.save();
 
-  let upPosition = new Position(event.params.long.toHex());
+  const upPosition = new Position(event.params.long.toHex());
   upPosition.side = 'long';
   upPosition.market = entity.id;
   upPosition.save();
 
-  let downPosition = new Position(event.params.short.toHex());
+  const downPosition = new Position(event.params.short.toHex());
   downPosition.side = 'short';
   downPosition.market = entity.id;
   downPosition.save();
@@ -48,7 +38,7 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let position = Position.load(event.address.toHex());
+  const position = Position.load(event.address.toHex());
   if (position !== null) {
     let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
     if (userBalanceFrom === null) {
@@ -69,45 +59,5 @@ export function handleTransfer(event: TransferEvent): void {
     }
     userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
     userBalanceTo.save();
-  }
-}
-
-export function handleMarketExpired(event: MarketExpiredEvent): void {
-  let marketEntity = Market.load(event.params.market.toHex());
-  if (marketEntity !== null) {
-    marketEntity.isOpen = false;
-    marketEntity.save();
-  }
-}
-
-export function handleMarketResolved(event: MarketResolvedEvent): void {
-  let market = Market.load(event.address.toHex());
-  if (market !== null) {
-    market.result = event.params.result;
-    market.poolSize = event.params.deposited;
-    market.finalPrice = event.params.oraclePrice;
-    market.save();
-  }
-}
-
-export function handleOptionsExercised(event: OptionsExercisedEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let poolSize = binaryOptionContract.deposited();
-  if (marketEntity !== null) {
-    marketEntity.poolSize = poolSize;
-    marketEntity.save();
-  }
-}
-
-export function handleMint(event: MintEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-
-  let poolSize = binaryOptionContract.deposited();
-
-  if (marketEntity !== null) {
-    marketEntity.poolSize = poolSize;
-    marketEntity.save();
   }
 }

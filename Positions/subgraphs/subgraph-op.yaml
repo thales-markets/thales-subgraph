@@ -1,10 +1,5 @@
 specVersion: 0.0.4
 description: Thales Binary Options API
-# features:
-#   - grafting
-# graft:
-#   base: QmUEyo82Ldt4t7qSD4crszFPo8ZsXEbB3iuaVyhQcJinmR # Subgraph ID of base subgraph
-#   block: 16000000 # Block number
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
   file: ../schema.graphql
@@ -82,48 +77,7 @@ dataSources:
       eventHandlers:
         - event: RangedMarketCreated(address,address,address)
           handler: handleRangedMarket
-
 templates:
-  - name: BinaryOptionMarket
-    kind: ethereum/contract
-    network: optimism
-    source:
-      abi: BinaryOptionMarket
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
-      entities:
-        - Market
-      abis:
-        - name: BinaryOptionMarket
-          file: ../abis/BinaryOptionMarket.json
-      eventHandlers:
-        - event: Mint(uint8,indexed address,uint256)
-          handler: handleMint
-        - event: MarketResolved(uint8,uint256,uint256,uint256,uint256,uint256)
-          handler: handleMarketResolved
-        - event: OptionsExercised(indexed address,uint256)
-          handler: handleOptionsExercised
-  - name: RangedMarket
-    kind: ethereum/contract
-    network: optimism
-    source:
-      abi: RangedMarket
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/ranged-markets-mapping.ts
-      entities:
-        - RangedMarket
-      abis:
-        - name: RangedMarket
-          file: '../abis/range-markets/RangedMarket.json'
-      eventHandlers:
-        - event: Resolved(uint8,uint256)
-          handler: handleMarketResolved
   - name: Position
     kind: ethereum/contract
     network: optimism

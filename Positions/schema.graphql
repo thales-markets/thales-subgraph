@@ -40,7 +40,7 @@ enum OptionSide {
   out
 }
 
-type Position @entity {
+type Position @entity(immutable: true) {
   id: ID!
   market: Market!
   side: OptionSide!
@@ -53,7 +53,7 @@ type PositionBalance @entity {
   position: Position!
 }
 
-type RangedPosition @entity {
+type RangedPosition @entity(immutable: true) {
   id: ID!
   market: RangedMarket!
   side: OptionSide!

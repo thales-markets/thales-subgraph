@@ -1,7 +1,6 @@
 import { RangedMarketCreated } from '../generated/RangedMarkets/RangedMarketsAMM';
 
 import { Market, RangedMarket, RangedPosition, RangedPositionBalance } from '../generated/schema';
-import { RangedMarket as RangedMarketTemplate } from '../generated/templates';
 import { Transfer as TransferEvent } from '../generated/templates/RangedPosition/RangedPosition';
 
 import { RangedMarket as RangedMarketContract, Resolved } from '../generated/RangedMarkets/RangedMarket';
@@ -10,7 +9,6 @@ import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleRangedMarket(event: RangedMarketCreated): void {
   let rangedMarket = new RangedMarket(event.params.market.toHex());
-  RangedMarketTemplate.create(event.params.market);
 
   let leftMarket = Market.load(event.params.leftMarket.toHex());
   let rightMarket = Market.load(event.params.rightMarket.toHex());
@@ -48,7 +46,7 @@ export function handleRangedMarket(event: RangedMarketCreated): void {
 }
 
 export function handleTransfer(event: TransferEvent): void {
-  let position = RangedPosition.load(event.address.toHex());
+  const position = RangedPosition.load(event.address.toHex());
   if (position !== null) {
     let userBalanceFrom = RangedPositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
     if (userBalanceFrom === null) {
@@ -69,14 +67,5 @@ export function handleTransfer(event: TransferEvent): void {
     }
     userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
     userBalanceTo.save();
-  }
-}
-
-export function handleMarketResolved(event: Resolved): void {
-  let market = RangedMarket.load(event.address.toHex());
-  if (market !== null) {
-    market.result = event.params.winningPosition;
-    market.finalPrice = event.params.finalPrice;
-    market.save();
   }
 }
