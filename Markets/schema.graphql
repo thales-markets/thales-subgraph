@@ -38,7 +38,7 @@ enum OptionTransactionType {
   exercise
 }
 
-type OptionTransaction @entity {
+type OptionTransaction @entity(immutable: true) {
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
@@ -63,7 +63,7 @@ enum OrderSide {
   sell
 }
 
-type Trade @entity {
+type Trade @entity(immutable: true) {
   # tx hash - order hash - log index
   id: ID!
   transactionHash: Bytes!
@@ -87,7 +87,7 @@ enum AccountBuyVolumeEnum {
   buyRanged
 }
 
-type AccountBuyVolume @entity {
+type AccountBuyVolume @entity(immutable: true) {
   id: ID!
   timestamp: BigInt!
   account: Bytes!
@@ -95,16 +95,7 @@ type AccountBuyVolume @entity {
   type: AccountBuyVolumeEnum!
 }
 
-type CanClaimOnBehalfItem @entity {
-  id: ID!
-  transactionHash: Bytes!
-  timestamp: BigInt!
-  sender: Bytes!
-  account: Bytes!
-  canClaimOnBehalf: Boolean!
-}
-
-type ReferralTransfer @entity {
+type ReferralTransfer @entity(immutable: true) {
   id: ID!
   refferer: Bytes!
   trader: Bytes!

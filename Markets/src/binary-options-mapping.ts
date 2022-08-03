@@ -8,12 +8,12 @@ import {
   OptionsExercised as OptionsExercisedEvent,
   BinaryOptionMarket,
 } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
-import { Market } from '../generated/schema';
+import { Market, OptionTransaction } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
+import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
-  let binaryOptionContract = BinaryOptionMarket.bind(event.params.market);
 
   let entity = new Market(event.params.market.toHex());
   entity.creator = event.params.creator;
@@ -27,7 +27,7 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.shortAddress = event.params.short;
   entity.customMarket = event.params.customMarket;
   entity.customOracle = event.params.customOracle;
-  entity.poolSize = binaryOptionContract.deposited();
+  entity.poolSize = BigInt.fromI32(0);
   entity.save();
 }
 
@@ -50,23 +50,23 @@ export function handleMarketResolved(event: MarketResolvedEvent): void {
 }
 
 export function handleOptionsExercised(event: OptionsExercisedEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-  let poolSize = binaryOptionContract.deposited();
-  if (marketEntity !== null) {
-    marketEntity.poolSize = poolSize;
-    marketEntity.save();
-  }
+  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  optionTransactionEntity.type = 'exercise';
+  optionTransactionEntity.timestamp = event.block.timestamp;
+  optionTransactionEntity.blockNumber = event.block.number;
+  optionTransactionEntity.account = event.params.account;
+  optionTransactionEntity.market = event.address;
+  optionTransactionEntity.amount = event.params.value;
+  optionTransactionEntity.save();
 }
 
 export function handleMint(event: MintEvent): void {
-  let marketEntity = Market.load(event.address.toHex());
-  let binaryOptionContract = BinaryOptionMarket.bind(event.address);
-
-  let poolSize = binaryOptionContract.deposited();
-
-  if (marketEntity !== null) {
-    marketEntity.poolSize = poolSize;
-    marketEntity.save();
-  }
+  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
+  optionTransactionEntity.type = 'mint';
+  optionTransactionEntity.timestamp = event.block.timestamp;
+  optionTransactionEntity.blockNumber = event.block.number;
+  optionTransactionEntity.account = event.params.account;
+  optionTransactionEntity.market = event.address;
+  optionTransactionEntity.amount = event.params.value;
+  optionTransactionEntity.save();
 }
