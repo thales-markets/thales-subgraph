@@ -6,8 +6,12 @@ import { Transfer as TransferEvent } from '../generated/templates/Position/Posit
 import { Market, Position, PositionBalance } from '../generated/schema';
 import { Position as PositionContract } from '../generated/templates';
 import { BigInt } from '@graphprotocol/graph-ts';
+import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
+import { MarketResolved as MarketResolvedEvent } from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
+  BinaryOptionMarketContract.create(event.params.market);
+
   let entity = new Market(event.params.market.toHex());
   entity.creator = event.params.creator;
   entity.timestamp = event.block.timestamp;
@@ -59,5 +63,25 @@ export function handleTransfer(event: TransferEvent): void {
     }
     userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
     userBalanceTo.save();
+  }
+}
+
+
+export function handleMarketExpired(event: MarketExpiredEvent): void {
+  let marketEntity = Market.load(event.params.market.toHex());
+  if(marketEntity !== null) {
+    marketEntity.isOpen = false;
+    marketEntity.save();
+  }
+
+}
+
+export function handleMarketResolved(event: MarketResolvedEvent): void {
+  let market = Market.load(event.address.toHex());
+  if(market !== null) {
+    market.result = event.params.result;
+    market.poolSize = event.params.deposited;
+    market.finalPrice = event.params.oraclePrice;
+    market.save();
   }
 }
