@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, SoldToAMM, ReferrerPaid } from '../generated/AMM/AMM';
-import { Trade, ReferralTransfer, ReferredTrader, Referrer } from '../generated/schema';
+import { Trade, ReferralTransfer, ReferredTrader, Referrer, Position, PositionBalance } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -20,6 +20,17 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
   trade.orderSide = 'buy';
   trade.save();
+
+  let position = Position.load(event.params.asset.toHex());
+  let userBalanceFrom = PositionBalance.load(event.params.asset.toHex() + ' - ' + event.params.buyer.toHex());
+  if (userBalanceFrom === null) {
+    userBalanceFrom = new PositionBalance(event.params.asset.toHex() + ' - ' + event.params.buyer.toHex());
+    userBalanceFrom.account = event.params.buyer;
+    userBalanceFrom.amount = BigInt.fromI32(0);
+    userBalanceFrom.position = position.id;
+  }
+  userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
+  userBalanceFrom.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
@@ -39,6 +50,17 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
   trade.orderSide = 'sell';
   trade.save();
+
+  let position = Position.load(event.params.asset.toHex());
+  let userBalanceFrom = PositionBalance.load(event.params.asset.toHex() + ' - ' + event.params.seller.toHex());
+  if (userBalanceFrom === null) {
+    userBalanceFrom = new PositionBalance(event.params.asset.toHex() + ' - ' + event.params.seller.toHex());
+    userBalanceFrom.account = event.params.buyer;
+    userBalanceFrom.amount = BigInt.fromI32(0);
+    userBalanceFrom.position = position.id;
+  }
+  userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
+  userBalanceFrom.save();
 }
 
 export function handleReferrerPaid(event: ReferrerPaid): void {
