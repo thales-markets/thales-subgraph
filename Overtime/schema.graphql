@@ -45,6 +45,13 @@ enum MarketTransactionType {
   sell
 }
 
+type ClaimTx @entity(immutable: true)  {
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt!
+}
+
 type MarketTransaction @entity {
   id: ID!
   hash: Bytes!

@@ -15,15 +15,15 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      file: ../src/thales-sport-markets-mapping.ts
       entities:
         - SportMarket
         - Position
       abis:
         - name: SportPositionalMarketManager
-          file: ../../abis/thales-sport-markets/SportPositionalMarketManager.json
+          file: ../abis/SportPositionalMarketManager.json
         - name: SportMarket
-          file: ../../abis/thales-sport-markets/SportMarket.json
+          file: ../abis/SportMarket.json
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,string,uint256,uint256,address,address,address)
           handler: handleMarketCreated
@@ -39,16 +39,16 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      file: ../src/thales-sport-markets-mapping.ts
       entities:
         - SportMarket
         - SportMarketOddsHistory
         - Position
       abis:
         - name: TheRundownConsumer
-          file: ../../abis/thales-sport-markets/TheRundownConsumer.json
+          file: ../abis/TheRundownConsumer.json
         - name: SportMarket
-          file: ../../abis/thales-sport-markets/SportMarket.json
+          file: ../abis/SportMarket.json
       eventHandlers:
         - event: CreateSportsMarket(address,bytes32,(bytes32,uint256,int24,int24,int24,string,string),uint256[],uint256[])
           handler: handleCreateSportsMarketEvent
@@ -71,18 +71,36 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../../src/thales-sport-markets/amm-mapping.ts
+      file: ../src/amm-mapping.ts
       entities:
         - MarketTransaction
       abis:
         - name: SportsAMM
-          file: ../../abis/thales-sport-markets/SportsAMM.json
+          file: ../abis/SportsAMM.json
       eventHandlers:
         - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
 templates:
+  - name: SportMarket
+    kind: ethereum/contract
+    network: optimism
+    source:
+      abi: SportMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - ClaimTx
+      abis:
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
   - name: Position
     kind: ethereum/contract
     network: optimism
@@ -92,12 +110,12 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ../../src/thales-sport-markets/thales-sport-markets-mapping.ts
+      file: ../src/thales-sport-markets-mapping.ts
       entities:
         - PositionBalance
       abis:
         - name: Position
-          file: ../../abis/thales-sport-markets/SportPosition.json
+          file: ../abis/SportPosition.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

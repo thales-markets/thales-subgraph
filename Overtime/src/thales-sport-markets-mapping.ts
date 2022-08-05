@@ -1,4 +1,4 @@
-import { Position, SportMarket, SportMarketOddsHistory, PositionBalance } from '../generated/schema';
+import { Position, SportMarket, SportMarketOddsHistory, PositionBalance, ClaimTx } from '../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
@@ -8,13 +8,15 @@ import {
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
 import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
 import { Position as PositionTemplate } from '../generated/templates';
-import { SportMarket as SportMarketContract } from '../generated/SportPositionalMarketManager/SportMarket';
+import { SportMarket as SportMarketTemplate } from '../generated/templates';
+import { OptionsExercised, SportMarket as SportMarketContract } from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { log } from '@graphprotocol/graph-ts';
 import { MarketCreated as MarketCreatedEvent } from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
 
 export function handleMarketCreated(event: MarketCreatedEvent): void {
   let market = new SportMarket(event.params.gameId.toHex());
+  SportMarketTemplate.create(event.params.market);
   if (market !== null) {
     market.timestamp = event.block.timestamp;
     market.address = event.params.market.toHexString();
@@ -53,6 +55,14 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   } else {
     log.info('zero adress draw: {}', [event.params.draw.toHexString()]);
   }
+}
+
+export function handleOptionsExercised(event: OptionsExercised): void {
+  let tx = new ClaimTx(event.transaction.hash.toHex());
+  tx.account =  event.params.account;
+  tx.amount =  event.params.value;
+  tx.timestamp = event.block.timestamp;
+  tx.save();
 }
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
