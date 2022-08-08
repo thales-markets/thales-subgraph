@@ -47,3 +47,12 @@ type Staker @entity {
   totalStakedAmount: BigInt!
   unstakingAmount: BigInt!
 }
+
+type CanClaimOnBehalfItem @entity {
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  sender: Bytes!
+  account: Bytes!
+  canClaimOnBehalf: Boolean!
+}

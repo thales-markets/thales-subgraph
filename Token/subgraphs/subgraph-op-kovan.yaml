@@ -32,6 +32,8 @@ dataSources:
           handler: handleStakingRewardsClaimEvent
         - event: AccountMerged(address,address)
           handler: handleAccountMergedEvent
+        - event: CanClaimOnBehalfChanged(address,address,bool)
+          handler: handleCanClaimOnBehalfChangedEvent
   - kind: ethereum/contract
     name: StakingThales_OldRewardsClaimed
     network: optimism-kovan
