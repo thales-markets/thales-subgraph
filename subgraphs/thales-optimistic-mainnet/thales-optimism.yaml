@@ -89,26 +89,6 @@ dataSources:
         - event: MarketExpired(address)
           handler: handleMarketExpired
   - kind: ethereum/contract
-    name: LimitOrderProtocol
-    network: optimism
-    source:
-      address: '0xb707d89d29c189421163515c59e42147371d6857'
-      abi: LimitOrderProtocol
-      startBlock: 1436819
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/1inch-limit-order-mapping.ts
-      entities:
-        - Trade
-      abis:
-        - name: LimitOrderProtocol
-          file: ../../abis/1inch/LimitOrderProtocol.json
-      eventHandlers:
-        - event: OrderFilled(indexed address,bytes32,uint256)
-          handler: handleOrderFilledEvent
-  - kind: ethereum/contract
     name: AMM
     network: optimism
     source:
@@ -135,126 +115,6 @@ dataSources:
           handler: handleSoldToAMMEvent
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
-  - kind: ethereum/contract
-    name: ThalesRoyale_old
-    network: optimism
-    source:
-      address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
-      abi: ThalesRoyale
-      startBlock: 2941851
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/thales-royale-with-passport-mapping.ts
-      entities:
-        - ThalesToyaleGame
-        - ThalesRoyaleSeason
-        - ThalesRoyalePlayer
-        - ThalesRoyalePostition
-        - ThalesRoyalePassportPlayer
-        - ThalesRoyalePassportPosition
-      abis:
-        - name: ThalesRoyale
-          file: ../../abis/thales-royale/ThalesRoyale_old.json
-      eventHandlers:
-        - event: SignedUp(address,uint256)
-          handler: handleSignedUp
-        - event: TookAPosition(address,uint256,uint256,uint256)
-          handler: handleTookAPosition
-  - kind: ethereum/contract
-    name: ThalesRoyale
-    network: optimism
-    source:
-      address: '0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579'
-      abi: ThalesRoyale
-      startBlock: 2941851
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/thales-royale-with-passport-mapping.ts
-      entities:
-        - ThalesRoyaleGame
-        - ThalesRoyaleSeason
-        - ThalesRoyalePlayer
-        - ThalesRoyalePostition
-        - ThalesRoyalePassportPlayer
-        - ThalesRoyalePassportPosition
-      abis:
-        - name: ThalesRoyale
-          file: ../../abis/thales-royale/ThalesRoyaleWithPassport.json
-      eventHandlers:
-        - event: SignedUp(address,uint256,uint256)
-          handler: handleSignedUpWithPosition
-        - event: SignedUpPassport(address,uint256,uint256,uint256[])
-          handler: handleSignedUpPassport
-        - event: TookAPositionPassport(address,uint256,uint256,uint256,uint256)
-          handler: handleTookAPositionPassport
-        - event: RoyaleStarted(uint256,uint256,uint256)
-          handler: handleRoyaleStartedOPMainnet
-        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
-          handler: handleRoundClosedOPMainnet
-  - kind: ethereum/contract
-    name: ThalesRoyalePass
-    network: optimism
-    source:
-      address: '0x2F71f4a2D8BAB9703fff3fF5794762bF5b6C7E29'
-      abi: ThalesRoyalePass
-      startBlock: 3845687
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/thales-royale-pass-mapping.ts
-      entities:
-        - ThalesRoyalePass
-      abis:
-        - name: ThalesRoyalePass
-          file: ../../abis/thales-royale/ThalesRoyalePass.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-  - kind: ethereum/contract
-    name: ThalesRoyalePassport
-    network: optimism
-    source:
-      address: '0xf534848023ba851c6265e8F99a919c4d5fd05CD0'
-      abi: ThalesRoyalePassport
-      startBlock: 5536421
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/thales-royale-passport-mapping.ts
-      entities:
-        - ThalesRoyalePassport
-      abis:
-        - name: ThalesRoyalePassport
-          file: ../../abis/thales-royale/ThalesRoyalePassport.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-  - kind: ethereum/contract
-    name: Airdrop
-    network: optimism
-    source:
-      address: '0x42B6e9b5Bb96a02E02e651d3104Fc3546E1313F2'
-      abi: Airdrop
-      startBlock: 3115834
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/token-mapping.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: Airdrop
-          file: ../../abis/token/Airdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleRetroAirdropClaimEvent
   - kind: ethereum/contract
     name: StakingThales
     network: optimism
@@ -350,26 +210,6 @@ dataSources:
         - event: Vested(address,uint256)
           handler: handleVestedEvent
   - kind: ethereum/contract
-    name: OngoingAirdrop
-    network: optimism
-    source:
-      address: '0x8D47b12ce25E2dc6866e8aAC0DbD823Da09fADd6'
-      abi: OngoingAirdrop
-      startBlock: 3119010
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./mappings/token-mapping-l2.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: OngoingAirdrop
-          file: ../../abis/token/OngoingAirdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleMigratedRewardsClaimEvent
-  - kind: ethereum/contract
     name: LPStakingRewards
     network: optimism
     source:
@@ -439,8 +279,6 @@ templates:
         - name: RangedMarket
           file: '../../abis/thales/range-markets/RangedMarket.json'
       eventHandlers:
-        - event: Mint(address,uint256,uint8)
-          handler: handleMint
         - event: Resolved(uint8,uint256)
           handler: handleMarketResolved
         - event: Exercised(address,uint256,uint8)
@@ -460,9 +298,6 @@ templates:
       abis:
         - name: Position
           file: ../../abis/thales/Position.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
   - name: RangedPosition
     kind: ethereum/contract
     network: optimism
@@ -478,6 +313,3 @@ templates:
       abis:
         - name: RangedPosition
           file: ../../abis/thales/range-markets/RangedPosition.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer

@@ -1,4 +1,4 @@
-import { Claim as AirdropClaimEvent } from '../generated/Airdrop/Airdrop';
+import { Claim as AirdropClaimEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import {
   Staked as StakedEvent,
   UnstakeCooldown as StartUnstakeEvent,

@@ -1,4 +1,3 @@
-import { Claim as AirdropClaimEvent } from '../../../generated/Airdrop/Airdrop';
 import {
   Staked as StakedEvent,
   UnstakeCooldown as StartUnstakeEvent,
@@ -15,17 +14,6 @@ import {
 } from '../../../generated/EscrowThales/EscrowThales';
 import { TokenTransaction, Staker, CanClaimOnBehalfItem } from '../../../generated/schema';
 import { BigInt, store } from '@graphprotocol/graph-ts';
-
-export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  tokenTransaction.transactionHash = event.transaction.hash;
-  tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.account = event.params.claimer;
-  tokenTransaction.amount = event.params.amount;
-  tokenTransaction.type = 'claimRetroAirdrop';
-  tokenTransaction.blockNumber = event.block.number;
-  tokenTransaction.save();
-}
 
 export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());

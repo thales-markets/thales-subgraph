@@ -1,4 +1,3 @@
-import { Claim as MigratedRewardsClaimEvent } from '../../../generated/OngoingAirdrop/OngoingAirdrop';
 import { Staker, TokenTransaction } from '../../../generated/schema';
 import {
   Staked as StakedEvent,
@@ -8,17 +7,6 @@ import {
 } from '../../../generated/LPStakingRewards/LPStakingRewards';
 import { StakedOnBehalf as StakedOnBehalfEvent } from '../../../generated/StakingThales/StakingThales';
 import { BigInt } from '@graphprotocol/graph-ts';
-
-export function handleMigratedRewardsClaimEvent(event: MigratedRewardsClaimEvent): void {
-  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  tokenTransaction.transactionHash = event.transaction.hash;
-  tokenTransaction.timestamp = event.block.timestamp;
-  tokenTransaction.account = event.params.claimer;
-  tokenTransaction.amount = event.params.amount;
-  tokenTransaction.type = 'claimMigratedRewards';
-  tokenTransaction.blockNumber = event.block.number;
-  tokenTransaction.save();
-}
 
 export function handleStakedEvent(event: StakedEvent): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());

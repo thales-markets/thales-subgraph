@@ -16,14 +16,7 @@ import {
   ReferredTrader,
 } from '../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../generated/templates';
-import { Transfer as TransferEvent } from '../generated/templates/RangedPosition/RangedPosition';
-import {
-  Exercised,
-  Mint,
-  RangedMarket as RangedMarketContract,
-  Resolved,
-} from '../generated/RangedMarkets/RangedMarket';
-import { RangedPosition as RangedPositionContract } from '../generated/templates';
+import { Exercised, RangedMarket as RangedMarketContract, Resolved } from '../generated/RangedMarkets/RangedMarket';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleRangedMarket(event: RangedMarketCreated): void {
@@ -61,34 +54,34 @@ export function handleRangedMarket(event: RangedMarketCreated): void {
   outPosition.market = rangedMarket.id;
   outPosition.save();
 
-  RangedPositionContract.create(rangedMarketContract.positions().value0);
-  RangedPositionContract.create(rangedMarketContract.positions().value1);
+  // RangedPositionContract.create(rangedMarketContract.positions().value0);
+  // RangedPositionContract.create(rangedMarketContract.positions().value1);
 }
 
-export function handleTransfer(event: TransferEvent): void {
-  let position = RangedPosition.load(event.address.toHex());
-  if (position !== null) {
-    let userBalanceFrom = RangedPositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
-    if (userBalanceFrom === null) {
-      userBalanceFrom = new RangedPositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
-      userBalanceFrom.account = event.params.from;
-      userBalanceFrom.amount = BigInt.fromI32(0);
-      userBalanceFrom.position = position.id;
-    }
-    userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
-    userBalanceFrom.save();
+// export function handleTransfer(event: TransferEvent): void {
+//   let position = RangedPosition.load(event.address.toHex());
+//   if (position !== null) {
+//     let userBalanceFrom = RangedPositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
+//     if (userBalanceFrom === null) {
+//       userBalanceFrom = new RangedPositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
+//       userBalanceFrom.account = event.params.from;
+//       userBalanceFrom.amount = BigInt.fromI32(0);
+//       userBalanceFrom.position = position.id;
+//     }
+//     userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
+//     userBalanceFrom.save();
 
-    let userBalanceTo = RangedPositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
-    if (userBalanceTo === null) {
-      userBalanceTo = new RangedPositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
-      userBalanceTo.account = event.params.to;
-      userBalanceTo.amount = BigInt.fromI32(0);
-      userBalanceTo.position = position.id;
-    }
-    userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
-    userBalanceTo.save();
-  }
-}
+//     let userBalanceTo = RangedPositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
+//     if (userBalanceTo === null) {
+//       userBalanceTo = new RangedPositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
+//       userBalanceTo.account = event.params.to;
+//       userBalanceTo.amount = BigInt.fromI32(0);
+//       userBalanceTo.position = position.id;
+//     }
+//     userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
+//     userBalanceTo.save();
+//   }
+// }
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let trade = new Trade(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -106,6 +99,19 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'buy';
   trade.save();
+
+  let position = RangedPosition.load(event.params.asset.toHex());
+  if (position !== null) {
+    let userBalanceFrom = RangedPositionBalance.load(event.params.asset.toHex() + ' - ' + event.params.buyer.toHex());
+    if (userBalanceFrom === null) {
+      userBalanceFrom = new RangedPositionBalance(event.params.asset.toHex() + ' - ' + event.params.buyer.toHex());
+      userBalanceFrom.account = event.params.buyer;
+      userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.position = position.id;
+    }
+    userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
+    userBalanceFrom.save();
+  }
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
@@ -124,6 +130,19 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'sell';
   trade.save();
+
+  let position = RangedPosition.load(event.params.asset.toHex());
+  if (position !== null) {
+    let userBalanceFrom = RangedPositionBalance.load(event.params.asset.toHex() + ' - ' + event.params.seller.toHex());
+    if (userBalanceFrom === null) {
+      userBalanceFrom = new RangedPositionBalance(event.params.asset.toHex() + ' - ' + event.params.seller.toHex());
+      userBalanceFrom.account = event.params.seller;
+      userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.position = position.id;
+    }
+    userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
+    userBalanceFrom.save();
+  }
 }
 
 export function handleExercised(event: Exercised): void {
@@ -137,19 +156,23 @@ export function handleExercised(event: Exercised): void {
   optionTransactionEntity.amount = event.params.amount;
   optionTransactionEntity.side = event.params._position;
   optionTransactionEntity.save();
-}
 
-export function handleMint(event: Mint): void {
-  let optionTransactionEntity = new OptionTransaction(event.transaction.hash.toHex() + '-' + event.logIndex.toString());
-
-  optionTransactionEntity.type = 'mint';
-  optionTransactionEntity.timestamp = event.block.timestamp;
-  optionTransactionEntity.blockNumber = event.block.number;
-  optionTransactionEntity.account = event.params.minter;
-  optionTransactionEntity.market = event.address;
-  optionTransactionEntity.amount = event.params.amount;
-  optionTransactionEntity.side = event.params._position;
-  optionTransactionEntity.save();
+  let position = RangedPosition.load(event.params._position.toHex());
+  if (position !== null) {
+    let userBalanceFrom = RangedPositionBalance.load(
+      event.params._position.toHex() + ' - ' + event.params.exerciser.toHex(),
+    );
+    if (userBalanceFrom === null) {
+      userBalanceFrom = new RangedPositionBalance(
+        event.params._position.toHex() + ' - ' + event.params.exerciser.toHex(),
+      );
+      userBalanceFrom.account = event.params.exerciser;
+      userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.position = position.id;
+    }
+    userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
+    userBalanceFrom.save();
+  }
 }
 
 export function handleMarketResolved(event: Resolved): void {
