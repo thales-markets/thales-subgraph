@@ -4,10 +4,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Gorshtak/Thales",
-    "create-local": "graph create --node http://localhost:8020/ Gorshtak/Thales",
-    "remove-local": "graph remove --node http://localhost:8020/ Gorshtak/Thales",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Gorshtak/Thales",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thales-markets/thales-options",
     "codegen-mumbai": "npm run codegen -- subgraphs/subgraph-mumbai.yaml",
     "deploy-mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     "deploy:options-mumbai": "npm run deploy-optimism -- thales-markets/thales-mumbai subgraphs/subgraph-mumbai.yaml",
