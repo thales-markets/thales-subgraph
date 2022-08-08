@@ -6,10 +6,11 @@ import {
   GameResolved as GameResolvedEvent,
   CancelSportsMarket as CancelSportsMarketEvent,
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
-import { Transfer as TransferEvent } from '../generated/templates/Position/Position';
-import { Position as PositionTemplate } from '../generated/templates';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
-import { OptionsExercised, SportMarket as SportMarketContract } from '../generated/SportPositionalMarketManager/SportMarket';
+import {
+  OptionsExercised,
+  SportMarket as SportMarketContract,
+} from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { log } from '@graphprotocol/graph-ts';
 import { MarketCreated as MarketCreatedEvent } from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
@@ -21,6 +22,9 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     market.timestamp = event.block.timestamp;
     market.address = event.params.market.toHexString();
     market.maturityDate = event.params.maturityDate;
+    market.upAddress = event.params.up;
+    market.downAddress = event.params.down;
+    market.drawAddress = event.params.draw;
     market.save();
   }
 
@@ -30,19 +34,14 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     positionHome.claimable = false;
     positionHome.side = 'home';
     positionHome.save();
-    PositionTemplate.create(event.params.up);
-  } else {
-    log.info('zero adress draw: {}', [event.params.up.toHexString()]);
   }
+
   if (event.params.down.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
     let positionAway = new Position(event.params.down.toHex());
     positionAway.market = market.id;
     positionAway.claimable = false;
     positionAway.side = 'away';
     positionAway.save();
-    PositionTemplate.create(event.params.down);
-  } else {
-    log.info('zero adress draw: {}', [event.params.down.toHexString()]);
   }
 
   if (event.params.draw.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
@@ -51,18 +50,45 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     positionDraw.claimable = false;
     positionDraw.side = 'draw';
     positionDraw.save();
-    PositionTemplate.create(event.params.draw);
-  } else {
-    log.info('zero adress draw: {}', [event.params.draw.toHexString()]);
   }
 }
 
 export function handleOptionsExercised(event: OptionsExercised): void {
   let tx = new ClaimTx(event.transaction.hash.toHex());
-  tx.account =  event.params.account;
-  tx.amount =  event.params.value;
-  tx.timestamp = event.block.timestamp;
-  tx.save();
+  let market = SportMarket.load(event.address.toHex());
+  if (market) {
+    tx.account = event.params.account;
+    tx.amount = event.params.value;
+    tx.timestamp = event.block.timestamp;
+    tx.market = market.id;
+    tx.save();
+
+    let position = Position.load(market.upAddress.toHex());
+    if (position !== null) {
+      let userHomeBalance = PositionBalance.load(position.id + ' - ' + event.params.account.toHex());
+      if (userHomeBalance !== null) {
+        userHomeBalance.amount = BigInt.fromI32(0);
+        userHomeBalance.save();
+      }
+    }
+    position = Position.load(market.downAddress.toHex());
+    if (position !== null) {
+      let userAwayBalance = PositionBalance.load(position.id + ' - ' + event.params.account.toHex());
+      if (userAwayBalance !== null) {
+        userAwayBalance.amount = BigInt.fromI32(0);
+        userAwayBalance.save();
+      }
+    }
+
+    position = Position.load(market.drawAddress.toHex());
+    if (position !== null) {
+      let userDrawBalance = PositionBalance.load(position.id + ' - ' + event.params.account.toHex());
+      if (userDrawBalance !== null) {
+        userDrawBalance.amount = BigInt.fromI32(0);
+        userDrawBalance.save();
+      }
+    }
+  }
 }
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
@@ -106,57 +132,30 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.save();
 }
 
-export function handleTransfer(event: TransferEvent): void {
-  let position = Position.load(event.address.toHex());
-  if (position !== null) {
-    let userBalanceFrom = PositionBalance.load(event.address.toHex() + ' - ' + event.params.from.toHex());
-    if (userBalanceFrom === null) {
-      userBalanceFrom = new PositionBalance(event.address.toHex() + ' - ' + event.params.from.toHex());
-      userBalanceFrom.account = event.params.from;
-      userBalanceFrom.amount = BigInt.fromI32(0);
-      userBalanceFrom.position = position.id;
-    }
-    userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.value);
-    userBalanceFrom.save();
-
-    let userBalanceTo = PositionBalance.load(event.address.toHex() + ' - ' + event.params.to.toHex());
-    if (userBalanceTo === null) {
-      userBalanceTo = new PositionBalance(event.address.toHex() + ' - ' + event.params.to.toHex());
-      userBalanceTo.account = event.params.to;
-      userBalanceTo.amount = BigInt.fromI32(0);
-      userBalanceTo.position = position.id;
-    }
-    userBalanceTo.amount = userBalanceTo.amount.plus(event.params.value);
-    userBalanceTo.save();
-  }
-}
-
 export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
-  // if (event.block.number === BigInt.fromI32(33062576)) return;
   if (market !== null) {
-    let marketContract = SportMarketContract.bind(event.params._marketAddress);
     market.timestamp = event.block.timestamp;
     market.isResolved = true;
     market.isOpen = false;
     market.finalResult = event.params._outcome;
 
     if (market.finalResult == BigInt.fromI32(1)) {
-      let position = Position.load(marketContract.getOptions().value0.toHex());
+      let position = Position.load(market.upAddress.toHex());
       if (position !== null) {
         position.claimable = true;
         position.save();
       }
     }
     if (market.finalResult == BigInt.fromI32(2)) {
-      let position = Position.load(marketContract.getOptions().value1.toHex());
+      let position = Position.load(market.downAddress.toHex());
       if (position !== null) {
         position.claimable = true;
         position.save();
       }
     }
     if (market.finalResult == BigInt.fromI32(3)) {
-      let position = Position.load(marketContract.getOptions().value2.toHex());
+      let position = Position.load(market.drawAddress.toHex());
       if (position !== null) {
         position.claimable = true;
         position.save();
@@ -213,18 +212,17 @@ export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
     market.isOpen = false;
     market.save();
 
-    let marketContract = SportMarketContract.bind(event.params._marketAddress);
-    let position = Position.load(marketContract.getOptions().value0.toHex());
+    let position = Position.load(market.upAddress.toHex());
     if (position !== null) {
       position.claimable = true;
       position.save();
     }
-    let position1 = Position.load(marketContract.getOptions().value1.toHex());
+    let position1 = Position.load(market.downAddress.toHex());
     if (position1 !== null) {
       position1.claimable = true;
       position1.save();
     }
-    let position2 = Position.load(marketContract.getOptions().value2.toHex());
+    let position2 = Position.load(market.drawAddress.toHex());
     if (position2 !== null) {
       position2.claimable = true;
       position2.save();

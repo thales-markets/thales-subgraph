@@ -116,6 +116,3 @@ templates:
       abis:
         - name: Position
           file: ../abis/SportPosition.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer

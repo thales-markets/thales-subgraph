@@ -17,6 +17,9 @@ type SportMarket @entity {
   drawOdds: BigInt
   homeScore: BigInt
   awayScore: BigInt
+  upAddress: Bytes!
+  downAddress: Bytes!
+  drawAddress: Bytes!
 }
 
 type SportMarketOddsHistory @entity {
@@ -45,11 +48,12 @@ enum MarketTransactionType {
   sell
 }
 
-type ClaimTx @entity(immutable: true)  {
+type ClaimTx @entity(immutable: true) {
   id: ID!
   timestamp: BigInt!
   account: Bytes!
   amount: BigInt!
+  market: SportMarket!
 }
 
 type MarketTransaction @entity {
