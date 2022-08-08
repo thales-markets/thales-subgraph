@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: BinaryOptionMarketManager
-    network: optimism
+    network: optimism-kovan
     source:
-      address: '0xBE086E0A2c588Ad64C8530048cE4356190D6a6F3'
+      address: '0xAfBA2e76B4580Ab88c07Beb2Ca884ca733fD4dD4'
       abi: BinaryOptionMarketManager
-      startBlock: 1436819
+      startBlock: 1186043
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -31,11 +31,11 @@ dataSources:
           handler: handleMarketExpired
   - kind: ethereum/contract
     name: AMM
-    network: optimism
+    network: optimism-kovan
     source:
-      address: '0x5ae7454827D83526261F3871C1029792644Ef1B1'
+      address: '0xfed727f37e921Faac22e36E0bbaA8504B45F6e3f'
       abi: AMM
-      startBlock: 1436819
+      startBlock: 1912110
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -57,37 +57,12 @@ dataSources:
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
   - kind: ethereum/contract
-    name: NewPositionaMarketManager
-    network: optimism
-    source:
-      address: '0x9227334352A890e51e980BeB7A56Bbdd01499B54'
-      abi: BinaryOptionMarketManager
-      startBlock: 6481303
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/binary-options-mapping.ts
-      entities:
-        - Market
-        - Position
-      abis:
-        - name: BinaryOptionMarketManager
-          file: ../abis/BinaryOptionMarketManager.json
-        - name: BinaryOptionMarket
-          file: '../abis/BinaryOptionMarket.json'
-      eventHandlers:
-        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
-          handler: handleNewMarket
-        - event: MarketExpired(address)
-          handler: handleMarketExpired
-  - kind: ethereum/contract
     name: RangedMarkets
-    network: optimism
+    network: optimism-kovan
     source:
-      address: '0x2d356b114cbCA8DEFf2d8783EAc2a5A5324fE1dF'
+      address: '0x0690F410FB54d76268e4fa97486CBD605e68dC62'
       abi: RangedMarketsAMM
-      startBlock: 8469705
+      startBlock: 2410842
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -118,7 +93,7 @@ dataSources:
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
-    network: optimism
+    network: optimism-kovan
     source:
       abi: BinaryOptionMarket
     mapping:
@@ -129,6 +104,7 @@ templates:
       entities:
         - Market
         - OptionTransaction
+        - HistoricalOptionPrice
       abis:
         - name: BinaryOptionMarket
           file: ../abis/BinaryOptionMarket.json
@@ -141,7 +117,7 @@ templates:
           handler: handleOptionsExercised
   - name: RangedMarket
     kind: ethereum/contract
-    network: optimism
+    network: optimism-kovan
     source:
       abi: RangedMarket
     mapping:
@@ -153,17 +129,20 @@ templates:
         - RangedMarket
         - Trade
         - OptionTransaction
+        - RangedPosition
       abis:
         - name: RangedMarket
           file: '../abis/range-markets/RangedMarket.json'
       eventHandlers:
+        - event: Mint(address,uint256,uint8)
+          handler: handleMint
         - event: Resolved(uint8,uint256)
           handler: handleMarketResolved
         - event: Exercised(address,uint256,uint8)
           handler: handleExercised
   - name: Position
     kind: ethereum/contract
-    network: optimism
+    network: optimism-kovan
     source:
       abi: Position
     mapping:
@@ -178,7 +157,7 @@ templates:
           file: ../abis/Position.json
   - name: RangedPosition
     kind: ethereum/contract
-    network: optimism
+    network: optimism-kovan
     source:
       abi: RangedPosition
     mapping:

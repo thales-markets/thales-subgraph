@@ -120,3 +120,29 @@ type ReferredTrader @entity {
   refferer: Referrer!
   timestamp: BigInt!
 }
+
+type Position @entity(immutable: true) {
+  id: ID!
+  market: Market!
+  side: OptionSide!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}
+
+type RangedPosition @entity(immutable: true) {
+  id: ID!
+  market: RangedMarket!
+  side: OptionSide!
+}
+
+type RangedPositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: RangedPosition!
+}

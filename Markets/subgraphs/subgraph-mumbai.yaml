@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.2
 description: Thales Binary Options API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 25429730
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/binary-options-mapping.ts
       entities:
@@ -38,7 +38,7 @@ dataSources:
       startBlock: 25428748
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/amm-mapping.ts
       entities:
@@ -76,9 +76,32 @@ templates:
           handler: handleMarketResolved
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
-  - name: Position
+  - name: RangedMarket
     kind: ethereum/contract
     network: mumbai
+    source:
+      abi: RangedMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+      abis:
+        - name: RangedMarket
+          file: '../abis/range-markets/RangedMarket.json'
+      eventHandlers:
+        - event: Resolved(uint8,uint256)
+          handler: handleMarketResolved
+        - event: Exercised(address,uint256,uint8)
+          handler: handleExercised
+  - name: Position
+    kind: ethereum/contract
+    network: optimism-kovan
     source:
       abi: Position
     mapping:
@@ -91,6 +114,3 @@ templates:
       abis:
         - name: Position
           file: ../abis/Position.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
