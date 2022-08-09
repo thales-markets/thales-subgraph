@@ -10,7 +10,7 @@
     "codegen:sport-markets-kovan": "npm run codegen -- subgraphs/subgraph-kovan.yaml",
     "deploy:sport-markets-kovan": "npm run deploy-optimism -- thales-markets/sport-markets-kovan subgraphs/subgraph-kovan.yaml",
     "codegen:sport-markets-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
-    "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/thales-markets-v2 subgraphs/subgraph-op.yaml"
+    "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/sport-markets-optimism subgraphs/subgraph-op.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.33.0",

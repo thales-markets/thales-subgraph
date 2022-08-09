@@ -1,8 +1,7 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, SoldToAMM } from '../generated/SportsAMM/SportsAMM';
-import { MarketTransaction, Position, PositionBalance, SportMarket } from '../generated/schema';
-import { log } from '@graphprotocol/graph-ts';
+import { MarketTransaction, Position, PositionBalance } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let transaction = new MarketTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -16,10 +15,10 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   transaction.position = BigInt.fromI32(event.params.position);
   transaction.market = event.params.market;
   transaction.paid = event.params.sUSDPaid;
-  log.info('zero adress draw: {}', [event.params.asset.toHexString()]);
+  transaction.save();
+
   let position = Position.load(event.params.asset.toHex());
   if (position !== null) {
-    log.info('zero adress draw: {}', ['0']);
     let userBalanceFrom = PositionBalance.load(position.id + ' - ' + event.params.buyer.toHex());
     if (userBalanceFrom === null) {
       userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.buyer.toHex());
@@ -44,12 +43,10 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   transaction.position = BigInt.fromI32(event.params.position);
   transaction.market = event.params.market;
   transaction.paid = event.params.sUSDPaid;
-
   transaction.save();
 
   let position = Position.load(event.params.asset.toHex());
   if (position !== null) {
-    log.info('zero adress draw: {}', ['0']);
     let userBalanceFrom = PositionBalance.load(position.id + ' - ' + event.params.seller.toHex());
     if (userBalanceFrom === null) {
       userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.seller.toHex());
