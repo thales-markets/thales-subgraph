@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0xFBffEbfA2bF2cF84fdCf77917b358fC59Ff5771e'
       abi: SportPositionalMarketManager
-      startBlock: 13806401
+      startBlock: 13806000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -34,7 +34,7 @@ dataSources:
     source:
       address: '0x2B91c14Ce9aa828eD124D12541452a017d8a2148'
       abi: TheRundownConsumer
-      startBlock: 13819169
+      startBlock: 13819160
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -66,7 +66,7 @@ dataSources:
     source:
       address: '0x170a5714112daEfF20E798B6e92e25B86Ea603C1'
       abi: SportsAMM
-      startBlock: 13809244
+      startBlock: 13809240
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

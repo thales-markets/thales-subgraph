@@ -43,6 +43,11 @@ type SportMarketOddsHistory @entity {
   awayScore: BigInt
 }
 
+type MarketToGameId @entity {
+  id: ID!
+  gameId: Bytes!
+}
+
 enum MarketTransactionType {
   buy
   sell
