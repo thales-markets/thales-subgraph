@@ -1,0 +1,58 @@
+enum TokenTransactionType {
+  claimRetroAirdrop
+  claimRetroUnlocked
+  claimStakingRewards
+  stake
+  startUnstake
+  cancelUnstake
+  unstake
+  addToEscrow
+  vest
+  claimMigratedRewards
+  lpStake
+  lpUnstake
+  lpClaimStakingRewards
+  lpClaimStakingRewardsSecond
+  claimMigratedRetroRewards
+  mergeAccount
+}
+
+type TokenTransaction @entity {
+  # tx hash - log index
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt
+  protocolRewards: BigInt
+  type: TokenTransactionType!
+  blockNumber: BigInt!
+}
+
+type OngoingAirdropNewRoot @entity {
+  # tx hash - log index
+  id: ID!
+  transactionHash: Bytes!
+  root: Bytes!
+  timestamp: BigInt!
+  period: BigInt!
+}
+
+type Staker @entity {
+  id: ID!
+  account: Bytes!
+  timestamp: BigInt!
+  stakedAmount: BigInt!
+  escrowedAmount: BigInt!
+  totalStakedAmount: BigInt!
+  unstakingAmount: BigInt!
+}
+
+type CanClaimOnBehalfItem @entity {
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  sender: Bytes!
+  account: Bytes!
+  canClaimOnBehalf: Boolean!
+}

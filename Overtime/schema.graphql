@@ -1,0 +1,96 @@
+type SportMarket @entity {
+  id: ID!
+  timestamp: BigInt!
+  address: String!
+  maturityDate: BigInt!
+  tags: [BigInt!]
+  isOpen: Boolean
+  isResolved: Boolean
+  isCanceled: Boolean
+  finalResult: BigInt
+  poolSize: BigInt
+  numberOfParticipants: BigInt
+  homeTeam: String
+  awayTeam: String
+  homeOdds: BigInt
+  awayOdds: BigInt
+  drawOdds: BigInt
+  homeScore: BigInt
+  awayScore: BigInt
+  upAddress: Bytes!
+  downAddress: Bytes!
+  drawAddress: Bytes!
+}
+
+type SportMarketOddsHistory @entity {
+  id: ID!
+  timestamp: BigInt!
+  address: Bytes!
+  maturityDate: BigInt!
+  tags: [BigInt!]!
+  isOpen: Boolean!
+  isResolved: Boolean!
+  isCanceled: Boolean!
+  finalResult: BigInt!
+  poolSize: BigInt!
+  numberOfParticipants: BigInt!
+  homeTeam: String!
+  awayTeam: String!
+  homeOdds: [BigInt!]!
+  awayOdds: [BigInt!]!
+  drawOdds: [BigInt!]!
+  homeScore: BigInt
+  awayScore: BigInt
+}
+
+type MarketToGameId @entity {
+  id: ID!
+  gameId: Bytes!
+}
+
+enum MarketTransactionType {
+  buy
+  sell
+}
+
+type ClaimTx @entity(immutable: true) {
+  id: ID!
+  timestamp: BigInt!
+  account: Bytes!
+  amount: BigInt!
+  market: SportMarket!
+}
+
+type MarketTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  type: MarketTransactionType!
+  account: Bytes!
+  market: Bytes!
+  amount: BigInt!
+  paid: BigInt!
+  position: BigInt!
+  wholeMarket: SportMarket!
+}
+
+enum PositionType {
+  home
+  away
+  draw
+}
+
+type Position @entity {
+  id: ID!
+  market: SportMarket!
+  side: PositionType!
+  claimable: Boolean!
+}
+
+type PositionBalance @entity {
+  id: ID!
+  account: Bytes!
+  amount: BigInt!
+  position: Position!
+}

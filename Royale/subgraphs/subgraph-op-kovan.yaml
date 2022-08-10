@@ -1,0 +1,79 @@
+specVersion: 0.0.6
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ThalesRoyale
+    network: optimism-kovan
+    source:
+      address: '0x5De27390C8280Db5732Ee6aA7f7aBC4e2a476B30'
+      abi: ThalesRoyale
+      startBlock: 1916739
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-with-passport-mapping.ts
+      entities:
+        - ThalesRoyaleGame
+        - ThalesRoyaleSeason
+        - ThalesRoyalePlayer
+        - ThalesRoyalePosition
+        - ThalesRoyalePassportPlayer
+        - ThalesRoyalePassportPosition
+      abis:
+        - name: ThalesRoyale
+          file: ../abis/ThalesRoyaleWithPassport.json
+      eventHandlers:
+        - event: SignedUp(address,uint256,uint256)
+          handler: handleSignedUpWithPosition
+        - event: SignedUpPassport(address,uint256,uint256,uint256[])
+          handler: handleSignedUpPassport
+        - event: TookAPosition(address,uint256,uint256,uint256)
+          handler: handleTookAPosition
+        - event: TookAPositionPassport(address,uint256,uint256,uint256,uint256)
+          handler: handleTookAPositionPassport
+        - event: RoyaleStarted(uint256,uint256,uint256)
+          handler: handleRoyaleStartedOPKovan
+        - event: RoundClosed(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleRoundClosedOPKovan
+  - kind: ethereum/contract
+    name: ThalesRoyalePass
+    network: optimism-kovan
+    source:
+      address: '0x288eF27eC4fEaD97F81A6F578152fd00DdFBB448'
+      abi: ThalesRoyalePass
+      startBlock: 1912110
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-pass-mapping.ts
+      entities:
+        - ThalesRoyalePass
+      abis:
+        - name: ThalesRoyalePass
+          file: ../abis/ThalesRoyalePass.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
+    name: ThalesRoyalePassport
+    network: optimism-kovan
+    source:
+      address: '0x8363a01892dE85BC871005570B481c374f2aB3e6'
+      abi: ThalesRoyalePassport
+      startBlock: 1880462
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-royale-passport-mapping.ts
+      entities:
+        - ThalesRoyalePassport
+      abis:
+        - name: ThalesRoyalePassport
+          file: ../abis/ThalesRoyalePassport.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

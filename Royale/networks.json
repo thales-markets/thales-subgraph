@@ -1,0 +1,13 @@
+{
+  "optimism": {
+    "ThalesRoyale": {
+      "address": "0x3198ab211CdF3E4d13a698E1Fb819507BcA2e579"
+    },
+    "ThalesRoyalePass": {
+      "address": "0x2F71f4a2D8BAB9703fff3fF5794762bF5b6C7E29"
+    },
+    "ThalesRoyalePassport": {
+      "address": "0xf534848023ba851c6265e8F99a919c4d5fd05CD0"
+    }
+  }
+}

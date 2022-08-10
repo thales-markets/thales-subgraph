@@ -1,0 +1,24 @@
+{
+  "name": "ThalesToken",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 thales-markets/thales-options",
+    "codegen-optimism-kovan": "npm run codegen -- subgraphs/subgraph-op-kovan.yaml",
+    "deploy-optimism-kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-optimism-kovan": "npm run deploy-optimism -- thales-markets/thales-token-kovan subgraphs/subgraph-op-kovan.yaml",
+    "codegen-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
+    "deploy-optimism": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-optimism": "npm run deploy-optimism -- thales-markets/thales-token subgraphs/subgraph-op.yaml",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.33.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
+}
