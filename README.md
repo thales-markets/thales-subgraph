@@ -4,20 +4,81 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/thalesmarket.svg?label=thalesmarket&style=social)](https://twitter.com/thalesmarket)
 
 The Graph exposes a GraphQL endpoint to query the events and entities within the Thales system.  
-Thales has one subgraph generated from this repository. It is used for getting binary options data:
+Thales has multiple subgraphs generated from this repository. 
 
-- Markets
-- Market transactions
-- Market trades
-- Token transactions
 
-## Supported networks
 
-Following networks are supported:
+## Token Subgraph
+- **Optimism**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
+- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-token
 
-- **Mainnet**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
-- **Ropsten**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-ropsten
-- **Kovan**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-kovan
+#### Entities: 
+- TokenTransaction
+- OngoingAirdropNewRoot
+- Staker
+- CanClaimOnBehalfItem
+
+## Positional Markets
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-markets
+- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-kovan-optimism
+- **Polygon**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-polygon
+- **Mumbai**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-mumbai
+
+#### Entities: 
+- Market
+- RangedMarket
+- OptionTransaction
+- Trade
+- AccountBuyVolume
+- ReferralTransfer
+- Referrer
+- ReferredTrader
+- Position
+- PositionBalance
+- RangedPosition
+- RangedPositionBalance
+
+## Sport Markets
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-optimism
+- **Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-kovan
+
+#### Entities: 
+- SportMarket
+- SportMarketOddsHistory
+- ClaimTx
+- MarketTransaction
+- Position
+- PositionBalance
+
+## Exotic Markets
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-royale
+- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/exotic-markets-optimism-kovan
+
+#### Entities: 
+- Market
+- Dispute
+- DisputeVote
+- Position
+- MarketTransaction
+
+
+
+## Thales Royale
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/exotic-markets-optimism
+- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-royale-kovan
+
+#### Entities: 
+- ThalesRoyaleGame
+- ThalesRoyaleSeason
+- ThalesRoyaleRound
+- ThalesRoyalePlayer
+- ThalesRoyalePosition
+- ThalesRoyalePass
+- ThalesRoyalePassportPlayer
+- ThalesRoyalePassportPosition
+
+
+
 
 ## To run and deploy locally
 
