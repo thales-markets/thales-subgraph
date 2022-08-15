@@ -1,4 +1,4 @@
-specVersion: 0.0.6
+specVersion: 0.0.4
 schema:
   file: ../schema.graphql
 dataSources:
@@ -155,7 +155,7 @@ dataSources:
           file: ../abis/LPStakingRewards.json
       eventHandlers:
         - event: Staked(indexed address,uint256)
-          handler: handleStakedEvent
+          handler: handleLpStakedEvent
         - event: Withdrawn(indexed address,uint256)
           handler: handleWithdrawnEvent
         - event: RewardPaid(indexed address,uint256)
