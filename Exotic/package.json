@@ -1,5 +1,5 @@
 {
-  "name": "Thales",
+  "name": "exotic-markets",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
@@ -15,8 +15,8 @@
     "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "git://github.com/graphprotocol/graph-cli.git#ebeeba0009f026bacf940f25ee7b875fe7676032",
-    "@graphprotocol/graph-ts": "^0.20.1"
+    "@graphprotocol/graph-cli": "0.33.0",
+    "@graphprotocol/graph-ts": "0.27.0"
   },
   "devDependencies": {
     "matchstick-as": "0.5.0"

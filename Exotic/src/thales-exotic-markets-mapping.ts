@@ -252,6 +252,7 @@ export function handleNewPositionTakenEvent(event: NewPositionTakenEvent): void 
   marketTransaction.save();
 
   if (position.position.equals(BigInt.fromI32(0))) {
+    position.creationTime = event.block.timestamp;
     let market = Market.load(event.address.toHex());
     if (market !== null) {
       market.poolSize = market.poolSize.plus(market.ticketPrice);
@@ -354,6 +355,7 @@ export function handleNewOpenBidsForPositionsEvent(event: NewOpenBidsForPosition
     }
 
     if (isNewPosition || position.isWithdrawn) {
+      position.creationTime = event.block.timestamp;
       market.numberOfParticipants = market.numberOfParticipants.plus(BigInt.fromI32(1));
     }
 
@@ -462,7 +464,7 @@ export function handleWinningOpenBidAmountClaimedEvent(event: WinningOpenBidAmou
       : BigInt.fromI32(0);
   marketTransaction.save();
 
-  if (position !== null) {
+  if (position !== null && market !== null) {
     position.timestamp = event.block.timestamp;
     position.positions = new Array<BigInt>(market.positions.length);
     position.amount = BigInt.fromI32(0);

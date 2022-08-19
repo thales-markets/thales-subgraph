@@ -63,6 +63,7 @@ type Position @entity {
   position: BigInt!
   positions: [BigInt!]!
   amount: BigInt!
+  creationTime: BigInt!
 }
 
 enum MarketTransactionType {
