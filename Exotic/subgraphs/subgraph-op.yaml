@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.2
 description: Thales Exotic Markets API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 6602328
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/thales-exotic-markets-mapping.ts
       entities:
@@ -39,7 +39,7 @@ dataSources:
       startBlock: 6602328
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/thales-exotic-markets-mapping.ts
       entities:
@@ -66,7 +66,7 @@ templates:
       abi: ExoticPositionalTicketMarket
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/thales-exotic-markets-mapping.ts
       entities:
@@ -98,7 +98,7 @@ templates:
       abi: ExoticPositionalOpenBidMarket
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ../src/thales-exotic-markets-mapping.ts
       entities:
