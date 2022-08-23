@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Thales Sport Markets API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 32539184
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../src/thales-sport-markets-mapping.ts
       entities:
@@ -36,7 +36,7 @@ dataSources:
       startBlock: 32542481
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../src/thales-sport-markets-mapping.ts
       entities:
@@ -68,7 +68,7 @@ dataSources:
       startBlock: 32540183
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../src/amm-mapping.ts
       entities:
@@ -81,6 +81,26 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+  - kind: ethereum/contract
+    name: OvertimeVoucher
+    network: kovan
+    source:
+      address: '0x631d9a17de875e47b76ede75d56aa2c611525881'
+      abi: OvertimeVoucher
+      startBlock: 33416871
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/overtime-voucher-mapping.ts
+      entities:
+        - OvertimeVoucher
+      abis:
+        - name: OvertimeVoucher
+          file: ../abis/OvertimeVoucher.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
 templates:
   - name: SportMarket
     kind: ethereum/contract
@@ -89,7 +109,7 @@ templates:
       abi: SportMarket
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../src/thales-sport-markets-mapping.ts
       entities:
@@ -107,7 +127,7 @@ templates:
       abi: Position
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../src/thales-sport-markets-mapping.ts
       entities:
