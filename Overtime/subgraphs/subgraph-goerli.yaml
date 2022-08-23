@@ -82,6 +82,26 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+  - kind: ethereum/contract
+    name: OvertimeVoucher
+    network: goerli
+    source:
+      address: '0xD1fe5a0256AcaeA497ecD30dc0b816cce95e23E9'
+      abi: OvertimeVoucher
+      startBlock: 7457151
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/overtime-voucher-mapping.ts
+      entities:
+        - OvertimeVoucher
+      abis:
+        - name: OvertimeVoucher
+          file: ../abis/OvertimeVoucher.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
 templates:
   - name: SportMarket
     kind: ethereum/contract
