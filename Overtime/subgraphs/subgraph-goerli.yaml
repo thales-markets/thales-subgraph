@@ -1,0 +1,118 @@
+specVersion: 0.0.4
+description: Thales Sport Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SportPositionalMarketManager
+    network: goerli
+    source:
+      address: '0x7465c5d60d3d095443CF9991Da03304A30D42Eae'
+      abi: SportPositionalMarketManager
+      startBlock: 7426128
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - Position
+      abis:
+        - name: SportPositionalMarketManager
+          file: ../abis/SportPositionalMarketManager.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,string,uint256,uint256,address,address,address)
+          handler: handleMarketCreated
+
+  - kind: ethereum/contract
+    name: TheRundownConsumer
+    network: goerli
+    source:
+      address: '0x4dB7AfB6b777fB47101C86Bdeb56669ffA8cD656'
+      abi: TheRundownConsumer
+      startBlock: 7425903
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - SportMarketOddsHistory
+        - Position
+      abis:
+        - name: TheRundownConsumer
+          file: ../abis/TheRundownConsumer.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: CreateSportsMarket(address,bytes32,(bytes32,uint256,int24,int24,int24,string,string),uint256[],uint256[])
+          handler: handleCreateSportsMarketEvent
+        - event: GameOddsAdded(bytes32,bytes32,(bytes32,int24,int24,int24),uint256[])
+          handler: handleGameOddsAddedEvent
+        - event: ResolveSportsMarket(address,bytes32,uint256)
+          handler: handleResolveSportsMarketEvent
+        - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8),uint256)
+          handler: handleGameResolvedEvent
+        - event: CancelSportsMarket(address,bytes32)
+          handler: handleCancelSportsMarket
+  - kind: ethereum/contract
+    name: SportsAMM
+    network: goerli
+    source:
+      address: '0x707075f0B619acF5A614Efb54FA8aC9B2FB55188'
+      abi: SportsAMM
+      startBlock: 7426563
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - MarketTransaction
+      abis:
+        - name: SportsAMM
+          file: ../abis/SportsAMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+templates:
+  - name: SportMarket
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: SportMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - ClaimTx
+      abis:
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
+  - name: Position
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: Position
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - PositionBalance
+      abis:
+        - name: Position
+          file: ../abis/SportPosition.json
