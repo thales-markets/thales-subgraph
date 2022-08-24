@@ -59,6 +59,7 @@ type ClaimTx @entity(immutable: true) {
   account: Bytes!
   amount: BigInt!
   market: SportMarket!
+  caller: Bytes!
 }
 
 type MarketTransaction @entity {

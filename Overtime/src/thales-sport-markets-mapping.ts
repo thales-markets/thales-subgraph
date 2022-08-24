@@ -70,6 +70,7 @@ export function handleOptionsExercised(event: OptionsExercised): void {
       tx.amount = event.params.value;
       tx.timestamp = event.block.timestamp;
       tx.market = market.id;
+      tx.caller = event.transaction.from;
       tx.save();
 
       let position = Position.load(market.upAddress.toHex());
