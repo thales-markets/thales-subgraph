@@ -18,6 +18,9 @@
     "codegen-polygon": "npm run codegen -- subgraphs/subgraph-polygon.yaml",
     "deploy-polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     "deploy:options-polygon": "npm run deploy-polygon -- thales-markets/thales-polygon subgraphs/subgraph-polygon.yaml",
+    "codegen-bsc": "npm run codegen -- subgraphs/subgraph-bsc.yaml",
+    "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-bsc": "npm run deploy-bsc -- thales-markets/thales-bsc subgraphs/subgraph-bsc.yaml",
     "test": "graph test"
   },
   "dependencies": {
