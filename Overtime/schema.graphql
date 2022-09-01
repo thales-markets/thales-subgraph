@@ -100,3 +100,9 @@ type OvertimeVoucher @entity {
   id: ID!
   address: Bytes!
 }
+
+type BuyTransaction @entity {
+  id: ID!
+  marketTransactionId: String!
+  positionBalanceId: String!
+}

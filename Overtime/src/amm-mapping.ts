@@ -1,7 +1,14 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, SoldToAMM } from '../generated/SportsAMM/SportsAMM';
-import { MarketTransaction, Position, PositionBalance, SportMarket, MarketToGameId } from '../generated/schema';
+import {
+  MarketTransaction,
+  Position,
+  PositionBalance,
+  SportMarket,
+  MarketToGameId,
+  BuyTransaction,
+} from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let transaction = new MarketTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -33,6 +40,11 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         }
         userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
         userBalanceFrom.save();
+
+        let buyTransaction = new BuyTransaction(event.transaction.hash.toHexString());
+        buyTransaction.marketTransactionId = transaction.id;
+        buyTransaction.positionBalanceId = userBalanceFrom.id;
+        buyTransaction.save();
       }
     }
   }

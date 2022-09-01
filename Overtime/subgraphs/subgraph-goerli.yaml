@@ -86,9 +86,9 @@ dataSources:
     name: OvertimeVoucher
     network: goerli
     source:
-      address: '0xD1fe5a0256AcaeA497ecD30dc0b816cce95e23E9'
+      address: '0x671f9654a594f8966b19c0b466f306E1dFe912a6'
       abi: OvertimeVoucher
-      startBlock: 7457151
+      startBlock: 7508868
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -102,6 +102,8 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: BoughtFromAmmWithVoucher(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmWithVoucherEvent
 templates:
   - name: SportMarket
     kind: ethereum/contract
