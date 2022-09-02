@@ -67,9 +67,9 @@ dataSources:
     name: AMM
     network: bsc
     source:
-      address: '0x85f1B57A1D3Ac7605de3Df8AdA056b3dB9676eCE'
+      address: '0x465B66A3e33088F0666dB1836652fBcF037c7319'
       abi: AMM
-      startBlock: 20751825
+      startBlock: 20978783
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
