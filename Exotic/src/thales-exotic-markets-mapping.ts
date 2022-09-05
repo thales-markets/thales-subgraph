@@ -2,6 +2,7 @@ import { BigInt } from '@graphprotocol/graph-ts';
 import {
   MarketCreated as MarketCreatedEvent,
   MarketCanceled as MarketCanceledEvent,
+  MarketCreatedWithDescription,
 } from '../generated/ExoticPositionalMarketManager/ExoticPositionalMarketManager';
 import {
   NewDispute as NewDisputeEvent,
@@ -46,6 +47,45 @@ export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
   market.creationTime = event.block.timestamp;
   market.address = event.params.marketAddress;
   market.question = event.params.marketQuestion;
+  market.dataSource = event.params.marketSource;
+  market.endOfPositioning = event.params.endOfPositioning;
+  market.ticketPrice = event.params.fixedTicketPrice;
+  market.isWithdrawalAllowed = event.params.withdrawalAllowed;
+  market.positions = event.params.positionPhrases;
+  market.tags = event.params.tags;
+  market.isTicketType = event.params.fixedTicketPrice.gt(BigInt.fromI32(0));
+  market.isOpen = true;
+  market.numberOfDisputes = BigInt.fromI32(0);
+  market.numberOfOpenDisputes = BigInt.fromI32(0);
+  market.marketClosedForDisputes = false;
+  market.isResolved = false;
+  market.isCancelled = false;
+  market.winningPosition = BigInt.fromI32(0);
+  market.backstopTimeout = BigInt.fromI32(0);
+  market.isPaused = false;
+  market.isDisputed = false;
+  market.poolSize = BigInt.fromI32(0);
+  market.numberOfParticipants = BigInt.fromI32(0);
+  market.noWinners = false;
+  market.cancelledByCreator = false;
+  market.save();
+}
+
+
+export function handleMarketCreatedEventWithDescription(event: MarketCreatedWithDescription): void {
+  if (event.params.fixedTicketPrice.gt(BigInt.fromI32(0))) {
+    ExoticPositionalTicketMarketContract.create(event.params.marketAddress);
+  } else {
+    ExoticPositionalOpenBidMarketContract.create(event.params.marketAddress);
+  }
+
+  let market = new Market(event.params.marketAddress.toHex());
+  market.timestamp = event.block.timestamp;
+  market.creator = event.params.marketOwner;
+  market.creationTime = event.block.timestamp;
+  market.address = event.params.marketAddress;
+  market.question = event.params.marketQuestion;
+  market.description = event.params.additionalInfo;
   market.dataSource = event.params.marketSource;
   market.endOfPositioning = event.params.endOfPositioning;
   market.ticketPrice = event.params.fixedTicketPrice;
