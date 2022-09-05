@@ -72,6 +72,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "maxFixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "disputePrice",
         "type": "uint256"
       },
@@ -353,6 +359,79 @@
       }
     ],
     "name": "MarketCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "marketAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "marketQuestion",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "marketSource",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "additionalInfo",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endOfPositioning",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "withdrawalAllowed",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "tags",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "positionCount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "positionPhrases",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "marketOwner",
+        "type": "address"
+      }
+    ],
+    "name": "MarketCreatedWithDescription",
     "type": "event"
   },
   {
@@ -651,6 +730,11 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "_additionalInfo",
+        "type": "string"
+      },
+      {
         "internalType": "uint256",
         "name": "_endOfPositioning",
         "type": "uint256"
@@ -679,59 +763,6 @@
         "internalType": "uint256[]",
         "name": "_positionsOfCreator",
         "type": "uint256[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "_positionPhrases",
-        "type": "string[]"
-      }
-    ],
-    "name": "createCLMarket",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_marketQuestion",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_marketSource",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_endOfPositioning",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_fixedTicketPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "_withdrawalAllowed",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_tags",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_positionCount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_positionOfCreator",
-        "type": "uint256"
       },
       {
         "internalType": "string[]",
@@ -1062,6 +1093,19 @@
   {
     "inputs": [],
     "name": "maxFinalWithdrawPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxFixedTicketPrice",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1501,6 +1545,11 @@
       {
         "internalType": "uint256",
         "name": "_minFixedTicketPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxFixedTicketPrice",
         "type": "uint256"
       },
       {
