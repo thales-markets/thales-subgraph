@@ -20,6 +20,8 @@ type SportMarket @entity {
   upAddress: Bytes!
   downAddress: Bytes!
   drawAddress: Bytes!
+  isApex: Boolean
+  resultDetails: String
 }
 
 type SportMarketOddsHistory @entity {
