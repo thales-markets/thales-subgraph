@@ -123,6 +123,8 @@ templates:
       eventHandlers:
         - event: OptionsExercised(indexed address,uint256)
           handler: handleOptionsExercised
+        - event: MarketResolved(uint8,uint256,uint256,uint256)
+          handler: handleMarketResolved
   - name: Position
     kind: ethereum/contract
     network: optimism-goerli

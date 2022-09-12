@@ -14,7 +14,7 @@ import {
   CancelSportsMarket as CancelSportsMarketEvent,
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
-import { OptionsExercised } from '../generated/SportPositionalMarketManager/SportMarket';
+import { OptionsExercised, MarketResolved } from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { MarketCreated as MarketCreatedEvent } from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
 
@@ -59,7 +59,18 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     positionDraw.save();
   }
 }
-
+export function handleMarketResolved(event: MarketResolved): void {
+  let marketToGameId = MarketToGameId.load(event.address.toHex());
+  if (marketToGameId !== null && event.params.result == 0) {
+    let market = SportMarket.load(marketToGameId.gameId.toHex());
+    if (market !== null) {
+      market.isCanceled = true;
+      market.isResolved = false;
+      market.isOpen = false;
+      market.save();
+    }
+  }
+}
 export function handleOptionsExercised(event: OptionsExercised): void {
   let tx = new ClaimTx(event.transaction.hash.toHex());
   let marketToGameId = MarketToGameId.load(event.address.toHex());
