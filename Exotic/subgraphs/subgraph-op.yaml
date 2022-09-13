@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Thales Exotic Markets API
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
@@ -28,6 +28,8 @@ dataSources:
       eventHandlers:
         - event: MarketCreated(address,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
           handler: handleMarketCreatedEvent
+        - event: MarketCreatedWithDescription(address,string,string,string,uint256,uint256,bool,uint256[],uint256,string[],address)
+          handler: handleMarketCreatedEventWithDescription
         - event: MarketCanceled(address)
           handler: handleMarketCanceledEvent
   - kind: ethereum/contract

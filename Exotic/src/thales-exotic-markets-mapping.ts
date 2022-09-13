@@ -48,6 +48,7 @@ export function handleMarketCreatedEvent(event: MarketCreatedEvent): void {
   market.address = event.params.marketAddress;
   market.question = event.params.marketQuestion;
   market.dataSource = event.params.marketSource;
+  market.description = '';
   market.endOfPositioning = event.params.endOfPositioning;
   market.ticketPrice = event.params.fixedTicketPrice;
   market.isWithdrawalAllowed = event.params.withdrawalAllowed;
