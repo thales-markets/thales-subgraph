@@ -27,7 +27,8 @@ dataSources:
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,string,uint256,uint256,address,address,address)
           handler: handleMarketCreated
-
+        - event: DatesUpdatedForMarket(address,uint256,uint256)
+          handler: handleDatesUpdatedForMarket
   - kind: ethereum/contract
     name: TheRundownConsumer
     network: optimism
@@ -159,6 +160,8 @@ templates:
           handler: handleOptionsExercised
         - event: MarketResolved(uint8,uint256,uint256,uint256)
           handler: handleMarketResolved
+        - event: PauseUpdated(bool)
+          handler: handleMarketPauseUpdated
   - name: Position
     kind: ethereum/contract
     network: optimism

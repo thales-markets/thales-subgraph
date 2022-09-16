@@ -22,6 +22,7 @@ type SportMarket @entity {
   drawAddress: Bytes!
   isApex: Boolean
   resultDetails: String
+  isPaused: Boolean
 }
 
 type SportMarketOddsHistory @entity {
@@ -43,6 +44,7 @@ type SportMarketOddsHistory @entity {
   drawOdds: [BigInt!]!
   homeScore: BigInt
   awayScore: BigInt
+  isPaused: Boolean
 }
 
 type MarketToGameId @entity {

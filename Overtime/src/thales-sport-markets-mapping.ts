@@ -14,9 +14,12 @@ import {
   CancelSportsMarket as CancelSportsMarketEvent,
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
-import { OptionsExercised, MarketResolved } from '../generated/SportPositionalMarketManager/SportMarket';
+import { OptionsExercised, MarketResolved, PauseUpdated } from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { MarketCreated as MarketCreatedEvent } from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
+import {
+  MarketCreated as MarketCreatedEvent,
+  DatesUpdatedForMarket as DatesUpdatedForMarketEvent,
+} from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
 
 export function handleMarketCreated(event: MarketCreatedEvent): void {
   let market = new SportMarket(event.params.gameId.toHex());
@@ -59,18 +62,52 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
     positionDraw.save();
   }
 }
+
 export function handleMarketResolved(event: MarketResolved): void {
   let marketToGameId = MarketToGameId.load(event.address.toHex());
   if (marketToGameId !== null && event.params.result == 0) {
     let market = SportMarket.load(marketToGameId.gameId.toHex());
     if (market !== null) {
       market.isCanceled = true;
-      market.isResolved = false;
       market.isOpen = false;
+      market.isPaused = false;
       market.save();
     }
   }
 }
+
+export function handleMarketPauseUpdated(event: PauseUpdated): void {
+  let marketToGameId = MarketToGameId.load(event.address.toHex());
+  if (marketToGameId !== null) {
+    let market = SportMarket.load(marketToGameId.gameId.toHex());
+    if (market !== null) {
+      market.isPaused = event.params._paused;
+      market.save();
+    }
+    let marketHistory = SportMarketOddsHistory.load(marketToGameId.gameId.toHex());
+    if (marketHistory !== null) {
+      marketHistory.isPaused = event.params._paused;
+      marketHistory.save();
+    }
+  }
+}
+
+export function handleDatesUpdatedForMarket(event: DatesUpdatedForMarketEvent): void {
+  let marketToGameId = MarketToGameId.load(event.params._market.toHex());
+  if (marketToGameId !== null) {
+    let market = SportMarket.load(marketToGameId.gameId.toHex());
+    if (market !== null) {
+      market.maturityDate = event.params._newStartTime;
+      market.save();
+    }
+    let marketHistory = SportMarketOddsHistory.load(marketToGameId.gameId.toHex());
+    if (marketHistory !== null) {
+      marketHistory.maturityDate = event.params._newStartTime;
+      marketHistory.save();
+    }
+  }
+}
+
 export function handleOptionsExercised(event: OptionsExercised): void {
   let tx = new ClaimTx(event.transaction.hash.toHex());
   let marketToGameId = MarketToGameId.load(event.address.toHex());
@@ -124,6 +161,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.isOpen = true;
     market.isResolved = false;
     market.isCanceled = false;
+    market.isPaused = false;
     market.finalResult = BigInt.fromI32(0);
     market.poolSize = BigInt.fromI32(0);
     market.numberOfParticipants = BigInt.fromI32(0);
@@ -143,6 +181,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.isOpen = true;
   marketHistory.isResolved = false;
   marketHistory.isCanceled = false;
+  marketHistory.isPaused = false;
   marketHistory.finalResult = BigInt.fromI32(0);
   marketHistory.poolSize = BigInt.fromI32(0);
   marketHistory.numberOfParticipants = BigInt.fromI32(0);

@@ -20,6 +20,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.isOpen = true;
     market.isResolved = false;
     market.isCanceled = false;
+    market.isPaused = false;
     market.finalResult = BigInt.fromI32(0);
     market.poolSize = BigInt.fromI32(0);
     market.numberOfParticipants = BigInt.fromI32(0);
@@ -40,6 +41,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   marketHistory.isOpen = true;
   marketHistory.isResolved = false;
   marketHistory.isCanceled = false;
+  marketHistory.isPaused = false;
   marketHistory.finalResult = BigInt.fromI32(0);
   marketHistory.poolSize = BigInt.fromI32(0);
   marketHistory.numberOfParticipants = BigInt.fromI32(0);
