@@ -23,6 +23,7 @@ type SportMarket @entity {
   isApex: Boolean
   resultDetails: String
   isPaused: Boolean
+  leagueRaceName: String
 }
 
 type SportMarketOddsHistory @entity {
@@ -109,4 +110,9 @@ type BuyTransaction @entity {
   id: ID!
   marketTransactionId: String!
   positionBalanceId: String!
+}
+
+type Race @entity {
+  id: ID!
+  raceName: String!
 }

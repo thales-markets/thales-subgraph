@@ -94,7 +94,9 @@ dataSources:
         - event: CancelSportsMarket(address,bytes32)
           handler: handleCancelSportsMarket
         - event: GameResultsSet(bytes32,uint256,bytes32,(bytes32,string,string))
-          handler: handleGameResultsSet
+          handler: handleGameResultsSetEvent
+        - event: RaceCreated(bytes32,uint256,string,(string,uint256,uint256,string,string,string))
+          handler: handleRaceCreatedEvent
   - kind: ethereum/contract
     name: SportsAMM
     network: optimism

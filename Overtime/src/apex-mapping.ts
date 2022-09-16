@@ -1,4 +1,4 @@
-import { Position, SportMarket, SportMarketOddsHistory } from '../generated/schema';
+import { Position, Race, SportMarket, SportMarketOddsHistory } from '../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
@@ -6,6 +6,7 @@ import {
   GameResolved as GameResolvedEvent,
   CancelSportsMarket as CancelSportsMarketEvent,
   GameResultsSet as GameResultsSetEvent,
+  RaceCreated as RaceCreatedEvent,
 } from '../generated/ApexConsumer/ApexConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
@@ -30,6 +31,12 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.awayOdds = normalizedOdds[1];
     market.drawOdds = normalizedOdds[2];
     market.isApex = true;
+
+    let race = Race.load(event.params._game.raceId);
+    if (race !== null) {
+      market.leagueRaceName = race.raceName;
+    }
+
     market.save();
   }
 
@@ -151,10 +158,16 @@ export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
   }
 }
 
-export function handleGameResultsSet(event: GameResultsSetEvent): void {
+export function handleGameResultsSetEvent(event: GameResultsSetEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
     market.resultDetails = event.params._game.resultDetails;
     market.save();
   }
+}
+
+export function handleRaceCreatedEvent(event: RaceCreatedEvent): void {
+  let race = new Race(event.params._id);
+  race.raceName = event.params._race.eventName;
+  race.save();
 }
