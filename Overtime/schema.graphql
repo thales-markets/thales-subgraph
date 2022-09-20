@@ -24,6 +24,8 @@ type SportMarket @entity {
   resultDetails: String
   isPaused: Boolean
   leagueRaceName: String
+  qualifyingStartTime: BigInt
+  arePostQualifyingOddsFetched: Boolean
 }
 
 type SportMarketOddsHistory @entity {
@@ -115,4 +117,6 @@ type BuyTransaction @entity {
 type Race @entity {
   id: ID!
   raceName: String!
+  startTime: BigInt!
+  qualifyingStartTime: BigInt!
 }

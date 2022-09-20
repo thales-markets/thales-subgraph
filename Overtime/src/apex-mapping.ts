@@ -8,6 +8,7 @@ import {
   GameResultsSet as GameResultsSetEvent,
   RaceCreated as RaceCreatedEvent,
 } from '../generated/ApexConsumer/ApexConsumer';
+import { GameOddsAdded as GameWithPostQualifyingOddsAddedEvent } from '../generated/ApexConsumerWithPostQualifyingOdds/ApexConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
@@ -31,10 +32,12 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.awayOdds = normalizedOdds[1];
     market.drawOdds = normalizedOdds[2];
     market.isApex = true;
+    market.arePostQualifyingOddsFetched = false;
 
     let race = Race.load(event.params._game.raceId);
     if (race !== null) {
       market.leagueRaceName = race.raceName;
+      market.qualifyingStartTime = race.qualifyingStartTime;
     }
 
     market.save();
@@ -169,5 +172,36 @@ export function handleGameResultsSetEvent(event: GameResultsSetEvent): void {
 export function handleRaceCreatedEvent(event: RaceCreatedEvent): void {
   let race = new Race(event.params._id);
   race.raceName = event.params._race.eventName;
+  race.startTime = event.params._race.startTime;
+  race.qualifyingStartTime = event.params._race.qualifyingStartTime;
   race.save();
+}
+
+export function handleGameWithPostQualifyingOddsAddedEvent(event: GameWithPostQualifyingOddsAddedEvent): void {
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    let normalizedOdds = event.params._normalizedOdds;
+    market.homeOdds = normalizedOdds[0];
+    market.awayOdds = normalizedOdds[1];
+    market.drawOdds = normalizedOdds[2];
+    market.arePostQualifyingOddsFetched = event.params._game.arePostQualifyingOddsFetched;
+    market.save();
+  }
+
+  let marketHistory = SportMarketOddsHistory.load(event.params._id.toHex());
+  if (marketHistory !== null) {
+    marketHistory.timestamp = event.block.timestamp;
+    let normalizedOdds = event.params._normalizedOdds;
+    let homeOdds = marketHistory.homeOdds;
+    homeOdds.push(normalizedOdds[0]);
+    let awayOdds = marketHistory.awayOdds;
+    awayOdds.push(normalizedOdds[1]);
+    let drawOdds = marketHistory.drawOdds;
+    drawOdds.push(normalizedOdds[2]);
+    marketHistory.homeOdds = homeOdds;
+    marketHistory.awayOdds = awayOdds;
+    marketHistory.drawOdds = drawOdds;
+    marketHistory.save();
+  }
 }
