@@ -1,0 +1,167 @@
+specVersion: 0.0.4
+description: Thales Binary Options API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: BinaryOptionMarketManager
+    network: matic
+    source:
+      address: '0x85f1B57A1D3Ac7605de3Df8AdA056b3dB9676eCE'
+      abi: BinaryOptionMarketManager
+      startBlock: 26851419
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+        - Position
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: RangedMarkets
+    network: matic
+    source:
+      address: '0xe8e022405505a9F2b0B7452C844F1e64423849fC'
+      abi: RangedMarketsAMM
+      startBlock: 31473296
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+        - ReferralTransfer
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: RangedMarket
+          file: ../abis/range-markets/RangedMarket.json
+        - name: RangedMarketsAMM
+          file: ../abis/range-markets/RangedMarketsAMM.json
+      eventHandlers:
+        - event: RangedMarketCreated(address,address,address)
+          handler: handleRangedMarket
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
+  - kind: ethereum/contract
+    name: AMM
+    network: matic
+    source:
+      address: '0x9b6d76B1C6140FbB0ABc9C4a348BFf4e4e8a1213'
+      abi: AMM
+      startBlock: 26852537
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: AMM
+          file: ../abis/AMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
+templates:
+  - name: BinaryOptionMarket
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: BinaryOptionMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+        - OptionTransaction
+        - HistoricalOptionPrice
+      abis:
+        - name: BinaryOptionMarket
+          file: ../abis/BinaryOptionMarket.json
+      eventHandlers:
+        - event: Mint(uint8,indexed address,uint256)
+          handler: handleMint
+        - event: MarketResolved(uint8,uint256,uint256,uint256,uint256,uint256)
+          handler: handleMarketResolved
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
+  - name: Position
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: Position
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - PositionBalance
+      abis:
+        - name: Position
+          file: ../abis/Position.json
+  - name: RangedMarket
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: RangedMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+      abis:
+        - name: RangedMarket
+          file: '../abis/range-markets/RangedMarket.json'
+      eventHandlers:
+        - event: Resolved(uint8,uint256)
+          handler: handleMarketResolved
+        - event: Exercised(address,uint256,uint8)
+          handler: handleExercised
+  - name: RangedPosition
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: RangedPosition
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedPositionBalance
+      abis:
+        - name: RangedPosition
+          file: ../abis/range-markets/RangedPosition.json

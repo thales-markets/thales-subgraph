@@ -1,0 +1,14 @@
+enum SafeBoxTransactionType {
+  positionalAmm
+  rangedAmm,
+  exotic,
+  overtime,
+  unknown,
+}
+
+type SafeBoxTransaction @entity(immutable: true) {
+  id: ID!
+  timestamp: BigInt!
+  type: SafeBoxTransactionType!
+  amount: BigInt!
+}

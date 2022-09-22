@@ -1,0 +1,26 @@
+specVersion: 0.0.4
+description: Thales SafeBox API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: sUSDContract
+    network: optimism
+    source:
+      address: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9'
+      abi: ProxyERC20
+      startBlock: 20266537
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/safebox-mapping.ts
+      entities:
+        - SafeBoxTransaction
+      abis:
+        - name: ProxyERC20
+          file: ../abis/ProxyERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleSafeBoxTransfer
