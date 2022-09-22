@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9'
       abi: ProxyERC20
-      startBlock: 20266537
+      startBlock: 2189849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
