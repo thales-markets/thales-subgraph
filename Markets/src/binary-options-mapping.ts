@@ -75,13 +75,13 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
     optionTransactionEntity.account = event.params.account;
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.value;
-    optionTransactionEntity.save();
 
     let positionUp = marketEntity.longAddress;
     let positionDown = marketEntity.shortAddress;
     if (positionUp !== null) {
       let userBalanceUp = PositionBalance.load(positionUp.toHex() + ' - ' + event.params.account.toHex());
       if (userBalanceUp !== null) {
+        optionTransactionEntity.side = 0;
         userBalanceUp.amount = BigInt.fromI32(0);
         userBalanceUp.save();
       }
@@ -89,10 +89,12 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
     if (positionDown !== null) {
       let userBalanceDown = PositionBalance.load(positionDown.toHex() + ' - ' + event.params.account.toHex());
       if (userBalanceDown !== null) {
+        optionTransactionEntity.side = 1;
         userBalanceDown.amount = BigInt.fromI32(0);
         userBalanceDown.save();
       }
     }
+    optionTransactionEntity.save();
   }
 }
 
