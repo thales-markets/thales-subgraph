@@ -48,6 +48,7 @@ type OptionTransaction @entity(immutable: true) {
   amount: BigInt!
   currencyKey: Bytes
   side: Int
+  isRangedMarket: Boolean!
   fee: BigInt
 }
 

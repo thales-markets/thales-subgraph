@@ -135,6 +135,7 @@ export function handleExercised(event: Exercised): void {
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.amount;
     optionTransactionEntity.side = event.params._position;
+    optionTransactionEntity.isRangedMarket = true;
     optionTransactionEntity.save();
 
     let positionIn = RangedPosition.load(rangedMarket.inAddress.toHex());

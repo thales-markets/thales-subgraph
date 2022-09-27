@@ -75,6 +75,7 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
     optionTransactionEntity.account = event.params.account;
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.value;
+    optionTransactionEntity.isRangedMarket = false;
 
     let positionUp = marketEntity.longAddress;
     let positionDown = marketEntity.shortAddress;
@@ -114,6 +115,7 @@ export function handleMint(event: MintEvent): void {
     optionTransactionEntity.account = event.params.account;
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.value;
+    optionTransactionEntity.isRangedMarket = false;
     optionTransactionEntity.save();
 
     if (event.params.side === 0) {
