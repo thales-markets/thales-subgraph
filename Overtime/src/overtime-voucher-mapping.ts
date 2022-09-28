@@ -1,3 +1,4 @@
+import { store } from '@graphprotocol/graph-ts';
 import { BoughtFromAmmWithVoucher, Transfer as TransferEvent } from '../generated/OvertimeVoucher/OvertimeVoucher';
 import { BuyTransaction, MarketTransaction, OvertimeVoucher, PositionBalance } from '../generated/schema';
 
@@ -21,8 +22,12 @@ export function handleBoughtFromAmmWithVoucherEvent(event: BoughtFromAmmWithVouc
     }
     let positionBalance = PositionBalance.load(buyTransaction.positionBalanceId);
     if (positionBalance !== null) {
-      positionBalance.account = event.params.buyer;
-      positionBalance.save();
+      let userBalanceFrom = new PositionBalance(positionBalance.position + ' - ' + event.params.buyer.toHex());
+      userBalanceFrom.account = event.params.buyer;
+      userBalanceFrom.amount = positionBalance.amount;
+      userBalanceFrom.position = positionBalance.position;
+      userBalanceFrom.save();
+      store.remove('PositionBalance', buyTransaction.positionBalanceId);
     }
   }
 }
