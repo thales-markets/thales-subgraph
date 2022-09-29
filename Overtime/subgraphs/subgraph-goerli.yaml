@@ -62,6 +62,30 @@ dataSources:
         - event: CancelSportsMarket(address,bytes32)
           handler: handleCancelSportsMarket
   - kind: ethereum/contract
+    name: TheRundownConsumerUpdatedAt
+    network: goerli
+    source:
+      address: '0x4dB7AfB6b777fB47101C86Bdeb56669ffA8cD656'
+      abi: TheRundownConsumer
+      startBlock: 7579546
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - SportMarketOddsHistory
+        - Position
+      abis:
+        - name: TheRundownConsumer
+          file: ../abis/TheRundownConsumer_UpdatedAt.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8,uint40),uint256)
+          handler: handleGameResolvedUpdatedAtEvent
+  - kind: ethereum/contract
     name: ApexConsumer
     network: goerli
     source:

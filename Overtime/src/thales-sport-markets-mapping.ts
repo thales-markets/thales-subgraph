@@ -13,6 +13,7 @@ import {
   GameResolved as GameResolvedEvent,
   CancelSportsMarket as CancelSportsMarketEvent,
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
+import { GameResolved as GameResolvedUpdatedAtEvent } from '../generated/TheRundownConsumerUpdatedAt/TheRundownConsumer';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
 import { OptionsExercised, MarketResolved, PauseUpdated } from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
@@ -228,6 +229,16 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
 }
 
 export function handleGameResolvedEvent(event: GameResolvedEvent): void {
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.homeScore = BigInt.fromI32(event.params._game.homeScore);
+    market.awayScore = BigInt.fromI32(event.params._game.awayScore);
+    market.save();
+  }
+}
+
+export function handleGameResolvedUpdatedAtEvent(event: GameResolvedUpdatedAtEvent): void {
   let market = SportMarket.load(event.params._id.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
