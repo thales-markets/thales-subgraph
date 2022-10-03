@@ -31,6 +31,10 @@
     "deploy-arbitrum": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     "deploy:options-arbitrum": "npm run deploy-arbitrum -- thales-markets/thales-arbitrum subgraphs/subgraph-arbitrum.yaml",
 
+    "codegen-goerli": "npm run codegen -- subgraphs/subgraph-op-goerli.yaml",
+    "deploy-goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-goerli": "npm run deploy-goerli -- thales-markets/thales-markets-goerli-ovm subgraphs/subgraph-op-goerli.yaml",
+
     "test": "graph test"
   },
   "dependencies": {
