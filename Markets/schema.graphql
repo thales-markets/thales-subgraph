@@ -86,6 +86,7 @@ enum AccountBuyVolumeEnum {
   buyUp
   buyDown
   buyRanged
+  buyDiscounted
 }
 
 type AccountBuyVolume @entity(immutable: true) {

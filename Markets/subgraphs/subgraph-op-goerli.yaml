@@ -83,6 +83,8 @@ dataSources:
       eventHandlers:
         - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmEvent
+        - event: BoughtWithDiscount(address,uint256,uint256)
+          handler: hangledBoughtWithDiscount
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
         - event: ReferrerPaid(address,address,uint256,uint256)

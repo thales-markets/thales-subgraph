@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
-import { BoughtFromAmm, ReferrerPaid, SoldToAMM } from '../generated/AMM/AMM';
+import { BoughtFromAmm, BoughtWithDiscount, ReferrerPaid, SoldToAMM } from '../generated/AMM/AMM';
 import {
   Trade,
   ReferralTransfer,
@@ -48,6 +48,15 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
     userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
     userBalanceFrom.save();
   }
+}
+
+export function hangledBoughtWithDiscount(event: BoughtWithDiscount): void {
+  let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  accountBuyVolume.timestamp = event.block.timestamp;
+  accountBuyVolume.account = event.params.buyer;
+  accountBuyVolume.amount = event.params.sUSDPaid;
+  accountBuyVolume.type = 'buyDiscounted';
+  accountBuyVolume.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
