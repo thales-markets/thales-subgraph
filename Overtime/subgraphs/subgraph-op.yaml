@@ -146,6 +146,30 @@ dataSources:
         - event: GameOddsAdded(bytes32,bytes32,(bytes32,uint256,uint256,uint256,bool),uint256[])
           handler: handleGameWithPostQualifyingOddsAddedEvent
   - kind: ethereum/contract
+    name: ApexConsumerWithBetType
+    network: optimism
+    source:
+      address: '0x0a6851C7D112A27019d84DCCb9cE0c0cd8b75325'
+      abi: ApexConsumer
+      startBlock: 23142630
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/apex-mapping.ts
+      entities:
+        - SportMarket
+        - SportMarketOddsHistory
+        - Position
+      abis:
+        - name: ApexConsumer
+          file: ../abis/ApexConsumer_GameBetType.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: CreateSportsMarket(address,bytes32,(bytes32,string,uint256,uint256,uint256,uint256,string,string,uint256),uint256[],uint256[])
+          handler: handleCreateSportsMarketWithBetTypeEvent          
+  - kind: ethereum/contract
     name: SportsAMM
     network: optimism
     source:

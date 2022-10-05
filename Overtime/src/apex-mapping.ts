@@ -9,6 +9,7 @@ import {
   RaceCreated as RaceCreatedEvent,
 } from '../generated/ApexConsumer/ApexConsumer';
 import { GameOddsAdded as GameWithPostQualifyingOddsAddedEvent } from '../generated/ApexConsumerWithPostQualifyingOdds/ApexConsumer';
+import { CreateSportsMarket as CreateSportsMarketWithBetTypeEvent } from '../generated/ApexConsumerWithBetType/ApexConsumer';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
@@ -33,6 +34,60 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.drawOdds = normalizedOdds[2];
     market.isApex = true;
     market.arePostQualifyingOddsFetched = false;
+    market.betType = BigInt.fromI32(0);
+
+    let race = Race.load(event.params._game.raceId);
+    if (race !== null) {
+      market.leagueRaceName = race.raceName;
+      market.qualifyingStartTime = race.qualifyingStartTime;
+    }
+
+    market.save();
+  }
+
+  let marketHistory = new SportMarketOddsHistory(event.params._id.toHex());
+  marketHistory.timestamp = event.block.timestamp;
+  marketHistory.address = event.params._marketAddress;
+  marketHistory.maturityDate = event.params._game.startTime;
+  marketHistory.tags = event.params._tags;
+  marketHistory.isOpen = true;
+  marketHistory.isResolved = false;
+  marketHistory.isCanceled = false;
+  marketHistory.isPaused = false;
+  marketHistory.finalResult = BigInt.fromI32(0);
+  marketHistory.poolSize = BigInt.fromI32(0);
+  marketHistory.numberOfParticipants = BigInt.fromI32(0);
+  marketHistory.homeTeam = event.params._game.homeTeam;
+  marketHistory.awayTeam = event.params._game.awayTeam;
+  marketHistory.homeOdds = [normalizedOdds[0]];
+  marketHistory.awayOdds = [normalizedOdds[1]];
+  marketHistory.drawOdds = [normalizedOdds[2]];
+  marketHistory.save();
+}
+
+export function handleCreateSportsMarketWithBetTypeEvent(event: CreateSportsMarketWithBetTypeEvent): void {
+  let normalizedOdds = event.params._normalizedOdds;
+  let market = SportMarket.load(event.params._id.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.address = event.params._marketAddress.toHexString();
+    market.maturityDate = event.params._game.startTime;
+    market.tags = event.params._tags;
+    market.isOpen = true;
+    market.isResolved = false;
+    market.isCanceled = false;
+    market.isPaused = false;
+    market.finalResult = BigInt.fromI32(0);
+    market.poolSize = BigInt.fromI32(0);
+    market.numberOfParticipants = BigInt.fromI32(0);
+    market.homeTeam = event.params._game.homeTeam;
+    market.awayTeam = event.params._game.awayTeam;
+    market.homeOdds = normalizedOdds[0];
+    market.awayOdds = normalizedOdds[1];
+    market.drawOdds = normalizedOdds[2];
+    market.isApex = true;
+    market.arePostQualifyingOddsFetched = false;
+    market.betType = event.params._game.betType;
 
     let race = Race.load(event.params._game.raceId);
     if (race !== null) {
