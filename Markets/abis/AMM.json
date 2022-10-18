@@ -153,5 +153,30 @@
     ],
     "name": "BoughtWithDiscount",
     "type": "event"
-  } 
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sUSDPaid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "inTheMoney",
+        "type": "bool"
+      }
+    ],
+    "name": "BoughtOptionType",
+    "type": "event"
+  }
 ]
