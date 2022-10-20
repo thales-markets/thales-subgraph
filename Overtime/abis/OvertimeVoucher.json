@@ -8,7 +8,8 @@
       { "internalType": "string", "name": "_tokenURITwoHundred", "type": "string" },
       { "internalType": "string", "name": "_tokenURIFiveHundred", "type": "string" },
       { "internalType": "string", "name": "_tokenURIThousand", "type": "string" },
-      { "internalType": "address", "name": "_sportsamm", "type": "address" }
+      { "internalType": "address", "name": "_sportsamm", "type": "address" },
+      { "internalType": "address", "name": "_parlayAMM", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -49,7 +50,26 @@
   },
   {
     "anonymous": false,
-    "inputs": [{ "indexed": false, "internalType": "address", "name": "_thalesRoyaleAddress", "type": "address" }],
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "buyer", "type": "address" },
+      { "indexed": false, "internalType": "address[]", "name": "_sportMarkets", "type": "address[]" },
+      { "indexed": false, "internalType": "uint256[]", "name": "_positions", "type": "uint256[]" },
+      { "indexed": false, "internalType": "uint256", "name": "_sUSDPaid", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_expectedPayout", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "susd", "type": "address" }
+    ],
+    "name": "BoughtFromParlayWithVoucher",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "_parlayAMM", "type": "address" }],
+    "name": "NewParlayAMM",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "_sportsAMM", "type": "address" }],
     "name": "NewSportsAMM",
     "type": "event"
   },
@@ -83,6 +103,13 @@
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "_name",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -123,6 +150,20 @@
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
     "name": "buyFromAMMWithVoucher",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_sportMarkets", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "_positions", "type": "uint256[]" },
+      { "internalType": "uint256", "name": "_sUSDPaid", "type": "uint256" },
+      { "internalType": "uint256", "name": "_additionalSlippage", "type": "uint256" },
+      { "internalType": "uint256", "name": "_expectedPayout", "type": "uint256" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "buyFromParlayAMMWithVoucher",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -172,6 +213,13 @@
     "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
     "name": "ownerOf",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "parlayAMM",
+    "outputs": [{ "internalType": "contract IParlayMarketsAMM", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -229,6 +277,13 @@
       { "internalType": "bool", "name": "approved", "type": "bool" }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_parlayAMM", "type": "address" }],
+    "name": "setParlayAMM",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
