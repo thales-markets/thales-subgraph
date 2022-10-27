@@ -11,6 +11,7 @@
     "codegen:sport-markets-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
     "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/sport-markets-optimism subgraphs/subgraph-op.yaml",
     "codegen:sport-markets-goerli": "npm run codegen -- subgraphs/subgraph-goerli.yaml",
+    
     "deploy:sport-markets-goerli": "npm run deploy-optimism -- thales-markets/sport-markets-goerli subgraphs/subgraph-goerli.yaml",
     "codegen-optimism-goerli": "npm run codegen -- subgraphs/subgraph-op-goerli.yaml",
     "deploy:sport-markets-optimism-goerli": "npm run deploy-optimism-goerli -- thales-markets/sport-markets-optimism-goerli subgraphs/subgraph-op-goerli.yaml"

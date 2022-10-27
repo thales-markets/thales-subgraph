@@ -121,3 +121,22 @@ type Race @entity {
   startTime: BigInt!
   qualifyingStartTime: BigInt!
 }
+
+type ParlayMarket @entity {
+  id: ID!
+  sportMarkets: [SportMarket!]!
+  positions: [Position!]!
+  marketQuotes: [BigInt!]
+  account: Bytes!
+  totalAmount: BigInt!
+  sUSDAfterFees: BigInt!
+  totalQuote: BigInt
+  skewImpact: BigInt
+  timestamp: BigInt!
+  lastGameStarts: BigInt!
+  blockNumber: BigInt!
+  resolved: Boolean!
+  won: Boolean!
+}
+
+

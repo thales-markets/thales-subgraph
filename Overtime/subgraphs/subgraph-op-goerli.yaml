@@ -30,6 +30,28 @@ dataSources:
         - event: DatesUpdatedForMarket(address,uint256,uint256)
           handler: handleDatesUpdatedForMarket
   - kind: ethereum/contract
+    name: ParlayMarketsAMM
+    network: optimism-goerli
+    source:
+      address: '0x0ec9D8Dac2178b041f85f60E3cF13CfaA3d23e0e'
+      abi: ParlayMarketsAMM
+      startBlock: 1576733
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/parlay-mapping.ts
+      entities:
+        - ParlayMarket      
+      abis:
+        - name: ParlayMarketsAMM
+          file: ../abis/ParlayMarketsAMM.json
+      eventHandlers:
+        - event: NewParlayMarket(address,address[],uint256[],uint256,uint256)
+          handler: handleNewParlayMarket
+        - event: ParlayMarketCreated(address,address,uint256,uint256,uint256,uint256,uint256,uint256[])
+          handler: handleParlayMarketCreated
+  - kind: ethereum/contract
     name: TheRundownConsumer
     network: optimism-goerli
     source:
