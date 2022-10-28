@@ -8,6 +8,7 @@ import {
   SportMarket,
   MarketToGameId,
   BuyTransaction,
+  UserStats,
 } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
@@ -48,6 +49,18 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
       }
     }
   }
+
+  let userStats = UserStats.load(event.params.buyer.toHex());
+  if(userStats === null) {
+    userStats = new UserStats(event.params.buyer.toHex())
+    userStats.volume =  BigInt.fromI32(0);
+    userStats.pnl =  BigInt.fromI32(0);
+    userStats.trades = 0;
+  }
+  userStats.volume = userStats.volume.plus(event.params.sUSDPaid)
+  userStats.pnl = userStats.pnl.minus(event.params.sUSDPaid);
+  userStats.trades = userStats.trades + 1;
+  userStats.save();
 }
 
 export function handleSoldToAMMEvent(event: SoldToAMM): void {
@@ -83,4 +96,16 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
       }
     }
   }
+
+  let userStats = UserStats.load(event.params.seller.toHex());
+  if(userStats === null) {
+    userStats = new UserStats(event.params.seller.toHex())
+    userStats.volume =  BigInt.fromI32(0);
+    userStats.pnl =  BigInt.fromI32(0);
+    userStats.trades = 0;
+  }
+  userStats.volume = userStats.volume.plus(event.params.sUSDPaid)
+  userStats.pnl = userStats.pnl.plus(event.params.sUSDPaid);
+  userStats.trades = userStats.trades + 1;
+  userStats.save();
 }

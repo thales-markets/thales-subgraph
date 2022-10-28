@@ -139,4 +139,11 @@ type ParlayMarket @entity {
   won: Boolean!
 }
 
+type UserStats @entity {
+  id: ID!
+  volume: BigInt!
+  pnl: BigInt!
+  trades: Int
+}
+
 

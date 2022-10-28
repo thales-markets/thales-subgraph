@@ -5,6 +5,7 @@ import {
   PositionBalance,
   ClaimTx,
   MarketToGameId,
+  UserStats,
 } from '../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
@@ -149,6 +150,17 @@ export function handleOptionsExercised(event: OptionsExercised): void {
       }
     }
   }
+
+  let userStats = UserStats.load(event.transaction.from.toHex());
+  if(userStats === null) {
+    userStats = new UserStats(event.transaction.from.toHex())
+    userStats.volume =  BigInt.fromI32(0);
+    userStats.pnl =  BigInt.fromI32(0);
+    userStats.trades = 0;
+  }
+ 
+  userStats.pnl = userStats.pnl.plus(event.params.value);
+  userStats.save();
 }
 
 export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): void {
