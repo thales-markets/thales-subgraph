@@ -1,6 +1,6 @@
 import { log, BigInt } from '@graphprotocol/graph-ts';
 import { NewParlayMarket, ParlayMarketCreated, ParlayResolved } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
-import { MarketToGameId, ParlayMarket, Position, SportMarket, UserStats } from '../generated/schema';
+import { MarketToGameId, ParlayMarket, Position, SportMarket, User } from '../generated/schema';
 import { getPositionAddressFromPositionIndex } from './functions/helpers';
 
 export function handleNewParlayMarket(event: NewParlayMarket): void {
@@ -43,9 +43,9 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   parlayMarket.won = false;
   parlayMarket.save();
 
-  let userStats = UserStats.load(event.transaction.from.toHex());
+  let userStats = User.load(event.transaction.from.toHex());
   if(userStats === null) {
-    userStats = new UserStats(event.transaction.from.toHex())
+    userStats = new User(event.transaction.from.toHex())
     userStats.volume =  BigInt.fromI32(0);
     userStats.pnl =  BigInt.fromI32(0);
     userStats.trades = 0;

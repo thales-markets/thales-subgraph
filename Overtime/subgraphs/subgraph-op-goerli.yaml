@@ -42,7 +42,8 @@ dataSources:
       language: wasm/assemblyscript
       file: ../src/parlay-mapping.ts
       entities:
-        - ParlayMarket      
+        - ParlayMarket 
+        - User     
       abis:
         - name: ParlayMarketsAMM
           file: ../abis/ParlayMarketsAMM.json
@@ -123,6 +124,7 @@ dataSources:
       file: ../src/amm-mapping.ts
       entities:
         - MarketTransaction
+        - User 
       abis:
         - name: SportsAMM
           file: ../abis/SportsAMM.json
@@ -166,6 +168,7 @@ templates:
       file: ../src/thales-sport-markets-mapping.ts
       entities:
         - ClaimTx
+        - User 
       abis:
         - name: SportMarket
           file: ../abis/SportMarket.json

@@ -8,7 +8,7 @@ import {
   SportMarket,
   MarketToGameId,
   BuyTransaction,
-  UserStats,
+  User,
 } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
@@ -50,9 +50,9 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
     }
   }
 
-  let userStats = UserStats.load(event.params.buyer.toHex());
+  let userStats = User.load(event.params.buyer.toHex());
   if(userStats === null) {
-    userStats = new UserStats(event.params.buyer.toHex())
+    userStats = new User(event.params.buyer.toHex())
     userStats.volume =  BigInt.fromI32(0);
     userStats.pnl =  BigInt.fromI32(0);
     userStats.trades = 0;
@@ -97,9 +97,9 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
     }
   }
 
-  let userStats = UserStats.load(event.params.seller.toHex());
+  let userStats = User.load(event.params.seller.toHex());
   if(userStats === null) {
-    userStats = new UserStats(event.params.seller.toHex())
+    userStats = new User(event.params.seller.toHex())
     userStats.volume =  BigInt.fromI32(0);
     userStats.pnl =  BigInt.fromI32(0);
     userStats.trades = 0;
