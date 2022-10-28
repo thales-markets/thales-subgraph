@@ -135,7 +135,7 @@ type ParlayMarket @entity {
   timestamp: BigInt!
   lastGameStarts: BigInt!
   blockNumber: BigInt!
-  resolved: Boolean!
+  claimed: Boolean!
   won: Boolean!
 }
 

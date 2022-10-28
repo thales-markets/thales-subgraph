@@ -1,9 +1,10 @@
 import { log, BigInt } from '@graphprotocol/graph-ts';
-import { NewParlayMarket, ParlayMarketCreated } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
+import { NewParlayMarket, ParlayMarketCreated, ParlayResolved } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
 import { MarketToGameId, ParlayMarket, Position, SportMarket } from '../generated/schema';
 import { getPositionAddressFromPositionIndex } from './functions/helpers';
 
 export function handleNewParlayMarket(event: NewParlayMarket): void {
+  log.warning('handleNewParlayMarket -> parlayMarket address {}', [event.params.market.toHexString()]);
   let parlayMarket = new ParlayMarket(event.params.market.toHex());
   const sportMarketsArray: string[] = [];
   const positionsArray: string[] = [];
@@ -38,18 +39,28 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   parlayMarket.timestamp = event.block.timestamp;
   parlayMarket.lastGameStarts = lastGameStarts !== null ? lastGameStarts : BigInt.fromString('0');
   parlayMarket.blockNumber = event.block.number;
-  parlayMarket.resolved = false;
+  parlayMarket.claimed = false;
   parlayMarket.won = false;
   parlayMarket.save();
 }
 
 export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
+  log.warning('handleParlayMarketCreated -> parlayMarket address {}', [event.params.market.toHexString()]);
   let parlayMarket = ParlayMarket.load(event.params.market.toHex());
-
   if (parlayMarket !== null) {
     parlayMarket.totalQuote = event.params.totalQuote;
     parlayMarket.skewImpact = event.params.skewImpact;
     parlayMarket.marketQuotes = event.params.marketQuotes;
+    parlayMarket.save();
+  }
+}
+
+export function handleParlayResolved(event: ParlayResolved): void {
+  log.info('handleParlayResolved -> parlayMarket address {}', [event.params._parlayMarket.toHexString()]);
+  let parlayMarket = ParlayMarket.load(event.params._parlayMarket.toHex());
+  if (parlayMarket !== null) {
+    parlayMarket.claimed = true;
+    parlayMarket.won = event.params._userWon;
     parlayMarket.save();
   }
 }

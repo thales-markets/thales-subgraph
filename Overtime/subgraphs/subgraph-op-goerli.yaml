@@ -51,6 +51,8 @@ dataSources:
           handler: handleNewParlayMarket
         - event: ParlayMarketCreated(address,address,uint256,uint256,uint256,uint256,uint256,uint256[])
           handler: handleParlayMarketCreated
+        - event: ParlayResolved(address,address,bool)
+          handler: handleParlayResolved
   - kind: ethereum/contract
     name: TheRundownConsumer
     network: optimism-goerli
