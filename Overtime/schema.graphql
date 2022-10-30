@@ -82,6 +82,7 @@ type MarketTransaction @entity {
   paid: BigInt!
   position: BigInt!
   wholeMarket: SportMarket!
+  positionBalance: PositionBalance!
 }
 
 enum PositionType {

@@ -28,7 +28,6 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
       transaction.market = event.params.market;
       transaction.paid = event.params.sUSDPaid;
       transaction.wholeMarket = market.id;
-      transaction.save();
 
       let position = Position.load(event.params.asset.toHex());
       if (position !== null) {
@@ -39,6 +38,9 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
           userBalanceFrom.amount = BigInt.fromI32(0);
           userBalanceFrom.position = position.id;
         }
+
+        transaction.positionBalance = userBalanceFrom.id;
+
         userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
         userBalanceFrom.save();
 
@@ -47,17 +49,18 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         buyTransaction.positionBalanceId = userBalanceFrom.id;
         buyTransaction.save();
       }
+      transaction.save();
     }
   }
 
   let userStats = User.load(event.params.buyer.toHex());
-  if(userStats === null) {
-    userStats = new User(event.params.buyer.toHex())
-    userStats.volume =  BigInt.fromI32(0);
-    userStats.pnl =  BigInt.fromI32(0);
+  if (userStats === null) {
+    userStats = new User(event.params.buyer.toHex());
+    userStats.volume = BigInt.fromI32(0);
+    userStats.pnl = BigInt.fromI32(0);
     userStats.trades = 0;
   }
-  userStats.volume = userStats.volume.plus(event.params.sUSDPaid)
+  userStats.volume = userStats.volume.plus(event.params.sUSDPaid);
   userStats.pnl = userStats.pnl.minus(event.params.sUSDPaid);
   userStats.trades = userStats.trades + 1;
   userStats.save();
@@ -80,7 +83,6 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
       transaction.market = event.params.market;
       transaction.paid = event.params.sUSDPaid;
       transaction.wholeMarket = market.id;
-      transaction.save();
 
       let position = Position.load(event.params.asset.toHex());
       if (position !== null) {
@@ -91,20 +93,24 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
           userBalanceFrom.amount = BigInt.fromI32(0);
           userBalanceFrom.position = position.id;
         }
+
+        transaction.positionBalance = userBalanceFrom.id;
+
         userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
         userBalanceFrom.save();
       }
+      transaction.save();
     }
   }
 
   let userStats = User.load(event.params.seller.toHex());
-  if(userStats === null) {
-    userStats = new User(event.params.seller.toHex())
-    userStats.volume =  BigInt.fromI32(0);
-    userStats.pnl =  BigInt.fromI32(0);
+  if (userStats === null) {
+    userStats = new User(event.params.seller.toHex());
+    userStats.volume = BigInt.fromI32(0);
+    userStats.pnl = BigInt.fromI32(0);
     userStats.trades = 0;
   }
-  userStats.volume = userStats.volume.plus(event.params.sUSDPaid)
+  userStats.volume = userStats.volume.plus(event.params.sUSDPaid);
   userStats.pnl = userStats.pnl.plus(event.params.sUSDPaid);
   userStats.trades = userStats.trades + 1;
   userStats.save();

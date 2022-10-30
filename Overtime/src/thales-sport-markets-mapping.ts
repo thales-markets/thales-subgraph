@@ -152,13 +152,13 @@ export function handleOptionsExercised(event: OptionsExercised): void {
   }
 
   let userStats = User.load(event.transaction.from.toHex());
-  if(userStats === null) {
-    userStats = new User(event.transaction.from.toHex())
-    userStats.volume =  BigInt.fromI32(0);
-    userStats.pnl =  BigInt.fromI32(0);
+  if (userStats === null) {
+    userStats = new User(event.transaction.from.toHex());
+    userStats.volume = BigInt.fromI32(0);
+    userStats.pnl = BigInt.fromI32(0);
     userStats.trades = 0;
   }
- 
+
   userStats.pnl = userStats.pnl.plus(event.params.value);
   userStats.save();
 }
