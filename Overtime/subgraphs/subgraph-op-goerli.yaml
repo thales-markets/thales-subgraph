@@ -137,9 +137,9 @@ dataSources:
     name: OvertimeVoucher
     network: optimism-goerli
     source:
-      address: '0x9B91d27568c51cEf3C4E04D504EF3CE11D5f2427'
+      address: '0x9483eFf448042c366a4297dB465FaE108d2e6ea6'
       abi: OvertimeVoucher
-      startBlock: 955504
+      startBlock: 2273460
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
