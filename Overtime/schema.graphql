@@ -126,7 +126,9 @@ type Race @entity {
 type ParlayMarket @entity {
   id: ID!
   sportMarkets: [SportMarket!]!
+  sportMarketsFromContract: [Bytes!]!
   positions: [Position!]!
+  positionsFromContract: [BigInt!]!
   marketQuotes: [BigInt!]
   account: Bytes!
   totalAmount: BigInt!

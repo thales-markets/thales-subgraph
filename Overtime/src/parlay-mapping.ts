@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts';
+import { log, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { NewParlayMarket, ParlayMarketCreated, ParlayResolved } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
 import { MarketToGameId, ParlayMarket, Position, SportMarket, User } from '../generated/schema';
 import { getPositionAddressFromPositionIndex } from './functions/helpers';
@@ -31,8 +31,15 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
       }
     }
   }
+
+  const sportMarketAddresses: Bytes[] = [];
+  for (let i = 0; i < event.params.markets.length; i++) {
+    sportMarketAddresses.push(event.params.markets[i]);
+  }
   parlayMarket.sportMarkets = sportMarketsArray;
+  parlayMarket.sportMarketsFromContract = sportMarketAddresses;
   parlayMarket.positions = positionsArray;
+  parlayMarket.positionsFromContract = event.params.positions;
   parlayMarket.account = event.transaction.from;
   parlayMarket.totalAmount = event.params.amount;
   parlayMarket.sUSDAfterFees = event.params.sUSDpaid;
@@ -42,18 +49,6 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   parlayMarket.claimed = false;
   parlayMarket.won = false;
   parlayMarket.save();
-
-  let userStats = User.load(event.transaction.from.toHex());
-  if (userStats === null) {
-    userStats = new User(event.transaction.from.toHex());
-    userStats.volume = BigInt.fromI32(0);
-    userStats.pnl = BigInt.fromI32(0);
-    userStats.trades = 0;
-  }
-  userStats.volume = userStats.volume.plus(event.params.sUSDpaid);
-  userStats.pnl = userStats.pnl.minus(event.params.sUSDpaid);
-  userStats.trades = userStats.trades + 1;
-  userStats.save();
 }
 
 export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
@@ -66,6 +61,18 @@ export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
     parlayMarket.sUSDPaid = event.params.sUSDPaid;
     parlayMarket.marketQuotes = event.params.marketQuotes;
     parlayMarket.save();
+
+    let userStats = User.load(event.transaction.from.toHex());
+    if (userStats === null) {
+      userStats = new User(event.transaction.from.toHex());
+      userStats.volume = BigInt.fromI32(0);
+      userStats.pnl = BigInt.fromI32(0);
+      userStats.trades = 0;
+    }
+    userStats.volume = userStats.volume.plus(event.params.sUSDPaid);
+    userStats.pnl = userStats.pnl.minus(event.params.sUSDPaid);
+    userStats.trades = userStats.trades + 1;
+    userStats.save();
   }
 }
 
