@@ -146,3 +146,22 @@ type User @entity {
   pnl: BigInt!
   trades: Int
 }
+
+type VaultTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  market: Bytes!
+  amount: BigInt!
+  paid: BigInt!
+  position: BigInt!
+  wholeMarket: SportMarket!
+}
+
+type VaultPnl @entity {
+  id: ID!
+  timestamp: BigInt!
+  round: BigInt!
+  pnl: BigInt!
+}

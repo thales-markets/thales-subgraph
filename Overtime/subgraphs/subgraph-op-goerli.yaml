@@ -42,8 +42,8 @@ dataSources:
       language: wasm/assemblyscript
       file: ../src/parlay-mapping.ts
       entities:
-        - ParlayMarket 
-        - User     
+        - ParlayMarket
+        - User
       abis:
         - name: ParlayMarketsAMM
           file: ../abis/ParlayMarketsAMM.json
@@ -124,7 +124,7 @@ dataSources:
       file: ../src/amm-mapping.ts
       entities:
         - MarketTransaction
-        - User 
+        - User
       abis:
         - name: SportsAMM
           file: ../abis/SportsAMM.json
@@ -155,6 +155,28 @@ dataSources:
           handler: handleTransfer
         - event: BoughtFromAmmWithVoucher(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmWithVoucherEvent
+  - kind: ethereum/contract
+    name: SportVault
+    network: optimism-goerli
+    source:
+      address: '0x4013c5eeb3F48A50531315e07037fbEA6D16DE8F'
+      abi: SportVault
+      startBlock: 2273460
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - SportVault
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
 templates:
   - name: SportMarket
     kind: ethereum/contract
@@ -168,7 +190,7 @@ templates:
       file: ../src/thales-sport-markets-mapping.ts
       entities:
         - ClaimTx
-        - User 
+        - User
       abis:
         - name: SportMarket
           file: ../abis/SportMarket.json
