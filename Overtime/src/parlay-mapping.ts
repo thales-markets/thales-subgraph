@@ -44,13 +44,13 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   parlayMarket.save();
 
   let userStats = User.load(event.transaction.from.toHex());
-  if(userStats === null) {
-    userStats = new User(event.transaction.from.toHex())
-    userStats.volume =  BigInt.fromI32(0);
-    userStats.pnl =  BigInt.fromI32(0);
+  if (userStats === null) {
+    userStats = new User(event.transaction.from.toHex());
+    userStats.volume = BigInt.fromI32(0);
+    userStats.pnl = BigInt.fromI32(0);
     userStats.trades = 0;
   }
-  userStats.volume = userStats.volume.plus(event.params.sUSDpaid)
+  userStats.volume = userStats.volume.plus(event.params.sUSDpaid);
   userStats.pnl = userStats.pnl.minus(event.params.sUSDpaid);
   userStats.trades = userStats.trades + 1;
   userStats.save();
@@ -62,6 +62,8 @@ export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
   if (parlayMarket !== null) {
     parlayMarket.totalQuote = event.params.totalQuote;
     parlayMarket.skewImpact = event.params.skewImpact;
+    parlayMarket.sUSDAfterFees = event.params.sUSDAfterFees;
+    parlayMarket.sUSDPaid = event.params.sUSDPaid;
     parlayMarket.marketQuotes = event.params.marketQuotes;
     parlayMarket.save();
   }

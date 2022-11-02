@@ -130,7 +130,8 @@ type ParlayMarket @entity {
   marketQuotes: [BigInt!]
   account: Bytes!
   totalAmount: BigInt!
-  sUSDAfterFees: BigInt!
+  sUSDAfterFees: BigInt
+  sUSDPaid: BigInt
   totalQuote: BigInt
   skewImpact: BigInt
   timestamp: BigInt!
