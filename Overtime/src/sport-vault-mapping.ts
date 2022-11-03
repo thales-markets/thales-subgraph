@@ -10,6 +10,7 @@ export function handleVaultTrade(event: TradeExecuted): void {
   if (marketToGameId !== null) {
     let market = SportMarket.load(marketToGameId.gameId.toHex());
     if (market !== null) {
+      transaction.vault = event.address;
       transaction.hash = event.transaction.hash;
       transaction.timestamp = event.block.timestamp;
       transaction.blockNumber = event.block.number;
@@ -25,6 +26,7 @@ export function handleVaultTrade(event: TradeExecuted): void {
 
 export function handleRoundClosed(event: RoundClosed): void {
   let vaultPnl = new VaultPnl(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  vaultPnl.vault = event.address;
   vaultPnl.timestamp = event.block.timestamp;
   vaultPnl.round = event.params.round;
   vaultPnl.pnl = event.params.roundPnL;

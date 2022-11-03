@@ -152,6 +152,7 @@ type User @entity {
 
 type VaultTransaction @entity {
   id: ID!
+  vault: Bytes!
   hash: Bytes!
   timestamp: BigInt!
   blockNumber: BigInt!
@@ -164,6 +165,7 @@ type VaultTransaction @entity {
 
 type VaultPnl @entity {
   id: ID!
+  vault: Bytes!
   timestamp: BigInt!
   round: BigInt!
   pnl: BigInt!
