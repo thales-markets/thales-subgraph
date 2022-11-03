@@ -159,7 +159,7 @@ dataSources:
     name: SportVault
     network: optimism-goerli
     source:
-      address: '0x4013c5eeb3F48A50531315e07037fbEA6D16DE8F'
+      address: '0x28aC7A6DeF3D937129ac7245354E11ce89194FbB'
       abi: SportVault
       startBlock: 2273460
     mapping:
