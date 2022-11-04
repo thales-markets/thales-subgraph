@@ -168,7 +168,7 @@ dataSources:
           file: ../abis/SportMarket.json
       eventHandlers:
         - event: CreateSportsMarket(address,bytes32,(bytes32,string,uint256,uint256,uint256,uint256,string,string,uint256),uint256[],uint256[])
-          handler: handleCreateSportsMarketWithBetTypeEvent          
+          handler: handleCreateSportsMarketWithBetTypeEvent
   - kind: ethereum/contract
     name: SportsAMM
     network: optimism
@@ -213,6 +213,28 @@ dataSources:
           handler: handleTransfer
         - event: BoughtFromAmmWithVoucher(address,address,uint8,uint256,uint256,address,address)
           handler: handleBoughtFromAmmWithVoucherEvent
+  - kind: ethereum/contract
+    name: SportVault
+    network: optimism
+    source:
+      address: '0xc922f4CDe42dD658A7D3EA852caF7Eae47F6cEcd'
+      abi: SportVault
+      startBlock: 34066512
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - SportVault
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
 templates:
   - name: SportMarket
     kind: ethereum/contract
