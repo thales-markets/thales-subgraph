@@ -170,3 +170,12 @@ type VaultPnl @entity {
   round: BigInt!
   pnl: BigInt!
 }
+
+type Zebro @entity {
+  id: ID!
+  owner: Bytes!
+  tokenId: BigInt!
+  country: BigInt!
+  countryName: String!
+  url: String!
+}

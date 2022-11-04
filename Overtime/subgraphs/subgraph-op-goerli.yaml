@@ -177,6 +177,26 @@ dataSources:
           handler: handleVaultTrade
         - event: RoundClosed(uint256,uint256)
           handler: handleRoundClosed
+  - kind: ethereum/contract
+    name: ZebroNFT
+    network: optimism-goerli
+    source:
+      address: '0xD66eE2D0F8810304402F6bE0E57E7C0a261b54A3'
+      abi: ZebroNFT
+      startBlock: 2372832
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/zebro-mapping.ts
+      entities:
+        - Zebro
+      abis:
+        - name: ZebroNFT
+          file: ../abis/ZebroNFT.json
+      eventHandlers:
+        - event: Mint(address,uint256,uint256,string,string)
+          handler: handleMint
 templates:
   - name: SportMarket
     kind: ethereum/contract

@@ -1,0 +1,14 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "address", "name": "_recipient", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "_id", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "_country", "type": "uint256" },
+            { "indexed": false, "internalType": "string", "name": "_countryName", "type": "string" },
+            { "indexed": false, "internalType": "string", "name": "_url", "type": "string" }
+        ],
+        "name": "Mint",
+        "type": "event"
+    }
+]
