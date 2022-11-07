@@ -50,6 +50,7 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   for (let i = 0; i < event.params.markets.length; i++) {
     sportMarketAddresses.push(event.params.markets[i]);
   }
+  parlayMarket.txHash = event.transaction.hash;
   parlayMarket.sportMarkets = sportMarketsArray;
   parlayMarket.sportMarketsFromContract = sportMarketAddresses;
   parlayMarket.positions = positionsArray;

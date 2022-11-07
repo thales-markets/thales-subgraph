@@ -23,6 +23,7 @@ export function handleBoughtFromAmmWithVoucherEvent(event: BoughtFromAmmWithVouc
     let positionBalance = PositionBalance.load(buyTransaction.positionBalanceId);
     if (positionBalance !== null) {
       let userBalanceFrom = new PositionBalance(positionBalance.position + ' - ' + event.params.buyer.toHex());
+      userBalanceFrom.firstTxHash = event.transaction.hash;
       userBalanceFrom.account = event.params.buyer;
       userBalanceFrom.amount = positionBalance.amount;
       userBalanceFrom.position = positionBalance.position;

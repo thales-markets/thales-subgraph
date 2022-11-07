@@ -37,6 +37,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         let userBalanceFrom = PositionBalance.load(position.id + ' - ' + event.params.buyer.toHex());
         if (userBalanceFrom === null) {
           userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.buyer.toHex());
+          userBalanceFrom.firstTxHash = event.transaction.hash;
           userBalanceFrom.account = event.params.buyer;
           userBalanceFrom.amount = BigInt.fromI32(0);
           userBalanceFrom.position = position.id;
@@ -92,6 +93,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
         let userBalanceFrom = PositionBalance.load(position.id + ' - ' + event.params.seller.toHex());
         if (userBalanceFrom === null) {
           userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.seller.toHex());
+          userBalanceFrom.firstTxHash = event.transaction.hash;
           userBalanceFrom.account = event.params.seller;
           userBalanceFrom.amount = BigInt.fromI32(0);
           userBalanceFrom.position = position.id;

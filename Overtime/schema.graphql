@@ -100,6 +100,7 @@ type Position @entity {
 
 type PositionBalance @entity {
   id: ID!
+  firstTxHash: Bytes!
   account: Bytes!
   amount: BigInt!
   position: Position!
@@ -125,6 +126,7 @@ type Race @entity {
 
 type ParlayMarket @entity {
   id: ID!
+  txHash: Bytes!
   sportMarkets: [SportMarket!]!
   sportMarketsFromContract: [Bytes!]!
   positions: [Position!]!
