@@ -1,6 +1,20 @@
 import { log, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { NewParlayMarket, ParlayMarketCreated, ParlayResolved } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
-import { MarketToGameId, ParlayMarket, Position, SportMarket, User } from '../generated/schema';
+import {
+  NewParlayMarket,
+  ParlayMarketCreated,
+  ParlayResolved,
+  ReferrerPaid,
+} from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
+import {
+  MarketToGameId,
+  ParlayMarket,
+  Position,
+  ReferralTransaction,
+  ReferredTrader,
+  Referrer,
+  SportMarket,
+  User,
+} from '../generated/schema';
 import { getPositionAddressFromPositionIndex } from './functions/helpers';
 
 export function handleNewParlayMarket(event: NewParlayMarket): void {
@@ -84,4 +98,47 @@ export function handleParlayResolved(event: ParlayResolved): void {
     parlayMarket.won = event.params._userWon;
     parlayMarket.save();
   }
+}
+
+export function handleReferralTransaction(event: ReferrerPaid): void {
+  let referrer = Referrer.load(event.params.refferer.toHex());
+  let trader = ReferredTrader.load(event.params.trader.toHex());
+
+  if (referrer == null) {
+    referrer = new Referrer(event.params.refferer.toHex());
+    referrer.trades = BigInt.fromI32(1);
+    referrer.totalEarned = event.params.amount;
+    referrer.totalVolume = event.params.volume;
+    referrer.timestamp = event.block.timestamp;
+    referrer.save();
+  } else {
+    referrer.trades = referrer.trades.plus(BigInt.fromI32(1));
+    referrer.totalEarned = referrer.totalEarned.plus(event.params.amount);
+    referrer.totalVolume = referrer.totalVolume.plus(event.params.volume);
+    referrer.save();
+  }
+
+  if (trader == null) {
+    trader = new ReferredTrader(event.params.trader.toHex());
+    trader.trades = BigInt.fromI32(1);
+    trader.totalAmount = event.params.amount;
+    trader.totalVolume = event.params.volume;
+    trader.referrer = referrer.id;
+    trader.timestamp = event.block.timestamp;
+    trader.save();
+  } else {
+    trader.trades = trader.trades.plus(BigInt.fromI32(1));
+    trader.totalAmount = trader.totalAmount.plus(event.params.amount);
+    trader.totalVolume = trader.totalVolume.plus(event.params.volume);
+    trader.save();
+  }
+
+  let referralTransaction = new ReferralTransaction(event.params.refferer.toHex() + '-' + event.params.trader.toHex());
+  referralTransaction.referrer = referrer.id;
+  referralTransaction.trader = trader.id;
+  referralTransaction.amount = event.params.amount;
+  referralTransaction.volume = event.params.volume;
+  referralTransaction.ammType = 'parlay';
+  referralTransaction.timestamp = event.block.timestamp;
+  referralTransaction.save();
 }

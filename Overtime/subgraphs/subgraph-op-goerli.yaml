@@ -44,6 +44,9 @@ dataSources:
       entities:
         - ParlayMarket
         - User
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
       abis:
         - name: ParlayMarketsAMM
           file: ../abis/ParlayMarketsAMM.json
@@ -54,6 +57,8 @@ dataSources:
           handler: handleParlayMarketCreated
         - event: ParlayResolved(address,address,bool)
           handler: handleParlayResolved
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
   - kind: ethereum/contract
     name: TheRundownConsumer
     network: optimism-goerli
@@ -125,6 +130,9 @@ dataSources:
       entities:
         - MarketTransaction
         - User
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
       abis:
         - name: SportsAMM
           file: ../abis/SportsAMM.json
@@ -133,6 +141,8 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
   - kind: ethereum/contract
     name: OvertimeVoucher
     network: optimism-goerli

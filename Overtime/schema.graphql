@@ -179,3 +179,35 @@ type Zebro @entity {
   countryName: String!
   url: String!
 }
+
+enum AmmType {
+  single
+  parlay
+}
+
+type Referrer @entity {
+  id: ID!
+  trades: BigInt!
+  totalVolume: BigInt!
+  totalEarned: BigInt!
+  timestamp: BigInt!
+}
+
+type ReferredTrader @entity {
+  id: ID!
+  trades: BigInt!
+  totalVolume: BigInt!
+  totalAmount: BigInt!
+  referrer: Referrer!
+  timestamp: BigInt!
+}
+
+type ReferralTransaction @entity {
+  id: ID!
+  referrer: Referrer!
+  trader: ReferredTrader!
+  amount: BigInt!
+  volume: BigInt!
+  ammType: AmmType!
+  timestamp: BigInt!
+}
