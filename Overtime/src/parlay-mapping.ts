@@ -134,7 +134,7 @@ export function handleReferralTransaction(event: ReferrerPaid): void {
     trader.save();
   }
 
-  let referralTransaction = new ReferralTransaction(event.params.refferer.toHex() + '-' + event.params.trader.toHex());
+  let referralTransaction = new ReferralTransaction(event.transaction.hash.toHex());
   referralTransaction.referrer = referrer.id;
   referralTransaction.trader = trader.id;
   referralTransaction.amount = event.params.amount;
