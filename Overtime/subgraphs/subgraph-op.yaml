@@ -318,7 +318,7 @@ dataSources:
           file: ../abis/ZebroNFT.json
       eventHandlers:
         - event: Mint(address,uint256,uint256,string,string)
-          handler: 
+          handler: handleMint
   - kind: ethereum/contract
     name: ParlayMarketsAMM
     network: optimism
@@ -362,6 +362,7 @@ templates:
       file: ../src/thales-sport-markets-mapping.ts
       entities:
         - ClaimTx
+        - User
       abis:
         - name: SportMarket
           file: ../abis/SportMarket.json
