@@ -178,7 +178,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ../src/sport-vault-mapping.ts
       entities:
-        - SportVault
+        - Vault
+        - VaultTransaction
+        - VaultPnl
       abis:
         - name: SportVault
           file: ../abis/SportVault.json
@@ -187,6 +189,8 @@ dataSources:
           handler: handleVaultTrade
         - event: RoundClosed(uint256,uint256)
           handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
   - kind: ethereum/contract
     name: ZebroNFT
     network: optimism-goerli

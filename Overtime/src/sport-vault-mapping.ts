@@ -1,7 +1,14 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
-import { TradeExecuted, RoundClosed } from '../generated/SportVault/SportVault';
-import { MarketToGameId, SportMarket, VaultPnl, VaultTransaction } from '../generated/schema';
+import { TradeExecuted, RoundClosed, VaultStarted } from '../generated/SportVault/SportVault';
+import { MarketToGameId, SportMarket, Vault, VaultPnl, VaultTransaction } from '../generated/schema';
+
+export function handleVaultStarted(event: VaultStarted): void {
+  let vault = new Vault(event.address.toHex());
+  vault.address = event.address;
+  vault.round = BigInt.fromI32(1);
+  vault.save();
+}
 
 export function handleVaultTrade(event: TradeExecuted): void {
   let transaction = new VaultTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -19,6 +26,12 @@ export function handleVaultTrade(event: TradeExecuted): void {
       transaction.market = event.params.market;
       transaction.paid = event.params.quote;
       transaction.wholeMarket = market.id;
+
+      let vault = Vault.load(event.address.toHex());
+      if (vault !== null) {
+        transaction.round = vault.round;
+      }
+
       transaction.save();
     }
   }
@@ -30,5 +43,12 @@ export function handleRoundClosed(event: RoundClosed): void {
   vaultPnl.timestamp = event.block.timestamp;
   vaultPnl.round = event.params.round;
   vaultPnl.pnl = event.params.roundPnL;
+
+  let vault = Vault.load(event.address.toHex());
+  if (vault !== null) {
+    vault.round = event.params.round.plus(BigInt.fromI32(1));
+    vault.save();
+  }
+
   vaultPnl.save();
 }

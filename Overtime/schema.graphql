@@ -152,6 +152,12 @@ type User @entity {
   trades: Int
 }
 
+type Vault @entity {
+  id: ID!
+  address: Bytes!
+  round: BigInt!
+}
+
 type VaultTransaction @entity {
   id: ID!
   vault: Bytes!
@@ -163,6 +169,7 @@ type VaultTransaction @entity {
   paid: BigInt!
   position: BigInt!
   wholeMarket: SportMarket!
+  round: BigInt!
 }
 
 type VaultPnl @entity {
