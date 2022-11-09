@@ -183,7 +183,11 @@ dataSources:
       file: ../src/amm-mapping.ts
       entities:
         - MarketTransaction
+        - User
         - PositionBalance
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
       abis:
         - name: SportsAMM
           file: ../abis/SportsAMM.json
@@ -192,6 +196,8 @@ dataSources:
           handler: handleBoughtFromAmmEvent
         - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
           handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
   - kind: ethereum/contract
     name: OvertimeVoucher
     network: optimism
@@ -312,7 +318,37 @@ dataSources:
           file: ../abis/ZebroNFT.json
       eventHandlers:
         - event: Mint(address,uint256,uint256,string,string)
-          handler: handleMint
+          handler: 
+  - kind: ethereum/contract
+    name: ParlayMarketsAMM
+    network: optimism
+    source:
+      address: '0x82B3634C0518507D5d817bE6dAb6233ebE4D68D9'
+      abi: ParlayMarketsAMM
+      startBlock: 35495825
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/parlay-mapping.ts
+      entities:
+        - ParlayMarket
+        - User
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
+      abis:
+        - name: ParlayMarketsAMM
+          file: ../abis/ParlayMarketsAMM.json
+      eventHandlers:
+        - event: NewParlayMarket(address,address[],uint256[],uint256,uint256)
+          handler: handleNewParlayMarket
+        - event: ParlayMarketCreated(address,address,uint256,uint256,uint256,uint256,uint256,uint256[])
+          handler: handleParlayMarketCreated
+        - event: ParlayResolved(address,address,bool)
+          handler: handleParlayResolved
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
 templates:
   - name: SportMarket
     kind: ethereum/contract
