@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
-import { TradeExecuted, RoundClosed, VaultStarted } from '../generated/SportVault/SportVault';
+import { TradeExecuted, RoundClosed, VaultStarted } from '../generated/DiscountVault/SportVault';
 import { MarketToGameId, SportMarket, Vault, VaultPnl, VaultTransaction } from '../generated/schema';
 
 export function handleVaultStarted(event: VaultStarted): void {
