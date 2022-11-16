@@ -148,3 +148,31 @@ type RangedPositionBalance @entity {
   amount: BigInt!
   position: RangedPosition!
 }
+
+type Vault @entity {
+  id: ID!
+  address: Bytes!
+  round: BigInt!
+}
+
+type VaultTransaction @entity {
+  id: ID!
+  vault: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  market: Bytes!
+  amount: BigInt!
+  paid: BigInt!
+  position: BigInt!
+  wholeMarket: Market!
+  round: BigInt!
+}
+
+type VaultPnl @entity {
+  id: ID!
+  vault: Bytes!
+  timestamp: BigInt!
+  round: BigInt!
+  pnl: BigInt!
+}
