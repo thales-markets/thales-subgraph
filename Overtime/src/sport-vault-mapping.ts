@@ -81,6 +81,8 @@ export function handleDeposited(event: Deposited): void {
   let vault = Vault.load(event.address.toHex());
   if (vault !== null) {
     transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
   }
 
   transaction.save();
@@ -99,6 +101,8 @@ export function handleWithdrawalRequested(event: WithdrawalRequested): void {
   let vault = Vault.load(event.address.toHex());
   if (vault !== null) {
     transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
   }
 
   transaction.save();
@@ -118,6 +122,8 @@ export function handleClaimed(event: Claimed): void {
   let vault = Vault.load(event.address.toHex());
   if (vault !== null) {
     transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
   }
 
   transaction.save();
