@@ -175,6 +175,12 @@ dataSources:
           handler: handleRoundClosed
         - event: VaultStarted()
           handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
   - kind: ethereum/contract
     name: SafuDiscountVault
     network: optimism
@@ -201,6 +207,12 @@ dataSources:
           handler: handleRoundClosed
         - event: VaultStarted()
           handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
