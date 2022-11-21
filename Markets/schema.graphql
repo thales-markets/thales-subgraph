@@ -176,3 +176,21 @@ type VaultPnl @entity {
   round: BigInt!
   pnl: BigInt!
 }
+
+enum VaultUserTransactionType {
+  deposit
+  withdrawalRequest
+  claim
+}
+
+type VaultUserTransaction @entity {
+  id: ID!
+  vault: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  account: Bytes!
+  type: VaultUserTransactionType!
+  amount: BigInt
+  round: BigInt!
+}

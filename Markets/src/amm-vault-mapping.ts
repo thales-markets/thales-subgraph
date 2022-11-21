@@ -1,7 +1,14 @@
 /* eslint-disable no-empty */
 import { BigInt } from '@graphprotocol/graph-ts';
-import { TradeExecuted, RoundClosed, VaultStarted } from '../generated/DiscountVault/AmmVault';
-import { Market, Vault, VaultPnl, VaultTransaction } from '../generated/schema';
+import {
+  TradeExecuted,
+  RoundClosed,
+  VaultStarted,
+  Deposited,
+  WithdrawalRequested,
+  Claimed,
+} from '../generated/DiscountVault/AmmVault';
+import { Market, Vault, VaultPnl, VaultTransaction, VaultUserTransaction } from '../generated/schema';
 
 export function handleVaultStarted(event: VaultStarted): void {
   let vault = new Vault(event.address.toHex());
@@ -48,4 +55,66 @@ export function handleRoundClosed(event: RoundClosed): void {
   }
 
   vaultPnl.save();
+}
+
+export function handleDeposited(event: Deposited): void {
+  let transaction = new VaultUserTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+
+  transaction.vault = event.address;
+  transaction.hash = event.transaction.hash;
+  transaction.timestamp = event.block.timestamp;
+  transaction.blockNumber = event.block.number;
+  transaction.account = event.params.user;
+  transaction.amount = event.params.amount;
+  transaction.type = 'deposit';
+
+  let vault = Vault.load(event.address.toHex());
+  if (vault !== null) {
+    transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
+  }
+
+  transaction.save();
+}
+
+export function handleWithdrawalRequested(event: WithdrawalRequested): void {
+  let transaction = new VaultUserTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+
+  transaction.vault = event.address;
+  transaction.hash = event.transaction.hash;
+  transaction.timestamp = event.block.timestamp;
+  transaction.blockNumber = event.block.number;
+  transaction.account = event.params.user;
+  transaction.type = 'withdrawalRequest';
+
+  let vault = Vault.load(event.address.toHex());
+  if (vault !== null) {
+    transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
+  }
+
+  transaction.save();
+}
+
+export function handleClaimed(event: Claimed): void {
+  let transaction = new VaultUserTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+
+  transaction.vault = event.address;
+  transaction.hash = event.transaction.hash;
+  transaction.timestamp = event.block.timestamp;
+  transaction.blockNumber = event.block.number;
+  transaction.account = event.params.user;
+  transaction.amount = event.params.amount;
+  transaction.type = 'claim';
+
+  let vault = Vault.load(event.address.toHex());
+  if (vault !== null) {
+    transaction.round = vault.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
+  }
+
+  transaction.save();
 }
