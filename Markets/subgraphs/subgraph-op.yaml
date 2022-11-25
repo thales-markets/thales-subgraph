@@ -153,7 +153,7 @@ dataSources:
     name: DegenDiscountVault
     network: optimism
     source:
-      address: '0x9d3ABEAf22ddF68E72b865CA3b23ED880A3be41F'
+      address: '0x43318DE9E8f65b591598F17aDD87ae7247649C83'
       abi: AmmVault
       startBlock: 35800858
     mapping:
