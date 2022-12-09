@@ -87,6 +87,30 @@ dataSources:
           handler: handleSoldToAMMEvent
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
+  - kind: ethereum/contract
+    name: AMMNew
+    network: matic
+    source:
+      address: '0xd52B865584c25FEBfcB676B9A87F32683356A063'
+      abi: AMM
+      startBlock: 36578495
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - Trade
+      abis:
+        - name: AMM
+          file: ../abis/AMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
