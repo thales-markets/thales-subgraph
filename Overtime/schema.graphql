@@ -85,6 +85,7 @@ type PositionBalance @entity {
   account: Bytes!
   amount: BigInt!
   position: Position!
+  sUSDPaid: BigInt
 }
 
 type OvertimeVoucher @entity {

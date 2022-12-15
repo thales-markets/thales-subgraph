@@ -38,6 +38,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         userBalanceFrom.account = event.params.buyer;
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.position = position.id;
+        userBalanceFrom.sUSDPaid = event.params.sUSDPaid;
       }
 
       transaction.positionBalance = userBalanceFrom.id;
