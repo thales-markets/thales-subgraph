@@ -1,7 +1,7 @@
 type SportMarket @entity {
   id: ID!
   timestamp: BigInt!
-  address: String!
+  address: Bytes!
   maturityDate: BigInt!
   tags: [BigInt!]
   isOpen: Boolean
@@ -27,33 +27,14 @@ type SportMarket @entity {
   qualifyingStartTime: BigInt
   arePostQualifyingOddsFetched: Boolean
   betType: BigInt
+  parentMarket: Bytes
+  spread: BigInt
+  total: BigInt
 }
 
-type SportMarketOddsHistory @entity {
+type GameIdToParentMarket @entity {
   id: ID!
-  timestamp: BigInt!
-  address: Bytes!
-  maturityDate: BigInt!
-  tags: [BigInt!]!
-  isOpen: Boolean!
-  isResolved: Boolean!
-  isCanceled: Boolean!
-  finalResult: BigInt!
-  poolSize: BigInt!
-  numberOfParticipants: BigInt!
-  homeTeam: String!
-  awayTeam: String!
-  homeOdds: [BigInt!]!
-  awayOdds: [BigInt!]!
-  drawOdds: [BigInt!]!
-  homeScore: BigInt
-  awayScore: BigInt
-  isPaused: Boolean
-}
-
-type MarketToGameId @entity {
-  id: ID!
-  gameId: Bytes!
+  parentMarket: Bytes!
 }
 
 enum MarketTransactionType {
