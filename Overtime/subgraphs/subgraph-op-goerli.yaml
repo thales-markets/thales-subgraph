@@ -132,7 +132,7 @@ dataSources:
           handler: handleGameOddsAddedObtainerEvent
         - event: GamedOddsAddedChild(bytes32,address,(bytes32,int24,int24,int24,int16,int24,int16,int24,uint24,int24,uint24,int24),uint256[],uint256)
           handler: handleGamedOddsAddedChildEvent
-        - event: ResolveChildMarket(address,uint256,address)
+        - event: ResolveChildMarket(address,uint256,address,uint24,uint24)
           handler: handleResolveChildMarketEvent
   - kind: ethereum/contract
     name: SportsAMM
