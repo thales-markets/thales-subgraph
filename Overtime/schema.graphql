@@ -2,6 +2,7 @@ type SportMarket @entity {
   id: ID!
   timestamp: BigInt!
   address: Bytes!
+  gameId: Bytes!
   maturityDate: BigInt!
   tags: [BigInt!]
   isOpen: Boolean
