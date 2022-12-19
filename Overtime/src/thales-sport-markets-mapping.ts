@@ -30,6 +30,7 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
 
   market.timestamp = event.block.timestamp;
   market.address = event.params.market.toHexString();
+  market.gameId = event.params.gameId;
   market.maturityDate = event.params.maturityDate;
   market.upAddress = event.params.up;
   market.downAddress = event.params.down;
