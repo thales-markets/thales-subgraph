@@ -38,12 +38,13 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         userBalanceFrom.account = event.params.buyer;
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.position = position.id;
-        userBalanceFrom.sUSDPaid = event.params.sUSDPaid;
+        userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
       }
 
       transaction.positionBalance = userBalanceFrom.id;
 
       userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
+      userBalanceFrom.sUSDPaid = userBalanceFrom.sUSDPaid.plus(event.params.sUSDPaid);
       userBalanceFrom.save();
 
       let buyTransaction = new BuyTransaction(event.transaction.hash.toHexString());

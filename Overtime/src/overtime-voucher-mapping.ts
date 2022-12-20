@@ -1,4 +1,4 @@
-import { store } from '@graphprotocol/graph-ts';
+import { store, BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmmWithVoucher, Transfer as TransferEvent } from '../generated/OvertimeVoucher/OvertimeVoucher';
 import { BuyTransaction, MarketTransaction, OvertimeVoucher, PositionBalance } from '../generated/schema';
 
@@ -27,7 +27,7 @@ export function handleBoughtFromAmmWithVoucherEvent(event: BoughtFromAmmWithVouc
       userBalanceFrom.account = event.params.buyer;
       userBalanceFrom.amount = positionBalance.amount;
       userBalanceFrom.position = positionBalance.position;
-      userBalanceFrom.sUSDPaid = event.params.sUSDPaid;
+      userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
       userBalanceFrom.save();
       store.remove('PositionBalance', buyTransaction.positionBalanceId);
     }
