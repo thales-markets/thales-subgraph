@@ -99,11 +99,13 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
           userBalanceFrom.account = event.params.seller;
           userBalanceFrom.amount = BigInt.fromI32(0);
           userBalanceFrom.position = position.id;
+          userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
         }
 
         transaction.positionBalance = userBalanceFrom.id;
 
         userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
+        userBalanceFrom.sUSDPaid = userBalanceFrom.sUSDPaid.minus(event.params.sUSDPaid);
         userBalanceFrom.save();
       }
       transaction.save();
