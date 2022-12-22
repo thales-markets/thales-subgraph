@@ -10,7 +10,7 @@
     "deploy-optimism-goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     
     "codegen:sport-markets-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
-    "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/sport-markets-optimism subgraphs/subgraph-op.yaml",
+    "deploy:sport-markets-optimism": "npm run deploy-optimism -- thales-markets/thales-rinkeby subgraphs/subgraph-op.yaml",
 
     "codegen:sport-markets-goerli": "npm run codegen -- subgraphs/subgraph-goerli.yaml",
     "deploy:sport-markets-goerli": "npm run deploy-optimism -- thales-markets/sport-markets-goerli subgraphs/subgraph-goerli.yaml",

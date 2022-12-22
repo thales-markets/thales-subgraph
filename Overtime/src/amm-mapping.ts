@@ -39,9 +39,9 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
           userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.buyer.toHex());
           userBalanceFrom.firstTxHash = event.transaction.hash;
           userBalanceFrom.account = event.params.buyer;
-          userBalanceFrom.amount = BigInt.fromI32(0);
+          userBalanceFrom.amount = BigInt.fromI64(0);
           userBalanceFrom.position = position.id;
-          userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
+          userBalanceFrom.sUSDPaid = BigInt.fromI64(0);
         }
 
         transaction.positionBalance = userBalanceFrom.id;
@@ -62,8 +62,8 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let userStats = User.load(event.params.buyer.toHex());
   if (userStats === null) {
     userStats = new User(event.params.buyer.toHex());
-    userStats.volume = BigInt.fromI32(0);
-    userStats.pnl = BigInt.fromI32(0);
+    userStats.volume = BigInt.fromI64(0);
+    userStats.pnl = BigInt.fromI64(0);
     userStats.trades = 0;
   }
   userStats.volume = userStats.volume.plus(event.params.sUSDPaid);
@@ -97,9 +97,9 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
           userBalanceFrom = new PositionBalance(position.id + ' - ' + event.params.seller.toHex());
           userBalanceFrom.firstTxHash = event.transaction.hash;
           userBalanceFrom.account = event.params.seller;
-          userBalanceFrom.amount = BigInt.fromI32(0);
+          userBalanceFrom.amount = BigInt.fromI64(0);
           userBalanceFrom.position = position.id;
-          userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
+          userBalanceFrom.sUSDPaid = BigInt.fromI64(0);
         }
 
         transaction.positionBalance = userBalanceFrom.id;
@@ -115,8 +115,8 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   let userStats = User.load(event.params.seller.toHex());
   if (userStats === null) {
     userStats = new User(event.params.seller.toHex());
-    userStats.volume = BigInt.fromI32(0);
-    userStats.pnl = BigInt.fromI32(0);
+    userStats.volume = BigInt.fromI64(0);
+    userStats.pnl = BigInt.fromI64(0);
     userStats.trades = 0;
   }
   userStats.volume = userStats.volume.plus(event.params.sUSDPaid);

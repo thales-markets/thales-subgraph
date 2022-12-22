@@ -80,8 +80,8 @@ export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
     let userStats = User.load(event.transaction.from.toHex());
     if (userStats === null) {
       userStats = new User(event.transaction.from.toHex());
-      userStats.volume = BigInt.fromI32(0);
-      userStats.pnl = BigInt.fromI32(0);
+      userStats.volume = BigInt.fromI64(0);
+      userStats.pnl = BigInt.fromI64(0);
       userStats.trades = 0;
     }
     userStats.volume = userStats.volume.plus(event.params.sUSDPaid);
