@@ -14,7 +14,10 @@ import {
   MarketCreated as MarketCreatedEvent,
   DatesUpdatedForMarket as DatesUpdatedForMarketEvent,
 } from '../generated/SportPositionalMarketManager/SportPositionalMarketManager';
-import { MarketCreated as MarketCreatedSpreadAndTotalEvent } from '../generated/SportPositionalMarketManagerSpreadAndTotal/SportPositionalMarketManager';
+import {
+  MarketCreated as MarketCreatedSpreadAndTotalEvent,
+  DoubleChanceMarketCreated as DoubleChanceMarketCreatedEvent,
+} from '../generated/SportPositionalMarketManagerSpreadAndTotal/SportPositionalMarketManager';
 import {
   CreateChildSpreadSportsMarket as CreateChildSpreadSportsMarketEvent,
   CreateChildTotalSportsMarket as CreateChildTotalSportsMarketEvent,
@@ -35,6 +38,20 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   market.upAddress = event.params.up;
   market.downAddress = event.params.down;
   market.drawAddress = event.params.draw;
+  market.maturityDate = event.params.maturityDate;
+  market.tags = [BigInt.fromI32(0)];
+  market.isOpen = true;
+  market.isResolved = false;
+  market.isCanceled = false;
+  market.isPaused = false;
+  market.finalResult = BigInt.fromI32(0);
+  market.poolSize = BigInt.fromI32(0);
+  market.numberOfParticipants = BigInt.fromI32(0);
+  market.homeTeam = '';
+  market.awayTeam = '';
+  market.homeOdds = BigInt.fromI32(0);
+  market.awayOdds = BigInt.fromI32(0);
+  market.drawOdds = BigInt.fromI32(0);
   market.save();
 
   if (event.params.up.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
@@ -74,6 +91,20 @@ export function handleMarketCreatedSpreadAndTotal(event: MarketCreatedSpreadAndT
   market.upAddress = event.params.up;
   market.downAddress = event.params.down;
   market.drawAddress = event.params.draw;
+  market.maturityDate = event.params.maturityDate;
+  market.tags = [BigInt.fromI32(0)];
+  market.isOpen = true;
+  market.isResolved = false;
+  market.isCanceled = false;
+  market.isPaused = false;
+  market.finalResult = BigInt.fromI32(0);
+  market.poolSize = BigInt.fromI32(0);
+  market.numberOfParticipants = BigInt.fromI32(0);
+  market.homeTeam = '';
+  market.awayTeam = '';
+  market.homeOdds = BigInt.fromI32(0);
+  market.awayOdds = BigInt.fromI32(0);
+  market.drawOdds = BigInt.fromI32(0);
   market.save();
 
   if (event.params.up.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
@@ -186,16 +217,7 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
   let market = SportMarket.load(event.params._marketAddress.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
-    market.address = event.params._marketAddress;
-    market.maturityDate = event.params._game.startTime;
     market.tags = event.params._tags;
-    market.isOpen = true;
-    market.isResolved = false;
-    market.isCanceled = false;
-    market.isPaused = false;
-    market.finalResult = BigInt.fromI32(0);
-    market.poolSize = BigInt.fromI32(0);
-    market.numberOfParticipants = BigInt.fromI32(0);
     market.homeTeam = event.params._game.homeTeam;
     market.awayTeam = event.params._game.awayTeam;
     market.homeOdds = normalizedOdds[0];
@@ -311,13 +333,6 @@ export function handleCreateChildSpreadSportsMarketEvent(event: CreateChildSprea
   let market = SportMarket.load(event.params._child.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
-    market.isOpen = true;
-    market.isResolved = false;
-    market.isCanceled = false;
-    market.isPaused = false;
-    market.finalResult = BigInt.fromI32(0);
-    market.poolSize = BigInt.fromI32(0);
-    market.numberOfParticipants = BigInt.fromI32(0);
     market.homeOdds = normalizedOdds[0];
     market.awayOdds = normalizedOdds[1];
     market.betType = event.params._type;
@@ -339,13 +354,6 @@ export function handleCreateChildTotalSportsMarketEvent(event: CreateChildTotalS
   let market = SportMarket.load(event.params._child.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
-    market.isOpen = true;
-    market.isResolved = false;
-    market.isCanceled = false;
-    market.isPaused = false;
-    market.finalResult = BigInt.fromI32(0);
-    market.poolSize = BigInt.fromI32(0);
-    market.numberOfParticipants = BigInt.fromI32(0);
     market.homeOdds = normalizedOdds[0];
     market.awayOdds = normalizedOdds[1];
     market.betType = event.params._type;
@@ -424,6 +432,23 @@ export function handleGamedOddsAddedChildEvent(event: GamedOddsAddedChildEvent):
     let normalizedOdds = event.params._normalizedChildOdds;
     market.homeOdds = normalizedOdds[0];
     market.awayOdds = normalizedOdds[1];
+    market.save();
+  }
+}
+
+export function handleDoubleChanceMarketCreated(event: DoubleChanceMarketCreatedEvent): void {
+  let market = SportMarket.load(event.params._doubleChanceMarket.toHex());
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.betType = event.params.tag;
+
+    let parentMarket = SportMarket.load(event.params._parentMarket.toHex());
+    if (parentMarket !== null) {
+      market.tags = parentMarket.tags;
+      market.homeTeam = parentMarket.homeTeam;
+      market.awayTeam = parentMarket.awayTeam;
+      market.parentMarket = parentMarket.address;
+    }
     market.save();
   }
 }
