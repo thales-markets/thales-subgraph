@@ -38,6 +38,11 @@ type GameIdToParentMarket @entity {
   parentMarket: Bytes!
 }
 
+type ParentMarketToDoubleChanceMarket @entity {
+  id: ID!
+  doubleChanceMarket: Bytes!
+}
+
 enum MarketTransactionType {
   buy
   sell

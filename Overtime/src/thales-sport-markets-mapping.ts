@@ -1,4 +1,12 @@
-import { Position, SportMarket, PositionBalance, ClaimTx, User, GameIdToParentMarket } from '../generated/schema';
+import {
+  Position,
+  SportMarket,
+  PositionBalance,
+  ClaimTx,
+  User,
+  GameIdToParentMarket,
+  ParentMarketToDoubleChanceMarket,
+} from '../generated/schema';
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
@@ -224,6 +232,17 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
     market.awayOdds = normalizedOdds[1];
     market.drawOdds = normalizedOdds[2];
     market.save();
+
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(event.params._marketAddress.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.tags = market.tags;
+        doubleChanceMarket.homeTeam = market.homeTeam;
+        doubleChanceMarket.awayTeam = market.awayTeam;
+        doubleChanceMarket.save();
+      }
+    }
   }
 }
 
@@ -441,14 +460,11 @@ export function handleDoubleChanceMarketCreated(event: DoubleChanceMarketCreated
   if (market !== null) {
     market.timestamp = event.block.timestamp;
     market.betType = event.params.tag;
-
-    let parentMarket = SportMarket.load(event.params._parentMarket.toHex());
-    if (parentMarket !== null) {
-      market.tags = parentMarket.tags;
-      market.homeTeam = parentMarket.homeTeam;
-      market.awayTeam = parentMarket.awayTeam;
-      market.parentMarket = parentMarket.address;
-    }
+    market.parentMarket = event.params._parentMarket;
     market.save();
+
+    let parentMarketToDoubleChanceMarket = new ParentMarketToDoubleChanceMarket(event.params._parentMarket.toHex());
+    parentMarketToDoubleChanceMarket.doubleChanceMarket = event.params._doubleChanceMarket;
+    parentMarketToDoubleChanceMarket.save();
   }
 }
