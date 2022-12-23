@@ -10,9 +10,7 @@ import {
 import {
   CreateSportsMarket as CreateSportsMarketEvent,
   GameOddsAdded as GameOddsAddedEvent,
-  ResolveSportsMarket as ResolveSportsMarketEvent,
   GameResolved as GameResolvedEvent,
-  CancelSportsMarket as CancelSportsMarketEvent,
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
 import { GameResolved as GameResolvedUpdatedAtEvent } from '../generated/TheRundownConsumerUpdatedAt/TheRundownConsumer';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
@@ -142,20 +140,70 @@ export function handleMarketCreatedSpreadAndTotal(event: MarketCreatedSpreadAndT
 
 export function handleMarketResolved(event: MarketResolved): void {
   let market = SportMarket.load(event.address.toHex());
-  if (market !== null && event.params.result == 0) {
-    market.isCanceled = true;
+  if (market !== null) {
+    market.timestamp = event.block.timestamp;
+    market.isCanceled = event.params.result == 0;
+    market.isResolved = true;
     market.isOpen = false;
     market.isPaused = false;
+    market.finalResult = BigInt.fromI32(event.params.result);
     market.save();
+
+    if (event.params.result == 1 || event.params.result == 0) {
+      let position = Position.load(market.upAddress.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
+    if (event.params.result == 2 || event.params.result == 0) {
+      let position = Position.load(market.downAddress.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
+    if (event.params.result == 3 || event.params.result == 0) {
+      let position = Position.load(market.drawAddress.toHex());
+      if (position !== null) {
+        position.claimable = true;
+        position.save();
+      }
+    }
 
     let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
     if (parentMarketToDoubleChanceMarket !== null) {
       let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
       if (doubleChanceMarket !== null) {
+        doubleChanceMarket.timestamp = market.timestamp;
         doubleChanceMarket.isCanceled = market.isCanceled;
+        doubleChanceMarket.isResolved = market.isResolved;
         doubleChanceMarket.isOpen = market.isOpen;
         doubleChanceMarket.isPaused = market.isPaused;
+        doubleChanceMarket.finalResult = market.finalResult;
         doubleChanceMarket.save();
+
+        if (event.params.result == 1 || event.params.result == 0) {
+          let position = Position.load(doubleChanceMarket.upAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
+        if (event.params.result == 2 || event.params.result == 0) {
+          let position = Position.load(doubleChanceMarket.downAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
+        if (event.params.result == 3 || event.params.result == 0) {
+          let position = Position.load(doubleChanceMarket.drawAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
       }
     }
   }
@@ -269,74 +317,10 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
         doubleChanceMarket.tags = market.tags;
         doubleChanceMarket.homeTeam = market.homeTeam;
         doubleChanceMarket.awayTeam = market.awayTeam;
+        doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
+        doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
+        doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
         doubleChanceMarket.save();
-      }
-    }
-  }
-}
-
-export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent): void {
-  let market = SportMarket.load(event.params._marketAddress.toHex());
-  if (market !== null) {
-    market.timestamp = event.block.timestamp;
-    market.isResolved = true;
-    market.isOpen = false;
-    market.finalResult = event.params._outcome;
-    market.save();
-
-    if (market.finalResult == BigInt.fromI32(1)) {
-      let position = Position.load(market.upAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
-    if (market.finalResult == BigInt.fromI32(2)) {
-      let position = Position.load(market.downAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
-    if (market.finalResult == BigInt.fromI32(3)) {
-      let position = Position.load(market.drawAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
-
-    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
-    if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
-      if (doubleChanceMarket !== null) {
-        doubleChanceMarket.timestamp = market.timestamp;
-        doubleChanceMarket.isResolved = market.isResolved;
-        doubleChanceMarket.isOpen = market.isOpen;
-        doubleChanceMarket.finalResult = market.finalResult;
-        doubleChanceMarket.save();
-
-        if (doubleChanceMarket.finalResult == BigInt.fromI32(1)) {
-          let position = Position.load(doubleChanceMarket.upAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
-        if (doubleChanceMarket.finalResult == BigInt.fromI32(2)) {
-          let position = Position.load(doubleChanceMarket.downAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
-        if (doubleChanceMarket.finalResult == BigInt.fromI32(3)) {
-          let position = Position.load(doubleChanceMarket.drawAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
       }
     }
   }
@@ -401,57 +385,15 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
       market.awayOdds = normalizedOdds[1];
       market.drawOdds = normalizedOdds[2];
       market.save();
-    }
-  }
-}
 
-export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
-  let market = SportMarket.load(event.params._marketAddress.toHex());
-  if (market !== null) {
-    market.timestamp = event.block.timestamp;
-    market.isCanceled = true;
-    market.isOpen = false;
-    market.save();
-
-    let position = Position.load(market.upAddress.toHex());
-    if (position !== null) {
-      position.claimable = true;
-      position.save();
-    }
-    let position1 = Position.load(market.downAddress.toHex());
-    if (position1 !== null) {
-      position1.claimable = true;
-      position1.save();
-    }
-    let position2 = Position.load(market.drawAddress.toHex());
-    if (position2 !== null) {
-      position2.claimable = true;
-      position2.save();
-    }
-
-    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
-    if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
-      if (doubleChanceMarket !== null) {
-        doubleChanceMarket.timestamp = market.timestamp;
-        doubleChanceMarket.isCanceled = market.isCanceled;
-        doubleChanceMarket.isOpen = market.isOpen;
-        doubleChanceMarket.save();
-
-        let position3 = Position.load(doubleChanceMarket.upAddress.toHex());
-        if (position3 !== null) {
-          position3.claimable = true;
-          position3.save();
-        }
-        let position4 = Position.load(doubleChanceMarket.downAddress.toHex());
-        if (position4 !== null) {
-          position4.claimable = true;
-          position4.save();
-        }
-        let position5 = Position.load(doubleChanceMarket.drawAddress.toHex());
-        if (position5 !== null) {
-          position5.claimable = true;
-          position5.save();
+      let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+      if (parentMarketToDoubleChanceMarket !== null) {
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
+          doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
+          doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
+          doubleChanceMarket.save();
         }
       }
     }
@@ -504,38 +446,8 @@ export function handleResolveChildMarketEvent(event: ResolveChildMarketEvent): v
   let market = SportMarket.load(event.params._child.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
-    market.isResolved = true;
-    market.isOpen = false;
-    market.finalResult = event.params._outcome;
-
-    let parentMarket = SportMarket.load(event.params._main.toHex());
-    if (parentMarket !== null) {
-      market.timestamp = event.block.timestamp;
-      market.homeScore = parentMarket.homeScore;
-      market.awayScore = parentMarket.awayScore;
-    }
-
-    if (market.finalResult == BigInt.fromI32(1)) {
-      let position = Position.load(market.upAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
-    if (market.finalResult == BigInt.fromI32(2)) {
-      let position = Position.load(market.downAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
-    if (market.finalResult == BigInt.fromI32(3)) {
-      let position = Position.load(market.drawAddress.toHex());
-      if (position !== null) {
-        position.claimable = true;
-        position.save();
-      }
-    }
+    market.homeScore = BigInt.fromI32(event.params._homeScore);
+    market.awayScore = BigInt.fromI32(event.params._awayScore);
     market.save();
   }
 }
@@ -551,11 +463,22 @@ export function handleGameOddsAddedObtainerEvent(event: GameOddsAddedObtainerEve
       market.awayOdds = normalizedOdds[1];
       market.drawOdds = normalizedOdds[2];
       market.save();
+
+      let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+      if (parentMarketToDoubleChanceMarket !== null) {
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
+          doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
+          doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
+          doubleChanceMarket.save();
+        }
+      }
     }
   }
 }
 
-export function handleGamedOddsAddedChildEvent(event: GamedOddsAddedChildEvent): void {
+export function handleGameOddsAddedChildEvent(event: GamedOddsAddedChildEvent): void {
   let market = SportMarket.load(event.params._market.toHex());
   if (market !== null) {
     market.timestamp = event.block.timestamp;
@@ -572,6 +495,13 @@ export function handleDoubleChanceMarketCreated(event: DoubleChanceMarketCreated
     market.timestamp = event.block.timestamp;
     market.betType = event.params.tag;
     market.parentMarket = event.params._parentMarket;
+
+    let parentMarket = SportMarket.load(event.params._parentMarket.toHex());
+    if (parentMarket !== null) {
+      market.homeOdds = parentMarket.homeOdds.plus(parentMarket.drawOdds);
+      market.awayOdds = parentMarket.awayOdds.plus(parentMarket.drawOdds);
+      market.drawOdds = parentMarket.homeOdds.plus(parentMarket.awayOdds);
+    }
     market.save();
 
     let parentMarketToDoubleChanceMarket = new ParentMarketToDoubleChanceMarket(event.params._parentMarket.toHex());

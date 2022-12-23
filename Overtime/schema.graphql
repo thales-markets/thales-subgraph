@@ -5,17 +5,17 @@ type SportMarket @entity {
   gameId: Bytes!
   maturityDate: BigInt!
   tags: [BigInt!]
-  isOpen: Boolean
-  isResolved: Boolean
-  isCanceled: Boolean
-  finalResult: BigInt
-  poolSize: BigInt
-  numberOfParticipants: BigInt
-  homeTeam: String
-  awayTeam: String
-  homeOdds: BigInt
-  awayOdds: BigInt
-  drawOdds: BigInt
+  isOpen: Boolean!
+  isResolved: Boolean!
+  isCanceled: Boolean!
+  finalResult: BigInt!
+  poolSize: BigInt!
+  numberOfParticipants: BigInt!
+  homeTeam: String!
+  awayTeam: String!
+  homeOdds: BigInt!
+  awayOdds: BigInt!
+  drawOdds: BigInt!
   homeScore: BigInt
   awayScore: BigInt
   upAddress: Bytes!
@@ -23,7 +23,7 @@ type SportMarket @entity {
   drawAddress: Bytes!
   isApex: Boolean
   resultDetails: String
-  isPaused: Boolean
+  isPaused: Boolean!
   leagueRaceName: String
   qualifyingStartTime: BigInt
   arePostQualifyingOddsFetched: Boolean
