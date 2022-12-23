@@ -147,6 +147,17 @@ export function handleMarketResolved(event: MarketResolved): void {
     market.isOpen = false;
     market.isPaused = false;
     market.save();
+
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.isCanceled = market.isCanceled;
+        doubleChanceMarket.isOpen = market.isOpen;
+        doubleChanceMarket.isPaused = market.isPaused;
+        doubleChanceMarket.save();
+      }
+    }
   }
 }
 
@@ -155,6 +166,15 @@ export function handleMarketPauseUpdated(event: PauseUpdated): void {
   if (market !== null) {
     market.isPaused = event.params._paused;
     market.save();
+
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.isPaused = market.isPaused;
+        doubleChanceMarket.save();
+      }
+    }
   }
 }
 
@@ -163,6 +183,15 @@ export function handleDatesUpdatedForMarket(event: DatesUpdatedForMarketEvent): 
   if (market !== null) {
     market.maturityDate = event.params._newStartTime;
     market.save();
+
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.maturityDate = market.maturityDate;
+        doubleChanceMarket.save();
+      }
+    }
   }
 }
 
@@ -253,6 +282,7 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
     market.isResolved = true;
     market.isOpen = false;
     market.finalResult = event.params._outcome;
+    market.save();
 
     if (market.finalResult == BigInt.fromI32(1)) {
       let position = Position.load(market.upAddress.toHex());
@@ -276,7 +306,39 @@ export function handleResolveSportsMarketEvent(event: ResolveSportsMarketEvent):
       }
     }
 
-    market.save();
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.timestamp = market.timestamp;
+        doubleChanceMarket.isResolved = market.isResolved;
+        doubleChanceMarket.isOpen = market.isOpen;
+        doubleChanceMarket.finalResult = market.finalResult;
+        doubleChanceMarket.save();
+
+        if (doubleChanceMarket.finalResult == BigInt.fromI32(1)) {
+          let position = Position.load(doubleChanceMarket.upAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
+        if (doubleChanceMarket.finalResult == BigInt.fromI32(2)) {
+          let position = Position.load(doubleChanceMarket.downAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
+        if (doubleChanceMarket.finalResult == BigInt.fromI32(3)) {
+          let position = Position.load(doubleChanceMarket.drawAddress.toHex());
+          if (position !== null) {
+            position.claimable = true;
+            position.save();
+          }
+        }
+      }
+    }
   }
 }
 
@@ -289,6 +351,17 @@ export function handleGameResolvedEvent(event: GameResolvedEvent): void {
       market.homeScore = BigInt.fromI32(event.params._game.homeScore);
       market.awayScore = BigInt.fromI32(event.params._game.awayScore);
       market.save();
+
+      let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+      if (parentMarketToDoubleChanceMarket !== null) {
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+      }
     }
   }
 }
@@ -302,6 +375,17 @@ export function handleGameResolvedUpdatedAtEvent(event: GameResolvedUpdatedAtEve
       market.homeScore = BigInt.fromI32(event.params._game.homeScore);
       market.awayScore = BigInt.fromI32(event.params._game.awayScore);
       market.save();
+
+      let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+      if (parentMarketToDoubleChanceMarket !== null) {
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+      }
     }
   }
 }
@@ -343,6 +427,33 @@ export function handleCancelSportsMarket(event: CancelSportsMarketEvent): void {
     if (position2 !== null) {
       position2.claimable = true;
       position2.save();
+    }
+
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.timestamp = market.timestamp;
+        doubleChanceMarket.isCanceled = market.isCanceled;
+        doubleChanceMarket.isOpen = market.isOpen;
+        doubleChanceMarket.save();
+
+        let position3 = Position.load(doubleChanceMarket.upAddress.toHex());
+        if (position3 !== null) {
+          position3.claimable = true;
+          position3.save();
+        }
+        let position4 = Position.load(doubleChanceMarket.downAddress.toHex());
+        if (position4 !== null) {
+          position4.claimable = true;
+          position4.save();
+        }
+        let position5 = Position.load(doubleChanceMarket.drawAddress.toHex());
+        if (position5 !== null) {
+          position5.claimable = true;
+          position5.save();
+        }
+      }
     }
   }
 }
