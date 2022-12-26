@@ -394,6 +394,18 @@
         "internalType": "address",
         "name": "_sportsManager",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_verifier",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_oddsObtainer",
+        "type": "address"
       }
     ],
     "name": "NewSportContracts",
@@ -423,6 +435,25 @@
       }
     ],
     "name": "NewWrapperAddress",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_marketAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "OddsCircuitBreaker",
     "type": "event"
   },
   {
@@ -683,20 +714,35 @@
   {
     "inputs": [
       {
-        "internalType": "int256",
-        "name": "_americanOdd",
-        "type": "int256"
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
-    "name": "calculateNormalizedOddFromAmerican",
+    "name": "backupOdds",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "odd",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "gameId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "int24",
+        "name": "homeOdds",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "awayOdds",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "drawOdds",
+        "type": "int24"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -743,6 +789,11 @@
         "internalType": "address",
         "name": "_market",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_useBackupOdds",
+        "type": "bool"
       }
     ],
     "name": "cancelMarketManually",
@@ -815,11 +866,6 @@
         "internalType": "bytes[]",
         "name": "_games",
         "type": "bytes[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_date",
-        "type": "uint256"
       }
     ],
     "name": "fulfillGamesOdds",
@@ -1160,44 +1206,27 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_gameId",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
       }
     ],
-    "name": "getGameResolvedById",
+    "name": "getGamePropsForOdds",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "gameId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint8",
-            "name": "homeScore",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "awayScore",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint8",
-            "name": "statusId",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint40",
-            "name": "lastUpdated",
-            "type": "uint40"
-          }
-        ],
-        "internalType": "struct TherundownConsumer.GameResolve",
-        "name": "",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "_sportId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_gameDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -1230,6 +1259,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      }
+    ],
+    "name": "getNormalizedChildOdds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "_gameId",
         "type": "bytes32"
@@ -1249,27 +1297,17 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_gameId",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
       }
     ],
-    "name": "getOddsForGame",
+    "name": "getNormalizedOddsForMarket",
     "outputs": [
       {
-        "internalType": "int24",
+        "internalType": "uint256[]",
         "name": "",
-        "type": "int24"
-      },
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
-      },
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -1340,6 +1378,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      }
+    ],
+    "name": "isChildMarket",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "_gameId",
         "type": "bytes32"
@@ -1397,30 +1454,6 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "_teamA",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_teamB",
-        "type": "string"
-      }
-    ],
-    "name": "isSameTeamOrTBD",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -1451,44 +1484,6 @@
       }
     ],
     "name": "isSportTwoPositionsSport",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_market",
-        "type": "string"
-      }
-    ],
-    "name": "isSupportedMarketType",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_sportId",
-        "type": "uint256"
-      }
-    ],
-    "name": "isSupportedSport",
     "outputs": [
       {
         "internalType": "bool",
@@ -1635,6 +1630,19 @@
   },
   {
     "inputs": [],
+    "name": "oddsObtainer",
+    "outputs": [
+      {
+        "internalType": "contract IGamesOddsObtainer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -1644,6 +1652,42 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_pause",
+        "type": "bool"
+      }
+    ],
+    "name": "pauseOrUnpauseMarket",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_pause",
+        "type": "bool"
+      }
+    ],
+    "name": "pauseOrUnpauseMarketManually",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1801,6 +1845,24 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_gameId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_child",
+        "type": "address"
+      }
+    ],
+    "name": "setGameIdPerChildMarket",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_owner",
         "type": "address"
@@ -1828,6 +1890,24 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_flag",
+        "type": "bool"
+      }
+    ],
+    "name": "setPausedByCanceledStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_wrapperAddress",
         "type": "address"
       },
@@ -1839,6 +1919,16 @@
       {
         "internalType": "address",
         "name": "_sportsManager",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_verifier",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_oddsObtainer",
         "type": "address"
       }
     ],
@@ -2016,6 +2106,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "verifier",
+    "outputs": [
+      {
+        "internalType": "contract ITherundownConsumerVerifier",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

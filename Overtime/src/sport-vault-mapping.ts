@@ -8,14 +8,7 @@ import {
   WithdrawalRequested,
   Claimed,
 } from '../generated/DiscountVault/SportVault';
-import {
-  MarketToGameId,
-  SportMarket,
-  Vault,
-  VaultPnl,
-  VaultTransaction,
-  VaultUserTransaction,
-} from '../generated/schema';
+import { SportMarket, Vault, VaultPnl, VaultTransaction, VaultUserTransaction } from '../generated/schema';
 
 export function handleVaultStarted(event: VaultStarted): void {
   let vault = new Vault(event.address.toHex());
@@ -27,27 +20,24 @@ export function handleVaultStarted(event: VaultStarted): void {
 export function handleVaultTrade(event: TradeExecuted): void {
   let transaction = new VaultTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
 
-  let marketToGameId = MarketToGameId.load(event.params.market.toHex());
-  if (marketToGameId !== null) {
-    let market = SportMarket.load(marketToGameId.gameId.toHex());
-    if (market !== null) {
-      transaction.vault = event.address;
-      transaction.hash = event.transaction.hash;
-      transaction.timestamp = event.block.timestamp;
-      transaction.blockNumber = event.block.number;
-      transaction.amount = event.params.amount;
-      transaction.position = BigInt.fromI32(event.params.position);
-      transaction.market = event.params.market;
-      transaction.paid = event.params.quote;
-      transaction.wholeMarket = market.id;
+  let market = SportMarket.load(event.params.market.toHex());
+  if (market !== null) {
+    transaction.vault = event.address;
+    transaction.hash = event.transaction.hash;
+    transaction.timestamp = event.block.timestamp;
+    transaction.blockNumber = event.block.number;
+    transaction.amount = event.params.amount;
+    transaction.position = BigInt.fromI32(event.params.position);
+    transaction.market = event.params.market;
+    transaction.paid = event.params.quote;
+    transaction.wholeMarket = market.id;
 
-      let vault = Vault.load(event.address.toHex());
-      if (vault !== null) {
-        transaction.round = vault.round;
-      }
-
-      transaction.save();
+    let vault = Vault.load(event.address.toHex());
+    if (vault !== null) {
+      transaction.round = vault.round;
     }
+
+    transaction.save();
   }
 }
 

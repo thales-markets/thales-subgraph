@@ -1,41 +1,10 @@
 type SportMarket @entity {
   id: ID!
   timestamp: BigInt!
-  address: String!
+  address: Bytes!
   gameId: Bytes!
   maturityDate: BigInt!
   tags: [BigInt!]
-  isOpen: Boolean
-  isResolved: Boolean
-  isCanceled: Boolean
-  finalResult: BigInt
-  poolSize: BigInt
-  numberOfParticipants: BigInt
-  homeTeam: String
-  awayTeam: String
-  homeOdds: BigInt
-  awayOdds: BigInt
-  drawOdds: BigInt
-  homeScore: BigInt
-  awayScore: BigInt
-  upAddress: Bytes!
-  downAddress: Bytes!
-  drawAddress: Bytes!
-  isApex: Boolean
-  resultDetails: String
-  isPaused: Boolean
-  leagueRaceName: String
-  qualifyingStartTime: BigInt
-  arePostQualifyingOddsFetched: Boolean
-  betType: BigInt
-}
-
-type SportMarketOddsHistory @entity {
-  id: ID!
-  timestamp: BigInt!
-  address: Bytes!
-  maturityDate: BigInt!
-  tags: [BigInt!]!
   isOpen: Boolean!
   isResolved: Boolean!
   isCanceled: Boolean!
@@ -44,17 +13,34 @@ type SportMarketOddsHistory @entity {
   numberOfParticipants: BigInt!
   homeTeam: String!
   awayTeam: String!
-  homeOdds: [BigInt!]!
-  awayOdds: [BigInt!]!
-  drawOdds: [BigInt!]!
+  homeOdds: BigInt!
+  awayOdds: BigInt!
+  drawOdds: BigInt!
   homeScore: BigInt
   awayScore: BigInt
-  isPaused: Boolean
+  upAddress: Bytes!
+  downAddress: Bytes!
+  drawAddress: Bytes!
+  isApex: Boolean
+  resultDetails: String
+  isPaused: Boolean!
+  leagueRaceName: String
+  qualifyingStartTime: BigInt
+  arePostQualifyingOddsFetched: Boolean
+  betType: BigInt
+  parentMarket: Bytes
+  spread: BigInt
+  total: BigInt
 }
 
-type MarketToGameId @entity {
+type GameIdToParentMarket @entity {
   id: ID!
-  gameId: Bytes!
+  parentMarket: Bytes!
+}
+
+type ParentMarketToDoubleChanceMarket @entity {
+  id: ID!
+  doubleChanceMarket: Bytes!
 }
 
 enum MarketTransactionType {

@@ -6,7 +6,6 @@ import {
   ReferrerPaid,
 } from '../generated/ParlayMarketsAMM/ParlayMarketsAMM';
 import {
-  MarketToGameId,
   ParlayMarket,
   Position,
   ReferralTransaction,
@@ -25,23 +24,19 @@ export function handleNewParlayMarket(event: NewParlayMarket): void {
   let lastGameStarts: BigInt | null = null;
 
   for (let i = 0; i < event.params.markets.length; i++) {
-    const marketToGameId = MarketToGameId.load(event.params.markets[i].toHex());
+    const sportMarket = SportMarket.load(event.params.markets[i].toHex());
+    if (sportMarket !== null) {
+      sportMarketsArray.push(sportMarket.id);
+      if (i == 0) lastGameStarts = sportMarket.maturityDate;
+      if (lastGameStarts !== null && lastGameStarts.lt(sportMarket.maturityDate)) {
+        lastGameStarts = sportMarket.maturityDate;
+      }
 
-    if (marketToGameId !== null) {
-      const sportMarket = SportMarket.load(marketToGameId.gameId.toHex());
-      if (sportMarket !== null) {
-        sportMarketsArray.push(sportMarket.id);
-        if (i == 0) lastGameStarts = sportMarket.maturityDate;
-        if (lastGameStarts !== null && lastGameStarts.lt(sportMarket.maturityDate)) {
-          lastGameStarts = sportMarket.maturityDate;
-        }
+      const positionAddress = getPositionAddressFromPositionIndex(event.params.positions[i], sportMarket);
 
-        const positionAddress = getPositionAddressFromPositionIndex(event.params.positions[i], sportMarket);
-
-        if (positionAddress !== null) {
-          const position = Position.load(positionAddress.toHex());
-          if (position !== null) positionsArray.push(position.id);
-        }
+      if (positionAddress !== null) {
+        const position = Position.load(positionAddress.toHex());
+        if (position !== null) positionsArray.push(position.id);
       }
     }
   }
