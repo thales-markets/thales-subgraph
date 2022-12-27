@@ -30,6 +30,31 @@ dataSources:
         - event: DatesUpdatedForMarket(address,uint256,uint256)
           handler: handleDatesUpdatedForMarket
   - kind: ethereum/contract
+    name: SportPositionalMarketManagerSpreadAndTotal
+    network: optimism
+    source:
+      address: '0xFBffEbfA2bF2cF84fdCf77917b358fC59Ff5771e'
+      abi: SportPositionalMarketManager
+      startBlock: 13806000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - Position
+      abis:
+        - name: SportPositionalMarketManager
+          file: ../abis/SportPositionalMarketManager_SpreadAndTotal.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,address,address,address)
+          handler: handleMarketCreatedSpreadAndTotal
+        - event: DoubleChanceMarketCreated(address,address,uint256)
+          handler: handleDoubleChanceMarketCreated
+  - kind: ethereum/contract
     name: TheRundownConsumer
     network: optimism
     source:
@@ -43,7 +68,6 @@ dataSources:
       file: ../src/thales-sport-markets-mapping.ts
       entities:
         - SportMarket
-        - SportMarketOddsHistory
         - Position
       abis:
         - name: TheRundownConsumer
@@ -55,12 +79,8 @@ dataSources:
           handler: handleCreateSportsMarketEvent
         - event: GameOddsAdded(bytes32,bytes32,(bytes32,int24,int24,int24),uint256[])
           handler: handleGameOddsAddedEvent
-        - event: ResolveSportsMarket(address,bytes32,uint256)
-          handler: handleResolveSportsMarketEvent
         - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8),uint256)
           handler: handleGameResolvedEvent
-        - event: CancelSportsMarket(address,bytes32)
-          handler: handleCancelSportsMarket
   - kind: ethereum/contract
     name: TheRundownConsumerUpdatedAt
     network: optimism
@@ -75,7 +95,6 @@ dataSources:
       file: ../src/thales-sport-markets-mapping.ts
       entities:
         - SportMarket
-        - SportMarketOddsHistory
         - Position
       abis:
         - name: TheRundownConsumer
@@ -169,6 +188,34 @@ dataSources:
       eventHandlers:
         - event: CreateSportsMarket(address,bytes32,(bytes32,string,uint256,uint256,uint256,uint256,string,string,uint256),uint256[],uint256[])
           handler: handleCreateSportsMarketWithBetTypeEvent
+  - kind: ethereum/contract
+    name: GamesOddsObtainer
+    network: optimism
+    source:
+      address: '0x3ff20410003767ede94c06c5df56968d90abae6c'
+      abi: GamesOddsObtainer
+      startBlock: 55527449
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+      abis:
+        - name: GamesOddsObtainer
+          file: ../abis/GamesOddsObtainer.json
+      eventHandlers:
+        - event: CreateChildSpreadSportsMarket(address,address,bytes32,int16,uint256[],uint256)
+          handler: handleCreateChildSpreadSportsMarketEvent
+        - event: CreateChildTotalSportsMarket(address,address,bytes32,uint24,uint256[],uint256)
+          handler: handleCreateChildTotalSportsMarketEvent
+        - event: GameOddsAdded(bytes32,bytes32,(bytes32,int24,int24,int24,int16,int24,int16,int24,uint24,int24,uint24,int24),uint256[])
+          handler: handleGameOddsAddedObtainerEvent
+        - event: GamedOddsAddedChild(bytes32,address,(bytes32,int24,int24,int24,int16,int24,int16,int24,uint24,int24,uint24,int24),uint256[],uint256)
+          handler: handleGameOddsAddedChildEvent
+        - event: ResolveChildMarket(address,uint256,address,uint24,uint24)
+          handler: handleResolveChildMarketEvent
   - kind: ethereum/contract
     name: SportsAMM
     network: optimism
