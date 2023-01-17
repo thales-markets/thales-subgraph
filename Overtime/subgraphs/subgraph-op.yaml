@@ -52,7 +52,7 @@ dataSources:
       eventHandlers:
         - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,address,address,address)
           handler: handleMarketCreatedSpreadAndTotal
-        - event: DoubleChanceMarketCreated(address,address,uint256)
+        - event: DoubleChanceMarketCreated(address,address,uint256,string)
           handler: handleDoubleChanceMarketCreated
   - kind: ethereum/contract
     name: TheRundownConsumer

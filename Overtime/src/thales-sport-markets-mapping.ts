@@ -170,42 +170,6 @@ export function handleMarketResolved(event: MarketResolved): void {
         position.save();
       }
     }
-
-    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
-    if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
-      if (doubleChanceMarket !== null) {
-        doubleChanceMarket.timestamp = market.timestamp;
-        doubleChanceMarket.isCanceled = market.isCanceled;
-        doubleChanceMarket.isResolved = market.isResolved;
-        doubleChanceMarket.isOpen = market.isOpen;
-        doubleChanceMarket.isPaused = market.isPaused;
-        doubleChanceMarket.finalResult = market.finalResult;
-        doubleChanceMarket.save();
-
-        if (event.params.result == 1 || event.params.result == 0) {
-          let position = Position.load(doubleChanceMarket.upAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
-        if (event.params.result == 2 || event.params.result == 0) {
-          let position = Position.load(doubleChanceMarket.downAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
-        if (event.params.result == 3 || event.params.result == 0) {
-          let position = Position.load(doubleChanceMarket.drawAddress.toHex());
-          if (position !== null) {
-            position.claimable = true;
-            position.save();
-          }
-        }
-      }
-    }
   }
 }
 
@@ -217,7 +181,17 @@ export function handleMarketPauseUpdated(event: PauseUpdated): void {
 
     let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
     if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.isPaused = market.isPaused;
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.isPaused = market.isPaused;
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
       if (doubleChanceMarket !== null) {
         doubleChanceMarket.isPaused = market.isPaused;
         doubleChanceMarket.save();
@@ -234,7 +208,17 @@ export function handleDatesUpdatedForMarket(event: DatesUpdatedForMarketEvent): 
 
     let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
     if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.maturityDate = market.maturityDate;
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.maturityDate = market.maturityDate;
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
       if (doubleChanceMarket !== null) {
         doubleChanceMarket.maturityDate = market.maturityDate;
         doubleChanceMarket.save();
@@ -312,14 +296,28 @@ export function handleCreateSportsMarketEvent(event: CreateSportsMarketEvent): v
 
     let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(event.params._marketAddress.toHex());
     if (parentMarketToDoubleChanceMarket !== null) {
-      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+      let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
       if (doubleChanceMarket !== null) {
         doubleChanceMarket.tags = market.tags;
         doubleChanceMarket.homeTeam = market.homeTeam;
         doubleChanceMarket.awayTeam = market.awayTeam;
         doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
-        doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
-        doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.tags = market.tags;
+        doubleChanceMarket.homeTeam = market.homeTeam;
+        doubleChanceMarket.awayTeam = market.awayTeam;
+        doubleChanceMarket.homeOdds = market.awayOdds.plus(market.drawOdds);
+        doubleChanceMarket.save();
+      }
+      doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
+      if (doubleChanceMarket !== null) {
+        doubleChanceMarket.tags = market.tags;
+        doubleChanceMarket.homeTeam = market.homeTeam;
+        doubleChanceMarket.awayTeam = market.awayTeam;
+        doubleChanceMarket.homeOdds = market.homeOdds.plus(market.awayOdds);
         doubleChanceMarket.save();
       }
     }
@@ -338,7 +336,21 @@ export function handleGameResolvedEvent(event: GameResolvedEvent): void {
 
       let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
       if (parentMarketToDoubleChanceMarket !== null) {
-        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
         if (doubleChanceMarket !== null) {
           doubleChanceMarket.timestamp = market.timestamp;
           doubleChanceMarket.homeScore = market.homeScore;
@@ -362,7 +374,21 @@ export function handleGameResolvedUpdatedAtEvent(event: GameResolvedUpdatedAtEve
 
       let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
       if (parentMarketToDoubleChanceMarket !== null) {
-        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.timestamp = market.timestamp;
+          doubleChanceMarket.homeScore = market.homeScore;
+          doubleChanceMarket.awayScore = market.awayScore;
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
         if (doubleChanceMarket !== null) {
           doubleChanceMarket.timestamp = market.timestamp;
           doubleChanceMarket.homeScore = market.homeScore;
@@ -388,11 +414,19 @@ export function handleGameOddsAddedEvent(event: GameOddsAddedEvent): void {
 
       let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
       if (parentMarketToDoubleChanceMarket !== null) {
-        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
         if (doubleChanceMarket !== null) {
           doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
-          doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
-          doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.awayOdds.plus(market.drawOdds);
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.homeOdds.plus(market.awayOdds);
           doubleChanceMarket.save();
         }
       }
@@ -466,11 +500,19 @@ export function handleGameOddsAddedObtainerEvent(event: GameOddsAddedObtainerEve
 
       let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(market.address.toHex());
       if (parentMarketToDoubleChanceMarket !== null) {
-        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.doubleChanceMarket.toHex());
+        let doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket.toHex());
         if (doubleChanceMarket !== null) {
           doubleChanceMarket.homeOdds = market.homeOdds.plus(market.drawOdds);
-          doubleChanceMarket.awayOdds = market.awayOdds.plus(market.drawOdds);
-          doubleChanceMarket.drawOdds = market.homeOdds.plus(market.awayOdds);
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.awayOdds.plus(market.drawOdds);
+          doubleChanceMarket.save();
+        }
+        doubleChanceMarket = SportMarket.load(parentMarketToDoubleChanceMarket.noDrawMarket.toHex());
+        if (doubleChanceMarket !== null) {
+          doubleChanceMarket.homeOdds = market.homeOdds.plus(market.awayOdds);
           doubleChanceMarket.save();
         }
       }
@@ -495,17 +537,33 @@ export function handleDoubleChanceMarketCreated(event: DoubleChanceMarketCreated
     market.timestamp = event.block.timestamp;
     market.betType = event.params.tag;
     market.parentMarket = event.params._parentMarket;
+    market.doubleChanceMarketType = event.params.label;
 
     let parentMarket = SportMarket.load(event.params._parentMarket.toHex());
     if (parentMarket !== null) {
-      market.homeOdds = parentMarket.homeOdds.plus(parentMarket.drawOdds);
-      market.awayOdds = parentMarket.awayOdds.plus(parentMarket.drawOdds);
-      market.drawOdds = parentMarket.homeOdds.plus(parentMarket.awayOdds);
+      market.homeOdds = event.params.label.startsWith('HomeTeamNotToLose')
+        ? parentMarket.homeOdds.plus(parentMarket.drawOdds)
+        : event.params.label.startsWith('AwayTeamNotToLose')
+        ? parentMarket.awayOdds.plus(parentMarket.drawOdds)
+        : parentMarket.homeOdds.plus(parentMarket.awayOdds);
     }
     market.save();
 
-    let parentMarketToDoubleChanceMarket = new ParentMarketToDoubleChanceMarket(event.params._parentMarket.toHex());
-    parentMarketToDoubleChanceMarket.doubleChanceMarket = event.params._doubleChanceMarket;
+    let parentMarketToDoubleChanceMarket = ParentMarketToDoubleChanceMarket.load(event.params._parentMarket.toHex());
+    if (parentMarketToDoubleChanceMarket !== null) {
+      if (event.params.label.startsWith('HomeTeamNotToLose')) {
+        parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket = event.params._doubleChanceMarket;
+      } else if (event.params.label.startsWith('AwayTeamNotToLose')) {
+        parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket = event.params._doubleChanceMarket;
+      } else if (event.params.label.startsWith('NoDraw')) {
+        parentMarketToDoubleChanceMarket.noDrawMarket = event.params._doubleChanceMarket;
+      }
+    } else {
+      parentMarketToDoubleChanceMarket = new ParentMarketToDoubleChanceMarket(event.params._parentMarket.toHex());
+      parentMarketToDoubleChanceMarket.homeTeamNotToLoseMarket = event.params._doubleChanceMarket;
+      parentMarketToDoubleChanceMarket.awayTeamNotToLoseMarket = event.params._doubleChanceMarket;
+      parentMarketToDoubleChanceMarket.noDrawMarket = event.params._doubleChanceMarket;
+    }
     parentMarketToDoubleChanceMarket.save();
   }
 }
