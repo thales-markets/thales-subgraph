@@ -15,6 +15,8 @@ enum TokenTransactionType {
   lpClaimStakingRewardsSecond
   claimMigratedRetroRewards
   mergeAccount
+  delegateVolume
+  removeDelegation
 }
 
 type TokenTransaction @entity {
@@ -23,6 +25,7 @@ type TokenTransaction @entity {
   transactionHash: Bytes!
   timestamp: BigInt!
   account: Bytes!
+  destAccount: Bytes
   amount: BigInt
   protocolRewards: BigInt
   type: TokenTransactionType!

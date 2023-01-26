@@ -12,6 +12,9 @@
     "codegen-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
     "deploy-optimism": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
     "deploy:options-optimism": "npm run deploy-optimism -- thales-markets/thales-token subgraphs/subgraph-op.yaml",
+    "codegen-optimism-goerli": "npm run codegen -- subgraphs/subgraph-op-goerli.yaml",
+    "deploy-optimism-goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "deploy:options-optimism-goerli": "npm run deploy-optimism-goerli -- thales-markets/token-goerli subgraphs/subgraph-op-goerli.yaml",
     "test": "graph test"
   },
   "dependencies": {

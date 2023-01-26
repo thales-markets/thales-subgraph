@@ -3,32 +3,12 @@ schema:
   file: ../schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Airdrop
-    network: optimism
-    source:
-      address: '0x42B6e9b5Bb96a02E02e651d3104Fc3546E1313F2'
-      abi: Airdrop
-      startBlock: 3115834
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: Airdrop
-          file: ../abis/Airdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleRetroAirdropClaimEvent
-  - kind: ethereum/contract
     name: StakingThales
-    network: optimism
+    network: optimism-goerli
     source:
-      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      address: '0x28D25990f7Dec7c606551c28A7A82B9D116dcb67'
       abi: StakingThales
-      startBlock: 2901896
+      startBlock: 2296591
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -58,11 +38,11 @@ dataSources:
           handler: handleCanClaimOnBehalfChangedEvent
   - kind: ethereum/contract
     name: StakingThales_OldRewardsClaimed
-    network: optimism
+    network: optimism-goerli
     source:
-      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      address: '0x28D25990f7Dec7c606551c28A7A82B9D116dcb67'
       abi: StakingThales_OldRewardsClaimed
-      startBlock: 2901896
+      startBlock: 2296591
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -78,11 +58,11 @@ dataSources:
           handler: handleOldStakingRewardsClaimEvent
   - kind: ethereum/contract
     name: StakingThalesMigration
-    network: optimism
+    network: optimism-goerli
     source:
-      address: '0xC392133eEa695603B51a5d5de73655d571c2CE51'
+      address: '0x28D25990f7Dec7c606551c28A7A82B9D116dcb67'
       abi: StakingThales
-      startBlock: 2901896
+      startBlock: 2296591
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -98,11 +78,11 @@ dataSources:
           handler: handleStakedOnBehalfEvent
   - kind: ethereum/contract
     name: EscrowThales
-    network: optimism
+    network: optimism-goerli
     source:
-      address: '0xa25816b9605009aa446d4d597F0AA46FD828f056'
+      address: '0xE7fc1dED638f00E7E20B6d5F024B0F33A7502609'
       abi: EscrowThales
-      startBlock: 2901873
+      startBlock: 2296585
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -118,49 +98,3 @@ dataSources:
           handler: handleAddedToEscrowEvent
         - event: Vested(address,uint256)
           handler: handleVestedEvent
-  - kind: ethereum/contract
-    name: OngoingAirdrop
-    network: optimism
-    source:
-      address: '0x8D47b12ce25E2dc6866e8aAC0DbD823Da09fADd6'
-      abi: OngoingAirdrop
-      startBlock: 3119010
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: OngoingAirdrop
-          file: ../abis/OngoingAirdrop.json
-      eventHandlers:
-        - event: Claim(address,uint256,uint256)
-          handler: handleMigratedRewardsClaimEvent
-  - kind: ethereum/contract
-    name: LPStakingRewards
-    network: optimism
-    source:
-      address: '0x31a20E5b7b1b067705419D57Ab4F72E81cC1F6Bf'
-      abi: LPStakingRewards
-      startBlock: 3130453
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/token-mapping.ts
-      entities:
-        - TokenTransaction
-      abis:
-        - name: LPStakingRewards
-          file: ../abis/LPStakingRewards.json
-      eventHandlers:
-        - event: Staked(indexed address,uint256)
-          handler: handleLpStakedEvent
-        - event: Withdrawn(indexed address,uint256)
-          handler: handleWithdrawnEvent
-        - event: RewardPaid(indexed address,uint256)
-          handler: handleRewardPaidEvent
-        - event: SecondRewardTokenPaid(indexed address,uint256)
-          handler: handleSecondRewardTokenPaidEvent
