@@ -16,7 +16,10 @@
     "deploy:sport-markets-goerli": "npm run deploy-optimism -- thales-markets/sport-markets-goerli subgraphs/subgraph-goerli.yaml",
 
     "codegen:optimism-goerli": "npm run codegen -- subgraphs/subgraph-op-goerli.yaml",
-    "deploy:sport-markets-optimism-goerli": "npm run deploy-optimism-goerli -- thales-markets/sport-markets-optimism-goerli subgraphs/subgraph-op-goerli.yaml"
+    "deploy:sport-markets-optimism-goerli": "npm run deploy-optimism-goerli -- thales-markets/sport-markets-optimism-goerli subgraphs/subgraph-op-goerli.yaml",
+
+    "codegen:sport-markets-arbitrum": "npm run codegen -- subgraphs/subgraph-arb.yaml",
+    "deploy:sport-markets-arbitrum": "npm run deploy-optimism -- thales-markets/overtime-arbitrum subgraphs/subgraph-arb.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.33.1",
