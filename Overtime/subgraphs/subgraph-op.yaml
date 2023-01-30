@@ -249,7 +249,7 @@ dataSources:
     name: OvertimeVoucher
     network: optimism
     source:
-      address: '0xF29Ba1A2F947D3c416382Dd853a1831e0d31DE9A'
+      address: '0x4393F1470317Da64e277b29D96e5bf203f28eFbE'
       abi: OvertimeVoucher
       startBlock: 35727801
     mapping:

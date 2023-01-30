@@ -2,6 +2,8 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_sUSD", "type": "address" },
+      { "internalType": "string", "name": "_tokenURIFive", "type": "string" },
+      { "internalType": "string", "name": "_tokenURITen", "type": "string" },
       { "internalType": "string", "name": "_tokenURITwenty", "type": "string" },
       { "internalType": "string", "name": "_tokenURIFifty", "type": "string" },
       { "internalType": "string", "name": "_tokenURIHundred", "type": "string" },
@@ -103,6 +105,13 @@
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "_name",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -257,7 +266,7 @@
       { "internalType": "address", "name": "from", "type": "address" },
       { "internalType": "address", "name": "to", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -297,6 +306,8 @@
   },
   {
     "inputs": [
+      { "internalType": "string", "name": "_tokenURIFive", "type": "string" },
+      { "internalType": "string", "name": "_tokenURITen", "type": "string" },
       { "internalType": "string", "name": "_tokenURITwenty", "type": "string" },
       { "internalType": "string", "name": "_tokenURIFifty", "type": "string" },
       { "internalType": "string", "name": "_tokenURIHundred", "type": "string" },
@@ -346,6 +357,13 @@
   },
   {
     "inputs": [],
+    "name": "tokenURIFive",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "tokenURIFiveHundred",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
@@ -354,6 +372,13 @@
   {
     "inputs": [],
     "name": "tokenURIHundred",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenURITen",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
