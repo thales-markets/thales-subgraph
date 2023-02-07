@@ -1,0 +1,20 @@
+type Collection @entity(immutable: true) {
+  id: ID!
+  created: BigInt!
+}
+
+type Item @entity(immutable: true) {
+  id: ID!
+  collection: Collection!
+  type: BigInt!
+  created: BigInt!
+}
+
+type MintTransaction @entity {
+  id: ID!
+  hash: Bytes!
+  minter: Bytes!
+  item: Item!
+  collection: Collection!
+  timestamp: BigInt!
+}
