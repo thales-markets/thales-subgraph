@@ -150,7 +150,7 @@ dataSources:
     name: OvertimeVoucher
     network: arbitrum-one
     source:
-      address: '0xD1fe5a0256AcaeA497ecD30dc0b816cce95e23E9'
+      address: '0x9Ee26dcb9A3F1104B37A5dCc8573c8b144c7ce42'
       abi: OvertimeVoucher
       startBlock: 56911601
     mapping:
