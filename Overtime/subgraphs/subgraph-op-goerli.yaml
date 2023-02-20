@@ -263,17 +263,17 @@ dataSources:
     name: LiquidityPool
     network: optimism-goerli
     source:
-      address: '0x5A17bB0394dD25f21fd11aC6202561B04f126065'
+      address: '0x5a17bb0394dd25f21fd11ac6202561b04f126065'
       abi: LiquidityPool
       startBlock: 5731227
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
-      file: ../src/sport-vault-mapping.ts
+      file: ../src/liquidity-pool-mapping.ts
       entities:
         - LiquidityPool
-        - LiquidityPoolTransaction
+        - LiquidityPoolUserTransaction
         - LiquidityPoolPnl
       abis:
         - name: LiquidityPool
