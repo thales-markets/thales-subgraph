@@ -2,34 +2,34 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import {
   RoundClosed,
-  // PoolStarted,
+  PoolStarted,
   Deposited,
   WithdrawalRequested,
   Claimed,
 } from '../generated/LiquidityPool/LiquidityPool';
 import { LiquidityPool, LiquidityPoolPnl, LiquidityPoolUserTransaction } from '../generated/schema';
 
-// export function handleLiquidityPoolStarted(event: PoolStarted): void {
-//   let vault = new LiquidityPool(event.address.toHex());
-//   vault.address = event.address;
-//   vault.round = BigInt.fromI32(1);
-//   vault.save();
-// }
+export function handleLiquidityPoolStarted(event: PoolStarted): void {
+  let liquidityPool = new LiquidityPool(event.address.toHex());
+  liquidityPool.address = event.address;
+  liquidityPool.round = BigInt.fromI32(1);
+  liquidityPool.save();
+}
 
 export function handleRoundClosed(event: RoundClosed): void {
-  let vaultPnl = new LiquidityPoolPnl(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
-  vaultPnl.liquidityPool = event.address;
-  vaultPnl.timestamp = event.block.timestamp;
-  vaultPnl.round = event.params.round;
-  vaultPnl.pnl = event.params.roundPnL;
+  let liquidityPoolPnl = new LiquidityPoolPnl(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  liquidityPoolPnl.liquidityPool = event.address;
+  liquidityPoolPnl.timestamp = event.block.timestamp;
+  liquidityPoolPnl.round = event.params.round;
+  liquidityPoolPnl.pnl = event.params.roundPnL;
 
-  let vault = LiquidityPool.load(event.address.toHex());
-  if (vault !== null) {
-    vault.round = event.params.round.plus(BigInt.fromI32(1));
-    vault.save();
+  let liquidityPool = LiquidityPool.load(event.address.toHex());
+  if (liquidityPool !== null) {
+    liquidityPool.round = event.params.round.plus(BigInt.fromI32(1));
+    liquidityPool.save();
   }
 
-  vaultPnl.save();
+  liquidityPoolPnl.save();
 }
 
 export function handleDeposited(event: Deposited): void {
@@ -61,9 +61,9 @@ export function handleWithdrawalRequested(event: WithdrawalRequested): void {
   transaction.account = event.params.user;
   transaction.type = 'withdrawalRequest';
 
-  let vault = LiquidityPool.load(event.address.toHex());
-  if (vault !== null) {
-    transaction.round = vault.round;
+  let liquidityPool = LiquidityPool.load(event.address.toHex());
+  if (liquidityPool !== null) {
+    transaction.round = liquidityPool.round;
   } else {
     transaction.round = BigInt.fromI32(0);
   }
@@ -84,9 +84,9 @@ export function handleClaimed(event: Claimed): void {
   transaction.amount = event.params.amount;
   transaction.type = 'claim';
 
-  let vault = LiquidityPool.load(event.address.toHex());
-  if (vault !== null) {
-    transaction.round = vault.round;
+  let liquidityPool = LiquidityPool.load(event.address.toHex());
+  if (liquidityPool !== null) {
+    transaction.round = liquidityPool.round;
   } else {
     transaction.round = BigInt.fromI32(0);
   }

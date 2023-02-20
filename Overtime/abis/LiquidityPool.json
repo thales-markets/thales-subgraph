@@ -78,6 +78,7 @@
     "name": "PoolRoundMastercopyChanged",
     "type": "event"
   },
+  { "anonymous": false, "inputs": [], "name": "PoolStarted", "type": "event" },
   {
     "anonymous": false,
     "inputs": [
