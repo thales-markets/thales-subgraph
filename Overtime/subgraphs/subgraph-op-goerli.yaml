@@ -263,7 +263,7 @@ dataSources:
     name: LiquidityPool
     network: optimism-goerli
     source:
-      address: '0x5a17bb0394dd25f21fd11ac6202561b04f126065'
+      address: '0x1dBc8eF4c551feb01C693e2c064aA66900D0f103'
       abi: LiquidityPool
       startBlock: 5731227
     mapping:

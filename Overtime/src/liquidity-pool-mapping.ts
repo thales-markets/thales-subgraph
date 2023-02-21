@@ -9,7 +9,7 @@ import {
 } from '../generated/LiquidityPool/LiquidityPool';
 import { LiquidityPool, LiquidityPoolPnl, LiquidityPoolUserTransaction } from '../generated/schema';
 
-export function handleLiquidityPoolStarted(event: PoolStarted): void {
+export function handlePoolStarted(event: PoolStarted): void {
   let liquidityPool = new LiquidityPool(event.address.toHex());
   liquidityPool.address = event.address;
   liquidityPool.round = BigInt.fromI32(1);
