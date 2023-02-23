@@ -43,8 +43,14 @@ export function handleDeposited(event: Deposited): void {
   transaction.blockNumber = event.block.number;
   transaction.account = event.params.user;
   transaction.amount = event.params.amount;
-  transaction.round = event.params.round;
   transaction.type = 'deposit';
+
+  let liquidityPool = LiquidityPool.load(event.address.toHex());
+  if (liquidityPool !== null) {
+    transaction.round = liquidityPool.round;
+  } else {
+    transaction.round = BigInt.fromI32(0);
+  }
 
   transaction.save();
 }
