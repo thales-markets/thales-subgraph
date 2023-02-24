@@ -163,6 +163,20 @@ type VaultTransaction @entity {
   round: BigInt!
 }
 
+type ParlayVaultTransaction @entity {
+  id: ID!
+  vault: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  market: Bytes!
+  amount: BigInt!
+  paid: BigInt!
+  position: BigInt!
+  wholeMarket: ParlayMarket!
+  round: BigInt!
+}
+
 type VaultPnl @entity {
   id: ID!
   vault: Bytes!
