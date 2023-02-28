@@ -163,6 +163,20 @@ type VaultTransaction @entity {
   round: BigInt!
 }
 
+type ParlayVaultTransaction @entity {
+  id: ID!
+  vault: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  market: Bytes!
+  amount: BigInt!
+  paid: BigInt!
+  position: BigInt!
+  wholeMarket: ParlayMarket!
+  round: BigInt!
+}
+
 type VaultPnl @entity {
   id: ID!
   vault: Bytes!
@@ -228,4 +242,36 @@ type ReferralTransaction @entity {
   volume: BigInt!
   ammType: AmmType!
   timestamp: BigInt!
+}
+
+type LiquidityPool @entity {
+  id: ID!
+  address: Bytes!
+  round: BigInt!
+}
+
+type LiquidityPoolPnl @entity {
+  id: ID!
+  liquidityPool: Bytes!
+  timestamp: BigInt!
+  round: BigInt!
+  pnl: BigInt!
+}
+
+enum LiquidityPoolUserTransactionType {
+  deposit
+  withdrawalRequest
+  claim
+}
+
+type LiquidityPoolUserTransaction @entity {
+  id: ID!
+  liquidityPool: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  account: Bytes!
+  type: LiquidityPoolUserTransactionType!
+  amount: BigInt
+  round: BigInt!
 }
