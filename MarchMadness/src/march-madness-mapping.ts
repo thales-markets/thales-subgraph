@@ -2,7 +2,7 @@ import { Mint, ResultForGameAdded, UpdateBracketsForAlreadyMintedItem } from '..
 import { Token, Game } from '../generated/schema';
 
 export function handleMint(event: Mint): void {
-  let brackets = new Token(`${event.params._recipient.toHexString()}-${event.params._id}`);
+  let brackets = new Token(`${event.params._recipient.toHexString()}-${event.params._id.toHexString()}`);
 
   brackets.createdHash = event.transaction.hash;
   brackets.minter = event.params._recipient;
@@ -15,7 +15,7 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBracketsUpdate(event: UpdateBracketsForAlreadyMintedItem): void {
-  let brackets = Token.load(`${event.params._minter.toHexString()}-${event.params.itemIndex}`);
+  let brackets = Token.load(`${event.params._minter.toHexString()}-${event.params.itemIndex.toHexString()}`);
 
   if (brackets !== null) {
     brackets.brackets = event.params._newBrackets;
