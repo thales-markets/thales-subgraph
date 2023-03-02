@@ -170,9 +170,7 @@ type ParlayVaultTransaction @entity {
   timestamp: BigInt!
   blockNumber: BigInt!
   market: Bytes!
-  amount: BigInt!
   paid: BigInt!
-  position: BigInt!
   wholeMarket: ParlayMarket!
   round: BigInt!
 }
