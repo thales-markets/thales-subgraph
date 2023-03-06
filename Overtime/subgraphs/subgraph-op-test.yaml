@@ -1,0 +1,26 @@
+specVersion: 0.0.4
+description: Thales Sport Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema-test.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: sUSD
+    network: optimism
+    source:
+      address: '0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9'
+      abi: sUSD
+      startBlock: 35495825
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/susd-mapping.ts
+      entities:
+        - ParlayPnl
+      abis:
+        - name: sUSD
+          file: ../abis/sUSD.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer

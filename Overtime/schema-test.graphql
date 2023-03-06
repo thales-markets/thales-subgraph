@@ -1,0 +1,6 @@
+type ParlayPnl @entity {
+  id: ID!
+  hash: Bytes!
+  account: Bytes!
+  amount: BigInt!
+}
