@@ -8,7 +8,7 @@ dataSources:
     name: MarchMadness
     network: optimism-goerli
     source:
-      address: '0x6F5caeeaB9f73D7639931A4a052B739EA9D3e48A'
+      address: '0x81FB5DAb46Ba7fb5b85D7fcBbF019a400a2000FD'
       abi: MarchMadness
       startBlock: 5904367
     mapping:
