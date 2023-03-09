@@ -8,7 +8,7 @@ dataSources:
     name: MarchMadness
     network: optimism
     source:
-      address: '0xF1299A4B78799C5fF9bd19f0E96c070f4e0D96De'
+      address: '0x3b05d4C58De4E96Ea093032c6D70C7e4212a4c31'
       abi: MarchMadness
       startBlock: 79070467
     mapping:
