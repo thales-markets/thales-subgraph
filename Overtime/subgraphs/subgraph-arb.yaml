@@ -199,6 +199,134 @@ dataSources:
           handler: handleWithdrawalRequested
         - event: Claimed(address,uint256)
           handler: handleClaimed
+  - kind: ethereum/contract
+    name: DiscountVault
+    network: arbitrum-one
+    source:
+      address: '0xfF7AEA98740fA1e2a9eB81680583e62aaFf1e3Ad'
+      abi: SportVault
+      startBlock: 72080228
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - Vault
+        - VaultTransaction
+        - VaultPnl
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: DegenDiscountVault
+    network: arbitrum-one
+    source:
+      address: '0xA852a651377fbE23f3d3acF5919c3D092aD4b77d'
+      abi: SportVault
+      startBlock: 72081006
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - Vault
+        - VaultTransaction
+        - VaultPnl
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: SafuDiscountVault
+    network: arbitrum-one
+    source:
+      address: '0xE26374c7aFe71a2a6AB4A61080772547C43B87E6'
+      abi: SportVault
+      startBlock: 69742831
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - Vault
+        - VaultTransaction
+        - VaultPnl
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: ParlayDiscountVault
+    network: arbitrum-one
+    source:
+      address: '0xAb9E5fc491c743AE0b45f7100fAf611Deb8FeC4A'
+      abi: ParlayVault
+      startBlock: 69754513
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/parlay-vault-mapping.ts
+      entities:
+        - Vault
+        - VaultPnl
+        - ParlayVaultTransaction
+      abis:
+        - name: ParlayVault
+          file: ../abis/ParlayVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
 templates:
   - name: SportMarket
     kind: ethereum/contract
