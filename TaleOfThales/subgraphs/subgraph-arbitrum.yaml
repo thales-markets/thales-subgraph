@@ -1,0 +1,36 @@
+specVersion: 0.0.4
+description: Tale of Thales NFT
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: TaleOfThalesNFTs
+    network: arbitrum-one
+    source:
+      address: '0xe42517a1Bf3E6Bd088Bf26ead8d8754e0e2BeBA3'
+      abi: TaleOfThalesNFTs
+      startBlock: 72903261
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/tot-nft-mapping.ts
+      entities:
+        - Collection
+        - Item
+        - MintTransaction
+      abis:
+        - name: TaleOfThalesNFTs
+          file: ../abis/TaleOfThalesNFTs.json
+      eventHandlers:
+        - event: AddedNewItemToCollection(uint256,uint256,uint8)
+          handler: handleAddedNewItemToCollection
+        - event: ItemMinted(uint256,address)
+          handler: handleItemMint
+        - event: CollectionMinted(uint256[],address)
+          handler: handleCollectionMint
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransfer
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleBatchTransfer

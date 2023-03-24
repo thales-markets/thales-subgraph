@@ -14,6 +14,11 @@
       "codegen-optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
       "deploy-optimism": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
       "deploy:optimism": "npm run deploy-optimism -- thales-markets/tale-of-thales subgraphs/subgraph-op.yaml",
+
+      "codegen-arbitrum": "npm run codegen -- subgraphs/subgraph-op.yaml",
+      "deploy-arbitrum": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+      "deploy:arbitrum": "npm run deploy-arbitrum -- thales-markets/tale-of-thales-arbitrum subgraphs/subgraph-arbitrum.yaml",
+
       "test": "graph test"
     },
     "dependencies": {
