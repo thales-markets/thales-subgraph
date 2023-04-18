@@ -4,27 +4,30 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/thalesmarket.svg?label=thalesmarket&style=social)](https://twitter.com/thalesmarket)
 
 The Graph exposes a GraphQL endpoint to query the events and entities within the Thales protocol.  
-Thales has multiple subgraphs generated from this repository. 
-
-
+Thales has multiple subgraphs generated from this repository.
 
 ## Token Subgraph
-- **Optimism**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
-- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-token
 
-#### Entities: 
+- **Optimism**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
+- **Arbitrum**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-token-arbitrum
+- **Optimism-Goerli**: https://thegraph.com/hosted-service/subgraph/thales-markets/token-goerli
+
+#### Entities:
+
 - TokenTransaction
-- OngoingAirdropNewRoot
 - Staker
 - CanClaimOnBehalfItem
 
 ## Positional Markets
-- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-markets
-- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-kovan-optimism
-- **Polygon**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-polygon
-- **Mumbai**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-mumbai
 
-#### Entities: 
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-markets
+- **Arbitrum**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-arbitrum
+- **Polygon**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-polygon
+- **BNBChain**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-bsc
+- **Optimism-Goerli**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-markets-goerli-ovm
+
+#### Entities:
+
 - Market
 - RangedMarket
 - OptionTransaction
@@ -37,56 +40,50 @@ Thales has multiple subgraphs generated from this repository.
 - PositionBalance
 - RangedPosition
 - RangedPositionBalance
+- Vault
+- VaultPnl
+- VaultTransactions
+- VaultUserTransactions
 
 ## Sport Markets
-- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-optimism
-- **Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-kovan
 
-#### Entities: 
+- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-optimism
+- **Arbitrum**: https://thegraph.com/hosted-service/subgraph/thales-markets/overtime-arbitrum
+- **Optimism-Goerli**: https://thegraph.com/hosted-service/subgraph/thales-markets/sport-markets-optimism-goerli
+
+#### Entities:
+
 - SportMarket
-- SportMarketOddsHistory
-- ClaimTx
 - MarketTransaction
+- ClaimTx
+- BuyTransaction
 - Position
 - PositionBalance
-
-## Exotic Markets
-- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-royale
-- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/exotic-markets-optimism-kovan
-
-#### Entities: 
-- Market
-- Dispute
-- DisputeVote
-- Position
-- MarketTransaction
-
-
-
-## Thales Royale
-- **Optimism**: https://thegraph.com/hosted-service/subgraph/thales-markets/exotic-markets-optimism
-- **Optimism-Kovan**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-royale-kovan
-
-#### Entities: 
-- ThalesRoyaleGame
-- ThalesRoyaleSeason
-- ThalesRoyaleRound
-- ThalesRoyalePlayer
-- ThalesRoyalePosition
-- ThalesRoyalePass
-- ThalesRoyalePassportPlayer
-- ThalesRoyalePassportPosition
-
-
-
+- ParlayMarket
+- GameIdToParentMarket
+- ParentMarketToDoubleChanceMarket
+- LiquidityPool
+- LiquidityPoolPnl
+- LiquidityPoolUserTransaction
+- OvertimeVoucher
+- Vault
+- VaultPnl
+- VaultTransactions
+- VaultUserTransactions
+- ParlayVaultTransaction
+- Referrer
+- ReferredTrader
+- ReferralTransaction
+- User
+- Zebro
 
 ## To run and deploy locally
 
-For any of the supported networks: `options` (mainnet), `options-ropsten` (ropsten), `options-kovan` (kovan) as `[subgraph]`
+For any of the supported networks (Optimism, Arbitrum, Polygon, BNBChain, Optimism-Goerli):
 
-1. Run the `npm run codegen:[subgraph]` task to prepare the TypeScript sources for the GraphQL (generated/schema) and the ABIs (generated/[ABI]/\*)
+1. Run the `npm run codegen:[subgraph]` task to prepare the TypeScript sources for the GraphQL (generated/schema) and the ABIs (generated/[ABI]/\*). Note: `subgraph` parameter can be found in the `package.json` file.
 2. [Optional] run the `npm run build:[subgraph]` task for the subgraph
-3. Deploy via `npm run deploy:[subgraph]`. Note: requires env variable of `$THEGRAPH_SNX_ACCESS_TOKEN` set in bash to work.
+3. Deploy via `npm run deploy:[subgraph]`. Note: requires env variable of `$THEGRAPH_THALES_ACCESS_TOKEN` set in bash to work.
 
 ## To query this subgraph
 
@@ -128,7 +125,7 @@ In it's simplest version (on a modern browser assuming `async await` support and
     variables: null,
   });
 
-  const response = await fetch('https://api.thegraph.com/subgraphs/name/thales-markets/thales-options', {
+  const response = await fetch('https://api.thegraph.com/subgraphs/name/thales-markets/thales-markets', {
     method: 'POST',
     body,
   });
@@ -140,4 +137,4 @@ In it's simplest version (on a modern browser assuming `async await` support and
 })();
 ```
 
-> Note: due to The Graph limitation, only `100` results will be returned (the maximum allowed `first` amount). The way around this is to use paging (using the `skip` operator in GraphQL). See the function `pageResults` in [thales-data](https://github.com/thales-markets/thales-data) for an example.
+> Note: due to The Graph limitation, only `1000` results will be returned (the maximum allowed `first` amount). The way around this is to use paging (using the `skip` operator in GraphQL). See the function `pageResults` in [thales-data](https://github.com/thales-markets/thales-data) for an example.
