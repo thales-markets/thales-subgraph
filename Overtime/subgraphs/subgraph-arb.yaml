@@ -296,6 +296,38 @@ dataSources:
         - event: Claimed(address,uint256)
           handler: handleClaimed
   - kind: ethereum/contract
+    name: SportVaultUpsettoor
+    network: arbitrum-one
+    source:
+      address: '0x31c2947c86412A5e33794105aA034DD9312eb711'
+      abi: SportVault
+      startBlock: 80021455
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sport-vault-mapping.ts
+      entities:
+        - Vault
+        - VaultTransaction
+        - VaultPnl
+      abis:
+        - name: SportVault
+          file: ../abis/SportVault.json
+      eventHandlers:
+        - event: TradeExecuted(address,uint8,uint256,uint256)
+          handler: handleVaultTrade
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: VaultStarted()
+          handler: handleVaultStarted
+        - event: Deposited(address,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
     name: ParlayDiscountVault
     network: arbitrum-one
     source:
