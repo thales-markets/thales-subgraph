@@ -67,7 +67,7 @@ dataSources:
     name: AMM
     network: optimism-goerli
     source:
-      address: '0xcE9c1aAb41b18b24355138776186484B260B9cf0'
+      address: '0xCf0f20487d4d5361C104DA48317b0028086Ad503'
       abi: AMM
       startBlock: 1266104
     mapping:
@@ -89,6 +89,36 @@ dataSources:
           handler: handleSoldToAMMEvent
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
+  - kind: ethereum/contract
+    name: LiquidityPool
+    network: optimism-goerli
+    source:
+      address: '0x7e98D27847e06261bE499E248060DCD6F7B82303'
+      abi: LiquidityPool
+      startBlock: 8798266
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: LiquidityPool
+          file: ../abis/LiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
 templates:
   - name: BinaryOptionMarket
     kind: ethereum/contract
