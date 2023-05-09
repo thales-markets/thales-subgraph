@@ -1,0 +1,36 @@
+specVersion: 0.0.4
+description: Thales Binary Options API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: LiquidityPool
+    network: optimism
+    source:
+      address: '0xC10a0A6fF6496E0BD896F9f6da5a7B640b85ea40'
+      abi: LiquidityPool
+      startBlock: 96927845
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: LiquidityPool
+          file: ../abis/LiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
