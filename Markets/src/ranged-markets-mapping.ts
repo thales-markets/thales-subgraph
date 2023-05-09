@@ -85,9 +85,11 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
       userBalanceFrom = new RangedPositionBalance(event.params.asset.toHex() + ' - ' + event.params.buyer.toHex());
       userBalanceFrom.account = event.params.buyer;
       userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
     }
     userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
+    userBalanceFrom.paid = userBalanceFrom.paid.plus(event.params.sUSDPaid);
     userBalanceFrom.save();
   }
 }
@@ -116,6 +118,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
       userBalanceFrom = new RangedPositionBalance(event.params.asset.toHex() + ' - ' + event.params.seller.toHex());
       userBalanceFrom.account = event.params.seller;
       userBalanceFrom.amount = BigInt.fromI32(0);
+      userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
     }
     userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);

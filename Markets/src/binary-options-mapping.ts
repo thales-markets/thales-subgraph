@@ -128,6 +128,7 @@ export function handleMint(event: MintEvent): void {
           userBalanceUp = new PositionBalance(marketEntity.longAddress.toHex() + ' - ' + event.params.account.toHex());
           userBalanceUp.account = event.params.account;
           userBalanceUp.amount = BigInt.fromI32(0);
+          userBalanceUp.paid = BigInt.fromI32(0);
           userBalanceUp.position = position.id;
         }
         userBalanceUp.amount = userBalanceUp.amount.plus(event.params.value);
@@ -145,7 +146,9 @@ export function handleMint(event: MintEvent): void {
           );
           userBalanceDown.account = event.params.account;
           userBalanceDown.amount = BigInt.fromI32(0);
+          userBalanceDown.paid = BigInt.fromI32(0);
           userBalanceDown.position = position.id;
+          
         }
         userBalanceDown.amount = userBalanceDown.amount.plus(event.params.value);
         userBalanceDown.save();

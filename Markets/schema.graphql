@@ -133,6 +133,7 @@ type PositionBalance @entity {
   id: ID!
   account: Bytes!
   amount: BigInt!
+  paid: BigInt!
   position: Position!
 }
 
@@ -146,6 +147,7 @@ type RangedPositionBalance @entity {
   id: ID!
   account: Bytes!
   amount: BigInt!
+  paid: BigInt!
   position: RangedPosition!
 }
 
