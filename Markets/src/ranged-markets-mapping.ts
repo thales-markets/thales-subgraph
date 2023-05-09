@@ -152,6 +152,7 @@ export function handleExercised(event: Exercised): void {
         );
         userBalanceFrom.account = event.params.exerciser;
         userBalanceFrom.amount = BigInt.fromI32(0);
+        userBalanceFrom.paid = BigInt.fromI32(0);
         userBalanceFrom.position = positionIn.id;
       }
       userBalanceFrom.amount = BigInt.fromI32(0);
@@ -169,6 +170,7 @@ export function handleExercised(event: Exercised): void {
         );
         userBalanceFrom.account = event.params.exerciser;
         userBalanceFrom.amount = BigInt.fromI32(0);
+        userBalanceFrom.paid = BigInt.fromI32(0);
         userBalanceFrom.position = positionOut.id;
       }
       userBalanceFrom.amount = BigInt.fromI32(0);
