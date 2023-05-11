@@ -1,0 +1,18 @@
+{
+  "name": "camelot",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
+    "codegen:camelot": "npm run codegen -- subgraphs/subgraph-arb.yaml",
+    "deploy:camelot": "npm run deploy -- thales-markets/camelot subgraphs/subgraph-arb.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.33.1",
+    "@graphprotocol/graph-ts": "^0.27.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
+}
