@@ -3,10 +3,10 @@ import { CancelRedeem, Convert, Redeem } from '../generated/XGrailToken/XGrailTo
 import { XGrailHolder } from '../generated/schema';
 
 export function handleConvertEvent(event: Convert): void {
-  let holder = XGrailHolder.load(event.params.from.toHex());
+  let holder = XGrailHolder.load(event.params.to.toHex());
   if (holder === null) {
-    holder = new XGrailHolder(event.params.from.toHex());
-    holder.address = event.params.from;
+    holder = new XGrailHolder(event.params.to.toHex());
+    holder.address = event.params.to;
     holder.timestamp = event.block.timestamp;
     holder.blockNumber = event.block.number;
     holder.save();
