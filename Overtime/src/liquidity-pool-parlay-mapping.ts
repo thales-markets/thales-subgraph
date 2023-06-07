@@ -13,7 +13,7 @@ export function handlePoolStarted(event: PoolStarted): void {
   let liquidityPool = new LiquidityPool(event.address.toHex());
   liquidityPool.address = event.address;
   liquidityPool.round = BigInt.fromI32(1);
-  liquidityPool.liquidityPoolType = 'single';
+  liquidityPool.liquidityPoolType = 'parlay';
   liquidityPool.save();
 }
 
@@ -23,7 +23,7 @@ export function handleRoundClosed(event: RoundClosed): void {
   liquidityPoolPnl.timestamp = event.block.timestamp;
   liquidityPoolPnl.round = event.params.round;
   liquidityPoolPnl.pnl = event.params.roundPnL;
-  liquidityPoolPnl.liquidityPoolType = 'single';
+  liquidityPoolPnl.liquidityPoolType = 'parlay';
   let liquidityPool = LiquidityPool.load(event.address.toHex());
   if (liquidityPool !== null) {
     liquidityPool.round = event.params.round.plus(BigInt.fromI32(1));
@@ -45,7 +45,7 @@ export function handleDeposited(event: Deposited): void {
   transaction.account = event.params.user;
   transaction.amount = event.params.amount;
   transaction.type = 'deposit';
-  transaction.liquidityPoolType = 'single';
+  transaction.liquidityPoolType = 'parlay';
 
   let liquidityPool = LiquidityPool.load(event.address.toHex());
   if (liquidityPool !== null) {
@@ -68,7 +68,7 @@ export function handleWithdrawalRequested(event: WithdrawalRequested): void {
   transaction.blockNumber = event.block.number;
   transaction.account = event.params.user;
   transaction.type = 'withdrawalRequest';
-  transaction.liquidityPoolType = 'single';
+  transaction.liquidityPoolType = 'parlay';
 
   let liquidityPool = LiquidityPool.load(event.address.toHex());
   if (liquidityPool !== null) {
@@ -92,7 +92,7 @@ export function handleClaimed(event: Claimed): void {
   transaction.account = event.params.user;
   transaction.amount = event.params.amount;
   transaction.type = 'claim';
-  transaction.liquidityPoolType = 'single';
+  transaction.liquidityPoolType = 'parlay';
 
   let liquidityPool = LiquidityPool.load(event.address.toHex());
   if (liquidityPool !== null) {

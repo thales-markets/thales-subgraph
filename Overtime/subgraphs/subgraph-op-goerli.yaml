@@ -321,6 +321,36 @@ dataSources:
           handler: handleWithdrawalRequested
         - event: Claimed(address,uint256)
           handler: handleClaimed
+  - kind: ethereum/contract
+    name: ParlayAMMLiquidityPool
+    network: optimism-goerli
+    source:
+      address: '0xA5D52005df7C457B014A54b3cF9812c861Ea9dF9'
+      abi: ParlayAMMLiquidityPool
+      startBlock: 10142477
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-parlay-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: ParlayAMMLiquidityPool
+          file: ../abis/ParlayAMMLiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
 templates:
   - name: SportMarket
     kind: ethereum/contract

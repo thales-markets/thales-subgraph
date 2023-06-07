@@ -242,10 +242,16 @@ type ReferralTransaction @entity {
   timestamp: BigInt!
 }
 
+enum LiquidityPoolType {
+  single
+  parlay
+}
+
 type LiquidityPool @entity {
   id: ID!
   address: Bytes!
   round: BigInt!
+  liquidityPoolType: LiquidityPoolType!
 }
 
 type LiquidityPoolPnl @entity {
@@ -254,6 +260,7 @@ type LiquidityPoolPnl @entity {
   timestamp: BigInt!
   round: BigInt!
   pnl: BigInt!
+  liquidityPoolType: LiquidityPoolType!
 }
 
 enum LiquidityPoolUserTransactionType {
@@ -272,4 +279,5 @@ type LiquidityPoolUserTransaction @entity {
   type: LiquidityPoolUserTransactionType!
   amount: BigInt
   round: BigInt!
+  liquidityPoolType: LiquidityPoolType!
 }
