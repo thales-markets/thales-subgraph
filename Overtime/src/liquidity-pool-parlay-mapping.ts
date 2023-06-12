@@ -12,7 +12,7 @@ import { LiquidityPool, LiquidityPoolPnl, LiquidityPoolUserTransaction } from '.
 export function handlePoolStarted(event: PoolStarted): void {
   let liquidityPool = new LiquidityPool(event.address.toHex());
   liquidityPool.address = event.address;
-  liquidityPool.round = BigInt.fromI32(1);
+  liquidityPool.round = BigInt.fromI32(2);
   liquidityPool.liquidityPoolType = 'parlay';
   liquidityPool.save();
 }
