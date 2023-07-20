@@ -10,7 +10,9 @@
     "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
     "deploy:optimism": "npm run deploy -- thales-markets/thales-token subgraphs/subgraph-op.yaml",
     "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arb.yaml",
-    "deploy:arbitrum": "npm run deploy -- thales-markets/thales-token-arbitrum subgraphs/subgraph-arb.yaml"
+    "deploy:arbitrum": "npm run deploy -- thales-markets/thales-token-arbitrum subgraphs/subgraph-arb.yaml",
+    "codegen:mainnet": "npm run codegen -- subgraphs/subgraph-mainnet.yaml",
+    "deploy:mainnet": "npm run deploy -- thales-markets/thales-token-mainnet subgraphs/subgraph-mainnet.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.33.0",

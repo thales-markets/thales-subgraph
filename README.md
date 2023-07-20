@@ -8,7 +8,7 @@ Thales has multiple subgraphs generated from this repository.
 
 ## Token Subgraph
 
-- **Optimism**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-options
+- **Optimism**: https://thegraph.com/legacy-explorer/subgraph/thales-markets/thales-token
 - **Arbitrum**: https://thegraph.com/hosted-service/subgraph/thales-markets/thales-token-arbitrum
 - **Optimism-Goerli**: https://thegraph.com/hosted-service/subgraph/thales-markets/token-goerli
 

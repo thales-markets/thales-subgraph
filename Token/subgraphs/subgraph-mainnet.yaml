@@ -1,0 +1,44 @@
+specVersion: 0.0.4
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: InvestorsMigratedRewards
+    network: mainnet
+    source:
+      address: '0x4f896abE9E28C2Db248a8DdAC205ca1cf84A2771'
+      abi: Airdrop
+      startBlock: 14531990
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-mainnet.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: Airdrop
+          file: ../abis/Airdrop.json
+      eventHandlers:
+        - event: Claim(address,uint256,uint256)
+          handler: handleInvestorsMigratedRewardsClaimEvent
+  - kind: ethereum/contract
+    name: InvestorsRetroUnlock
+    network: mainnet
+    source:
+      address: '0x088c6Ad16ba124F1d40fD2A3EDe63ef2E8dAe39f'
+      abi: VestingEscrow
+      startBlock: 14532006
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping-mainnet.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: VestingEscrow
+          file: ../abis/VestingEscrow.json
+      eventHandlers:
+        - event: Claim(indexed address,uint256)
+          handler: handleInvestorsRetroUnlockClaimEvent
