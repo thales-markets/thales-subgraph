@@ -1,6 +1,0 @@
-type XGrailHolder @entity {
-  id: ID!
-  address: Bytes!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-}

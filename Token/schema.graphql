@@ -32,15 +32,6 @@ type TokenTransaction @entity {
   blockNumber: BigInt!
 }
 
-type OngoingAirdropNewRoot @entity {
-  # tx hash - log index
-  id: ID!
-  transactionHash: Bytes!
-  root: Bytes!
-  timestamp: BigInt!
-  period: BigInt!
-}
-
 type Staker @entity {
   id: ID!
   account: Bytes!

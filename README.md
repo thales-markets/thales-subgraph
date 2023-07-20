@@ -40,6 +40,9 @@ Thales has multiple subgraphs generated from this repository.
 - PositionBalance
 - RangedPosition
 - RangedPositionBalance
+- LiquidityPool
+- LiquidityPoolPnl
+- LiquidityPoolUserTransaction
 - Vault
 - VaultPnl
 - VaultTransactions
