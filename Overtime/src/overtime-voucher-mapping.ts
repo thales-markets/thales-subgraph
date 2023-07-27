@@ -27,7 +27,7 @@ export function handleBoughtFromAmmWithVoucherEvent(event: BoughtFromAmmWithVouc
       userBalanceFrom.account = event.params.buyer;
       userBalanceFrom.amount = positionBalance.amount;
       userBalanceFrom.position = positionBalance.position;
-      userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
+      userBalanceFrom.sUSDPaid = positionBalance.sUSDPaid;
       userBalanceFrom.save();
       store.remove('PositionBalance', buyTransaction.positionBalanceId);
     }
