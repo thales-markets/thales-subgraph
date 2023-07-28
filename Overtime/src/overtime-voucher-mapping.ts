@@ -22,13 +22,19 @@ export function handleBoughtFromAmmWithVoucherEvent(event: BoughtFromAmmWithVouc
     }
     let positionBalance = PositionBalance.load(buyTransaction.positionBalanceId);
     if (positionBalance !== null) {
-      let userBalanceFrom = new PositionBalance(positionBalance.position + ' - ' + event.params.buyer.toHex());
-      userBalanceFrom.firstTxHash = event.transaction.hash;
-      userBalanceFrom.account = event.params.buyer;
-      userBalanceFrom.amount = positionBalance.amount;
-      userBalanceFrom.position = positionBalance.position;
-      userBalanceFrom.sUSDPaid = positionBalance.sUSDPaid;
-      userBalanceFrom.claimed = positionBalance.claimed;
+      let userBalanceFrom = PositionBalance.load(positionBalance.position + ' - ' + event.params.buyer.toHex());
+      if (userBalanceFrom !== null) {
+        userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
+        userBalanceFrom.sUSDPaid = userBalanceFrom.sUSDPaid.plus(event.params.sUSDPaid);
+      } else {
+        userBalanceFrom = new PositionBalance(positionBalance.position + ' - ' + event.params.buyer.toHex());
+        userBalanceFrom.firstTxHash = event.transaction.hash;
+        userBalanceFrom.account = event.params.buyer;
+        userBalanceFrom.amount = positionBalance.amount;
+        userBalanceFrom.position = positionBalance.position;
+        userBalanceFrom.sUSDPaid = positionBalance.sUSDPaid;
+        userBalanceFrom.claimed = positionBalance.claimed;
+      }
       userBalanceFrom.save();
       store.remove('PositionBalance', buyTransaction.positionBalanceId);
     }
