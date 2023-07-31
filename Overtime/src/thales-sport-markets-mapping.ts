@@ -242,7 +242,6 @@ export function handleOptionsExercised(event: OptionsExercised): void {
     if (position !== null) {
       let userHomeBalance = PositionBalance.load(position.id + ' - ' + event.params.account.toHex());
       if (userHomeBalance !== null) {
-        userHomeBalance.amount = BigInt.fromI32(0);
         userHomeBalance.claimed = true;
         userHomeBalance.save();
       }
@@ -251,7 +250,6 @@ export function handleOptionsExercised(event: OptionsExercised): void {
     if (positionDown !== null) {
       let userAwayBalance = PositionBalance.load(positionDown.id + ' - ' + event.params.account.toHex());
       if (userAwayBalance !== null) {
-        userAwayBalance.amount = BigInt.fromI32(0);
         userAwayBalance.claimed = true;
         userAwayBalance.save();
       }
@@ -261,7 +259,6 @@ export function handleOptionsExercised(event: OptionsExercised): void {
     if (positionDraw !== null) {
       let userDrawBalance = PositionBalance.load(positionDraw.id + ' - ' + event.params.account.toHex());
       if (userDrawBalance !== null) {
-        userDrawBalance.amount = BigInt.fromI32(0);
         userDrawBalance.claimed = true;
         userDrawBalance.save();
       }
