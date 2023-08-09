@@ -7,7 +7,7 @@ import {
   Deposited,
   WithdrawalRequested,
   Claimed,
-} from '../generated/SportVault/SportVault';
+} from '../generated/DiscountVault/SportVault';
 import { SportMarket, Vault, VaultPnl, VaultTransaction, VaultUserTransaction } from '../generated/schema';
 
 export function handleVaultStarted(event: VaultStarted): void {
