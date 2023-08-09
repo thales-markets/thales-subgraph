@@ -32,6 +32,12 @@ type SportMarket @entity {
   spread: BigInt
   total: BigInt
   doubleChanceMarketType: String
+  playerId: Bytes
+  playerName: String
+  playerPropsLine: BigInt
+  playerPropsType: BigInt
+  playerPropsOutcome: BigInt
+  playerPropsScore: BigInt
 }
 
 type GameIdToParentMarket @entity {
