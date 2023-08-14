@@ -18,10 +18,13 @@
     "codegen:bsc": "npm run codegen -- subgraphs/subgraph-bsc.yaml",
     "deploy:bsc": "npm run deploy -- thales-markets/thales-bsc subgraphs/subgraph-bsc.yaml",
     "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arbitrum.yaml",
-    "deploy:arbitrum": "npm run deploy -- thales-markets/thales-arbitrum subgraphs/subgraph-arbitrum.yaml"
+    "deploy:arbitrum": "npm run deploy -- thales-markets/thales-arbitrum subgraphs/subgraph-arbitrum.yaml",
+    "codegen:base": "npm run codegen -- subgraphs/subgraph-base.yaml",
+    "auth:base": "graph auth --studio aac7a0e1831f5b21419b7e59c4a2d3a2",
+    "deploy:base": "graph deploy --studio thales-markets-base subgraphs/subgraph-base.yaml"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.33.1",
+    "@graphprotocol/graph-cli": "0.55.0",
     "@graphprotocol/graph-ts": "0.27.0"
   },
   "devDependencies": {
