@@ -329,7 +329,7 @@ dataSources:
     name: GamesPlayerProps
     network: optimism-goerli
     source:
-      address: '0x5106A0686C375f8AB1A86c8eEb2f0B3cc1e5af23'
+      address: '0x738D5996f9E87A238EbCa7352909c20EF27c54d0'
       abi: GamesPlayerProps
       startBlock: 12988847
     mapping:
