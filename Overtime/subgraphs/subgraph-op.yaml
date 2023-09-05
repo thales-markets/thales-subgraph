@@ -538,6 +538,28 @@ dataSources:
           handler: handleWithdrawalRequested
         - event: Claimed(address,uint256)
           handler: handleClaimed
+  - kind: ethereum/contract
+    name: GamesPlayerProps
+    network: optimism
+    source:
+      address: '0xE7a6C567dEF38AE2268634EA1Eb0dB80e0c7F8D2'
+      abi: GamesPlayerProps
+      startBlock: 109149262
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+      abis:
+        - name: GamesPlayerProps
+          file: ../abis/GamesPlayerProps.json
+      eventHandlers:
+        - event: CreatePlayerPropsMarket(address,address,bytes32,bytes32,string,uint16,uint8,uint256[],uint256)
+          handler: handleCreatePlayerPropsMarketEvent
+        - event: ResolveChildMarket(address,uint256,address,uint16)
+          handler: handleResolvePlayerPropsChildMarketEvent
 templates:
   - name: SportMarket
     kind: ethereum/contract
