@@ -32,11 +32,6 @@ import {
   GamedOddsAddedChild as GamedOddsAddedChildEvent,
 } from '../generated/GamesOddsObtainer/GamesOddsObtainer';
 
-import {
-  CreatePlayerPropsMarket as CreatePlayerPropsMarketEvent,
-  ResolveChildMarket as ResolvePlayerPropsChildMarketEvent,
-} from '../generated/GamesPlayerProps/GamesPlayerProps';
-
 export function handleMarketCreated(event: MarketCreatedEvent): void {
   let market = new SportMarket(event.params.market.toHex());
 
@@ -570,39 +565,5 @@ export function handleDoubleChanceMarketCreated(event: DoubleChanceMarketCreated
       parentMarketToDoubleChanceMarket.noDrawMarket = event.params._doubleChanceMarket;
     }
     parentMarketToDoubleChanceMarket.save();
-  }
-}
-
-export function handleCreatePlayerPropsMarketEvent(event: CreatePlayerPropsMarketEvent): void {
-  let normalizedOdds = event.params._normalizedOdds;
-  let market = SportMarket.load(event.params._child.toHex());
-  if (market !== null) {
-    market.timestamp = event.block.timestamp;
-    market.homeOdds = normalizedOdds[0];
-    market.awayOdds = normalizedOdds[1];
-    market.betType = event.params._type;
-    market.playerId = event.params._playerId;
-    market.playerName = event.params._playerName;
-    market.playerPropsLine = BigInt.fromI32(event.params._line);
-    market.playerPropsType = BigInt.fromI32(event.params._option);
-
-    let parentMarket = SportMarket.load(event.params._main.toHex());
-    if (parentMarket !== null) {
-      market.tags = parentMarket.tags;
-      market.homeTeam = parentMarket.homeTeam;
-      market.awayTeam = parentMarket.awayTeam;
-      market.parentMarket = parentMarket.address;
-    }
-    market.save();
-  }
-}
-
-export function handleResolvePlayerPropsChildMarketEvent(event: ResolvePlayerPropsChildMarketEvent): void {
-  let market = SportMarket.load(event.params._child.toHex());
-  if (market !== null) {
-    market.timestamp = event.block.timestamp;
-    market.playerPropsOutcome = event.params._outcome;
-    market.playerPropsScore = BigInt.fromI32(event.params._score);
-    market.save();
   }
 }
