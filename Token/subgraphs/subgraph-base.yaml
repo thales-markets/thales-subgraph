@@ -1,0 +1,60 @@
+specVersion: 0.0.4
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: StakingThales
+    network: base
+    source:
+      address: '0x84aB38e42D8Da33b480762cCa543eEcA6135E040'
+      abi: StakingThales
+      startBlock: 3036597
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: StakingThales
+          file: ../abis/StakingThales.json
+      eventHandlers:
+        - event: Staked(address,uint256)
+          handler: handleStakedEvent
+        - event: UnstakeCooldown(address,uint256,uint256)
+          handler: handleStartUnstakeEvent
+        - event: Unstaked(address,uint256)
+          handler: handleUnstakedEvent
+        - event: CancelUnstake(address)
+          handler: handleCancelUnstakeEvent
+        - event: RewardsClaimed(address,uint256,uint256,uint256,uint256)
+          handler: handleStakingRewardsClaimEvent
+        - event: AccountMerged(address,address)
+          handler: handleAccountMergedEvent
+        - event: DelegatedVolume(address)
+          handler: handleDelegatedVolume
+        - event: CanClaimOnBehalfChanged(address,address,bool)
+          handler: handleCanClaimOnBehalfChangedEvent
+  - kind: ethereum/contract
+    name: EscrowThales
+    network: base
+    source:
+      address: '0x29dfc5fee05578CD913c75fF1C7A0d315595939A'
+      abi: EscrowThales
+      startBlock: 3036586
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/token-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: EscrowThales
+          file: ../abis/EscrowThales.json
+      eventHandlers:
+        - event: AddedToEscrow(address,uint256)
+          handler: handleAddedToEscrowEvent
+        - event: Vested(address,uint256)
+          handler: handleVestedEvent
