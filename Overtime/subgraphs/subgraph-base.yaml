@@ -1,0 +1,255 @@
+specVersion: 0.0.4
+description: Thales Sport Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SportPositionalMarketManagerSpreadAndTotal
+    network: base
+    source:
+      address: '0xB0EE5C967F209f24f7eF30c2C6Da38346a87E089'
+      abi: SportPositionalMarketManager
+      startBlock: 3038302
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - Position
+      abis:
+        - name: SportPositionalMarketManager
+          file: ../abis/SportPositionalMarketManager_SpreadAndTotal.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,address,address,address)
+          handler: handleMarketCreatedSpreadAndTotal
+        - event: DoubleChanceMarketCreated(address,address,uint256,string)
+          handler: handleDoubleChanceMarketCreated
+        - event: DatesUpdatedForMarket(address,uint256,uint256)
+          handler: handleDatesUpdatedForMarket
+  - kind: ethereum/contract
+    name: TheRundownConsumer
+    network: base
+    source:
+      address: '0xc5ba777202F117dcc28012370B1f67a430c771DA'
+      abi: TheRundownConsumer
+      startBlock: 3044334
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+        - SportMarketOddsHistory
+        - Position
+      abis:
+        - name: TheRundownConsumer
+          file: ../abis/TheRundownConsumer_UpdatedAt.json
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: CreateSportsMarket(address,bytes32,(bytes32,uint256,int24,int24,int24,string,string),uint256[],uint256[])
+          handler: handleCreateSportsMarketEvent
+        - event: GameOddsAdded(bytes32,bytes32,(bytes32,int24,int24,int24),uint256[])
+          handler: handleGameOddsAddedEvent
+        - event: GameResolved(bytes32,uint256,bytes32,(bytes32,uint8,uint8,uint8,uint40),uint256)
+          handler: handleGameResolvedUpdatedAtEvent
+  - kind: ethereum/contract
+    name: SportsAMM
+    network: base
+    source:
+      address: '0xAFD339acf24813e8038bfdF19A8d87Eb94B4605d'
+      abi: SportsAMM
+      startBlock: 3044816
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - MarketTransaction
+        - User
+        - PositionBalance
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
+      abis:
+        - name: SportsAMM
+          file: ../abis/SportsAMM.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
+  - kind: ethereum/contract
+    name: GamesOddsObtainer
+    network: base
+    source:
+      address: '0xF9091C4F9c990c4fAf656F44D1bbbD849a66f330'
+      abi: GamesOddsObtainer
+      startBlock: 3045465
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - SportMarket
+      abis:
+        - name: GamesOddsObtainer
+          file: ../abis/GamesOddsObtainer.json
+      eventHandlers:
+        - event: CreateChildSpreadSportsMarket(address,address,bytes32,int16,uint256[],uint256)
+          handler: handleCreateChildSpreadSportsMarketEvent
+        - event: CreateChildTotalSportsMarket(address,address,bytes32,uint24,uint256[],uint256)
+          handler: handleCreateChildTotalSportsMarketEvent
+        - event: GameOddsAdded(bytes32,bytes32,(bytes32,int24,int24,int24,int16,int24,int16,int24,uint24,int24,uint24,int24),uint256[])
+          handler: handleGameOddsAddedObtainerEvent
+        - event: GamedOddsAddedChild(bytes32,address,(bytes32,int24,int24,int24,int16,int24,int16,int24,uint24,int24,uint24,int24),uint256[],uint256)
+          handler: handleGameOddsAddedChildEvent
+        - event: ResolveChildMarket(address,uint256,address,uint24,uint24)
+          handler: handleResolveChildMarketEvent
+  - kind: ethereum/contract
+    name: ParlayMarketsAMM
+    network: base
+    source:
+      address: '0x5625c3233b52206a5f23c5fC1Ce16F6A7e3874dd'
+      abi: ParlayMarketsAMM
+      startBlock: 3046612
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/parlay-mapping.ts
+      entities:
+        - ParlayMarket
+        - User
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
+      abis:
+        - name: ParlayMarketsAMM
+          file: ../abis/ParlayMarketsAMM.json
+      eventHandlers:
+        - event: NewParlayMarket(address,address[],uint256[],uint256,uint256)
+          handler: handleNewParlayMarket
+        - event: ParlayMarketCreated(address,address,uint256,uint256,uint256,uint256,uint256,uint256[])
+          handler: handleParlayMarketCreated
+        - event: ParlayResolved(address,address,bool)
+          handler: handleParlayResolved
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferralTransaction
+  - kind: ethereum/contract
+    name: OvertimeVoucher
+    network: base
+    source:
+      address: '0x58050F0c63ad9ecaeEbbB002F305aF1dF0C92333'
+      abi: OvertimeVoucher
+      startBlock: 3055137
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/overtime-voucher-mapping.ts
+      entities:
+        - OvertimeVoucher
+        - PositionBalance
+      abis:
+        - name: OvertimeVoucher
+          file: ../abis/OvertimeVoucher.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: BoughtFromAmmWithVoucher(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmWithVoucherEvent
+  - kind: ethereum/contract
+    name: LiquidityPool
+    network: base
+    source:
+      address: '0x0b82E4Db2971829bB13db8Bf87118C065480fd10'
+      abi: LiquidityPool
+      startBlock: 3046053
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: LiquidityPool
+          file: ../abis/LiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: ParlayAMMLiquidityPool
+    network: base
+    source:
+      address: '0x46005F3C5a6BD95df00CfA53988C79A17E56D060'
+      abi: ParlayAMMLiquidityPool
+      startBlock: 3047953
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-parlay-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: ParlayAMMLiquidityPool
+          file: ../abis/ParlayAMMLiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+templates:
+  - name: SportMarket
+    kind: ethereum/contract
+    network: base
+    source:
+      abi: SportMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/thales-sport-markets-mapping.ts
+      entities:
+        - ClaimTx
+        - User
+      abis:
+        - name: SportMarket
+          file: ../abis/SportMarket.json
+      eventHandlers:
+        - event: OptionsExercised(indexed address,uint256)
+          handler: handleOptionsExercised
+        - event: MarketResolved(uint8,uint256,uint256,uint256)
+          handler: handleMarketResolved
+        - event: PauseUpdated(bool)
+          handler: handleMarketPauseUpdated
