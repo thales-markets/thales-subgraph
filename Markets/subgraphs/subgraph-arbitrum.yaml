@@ -64,6 +64,27 @@ dataSources:
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
   - kind: ethereum/contract
+    name: SpeedMarkets
+    network: arbitrum-one
+    source:
+      address: '0x02D0123a89Ae6ef27419d5EBb158d1ED4Cf24FA3'
+      abi: SpeedMarketsAMM
+      startBlock: 118548593
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/speed-markets-mapping.ts
+      entities:
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: SpeedMarketsAMM
+          file: ../abis/speed-markets/SpeedMarketsAMM.json
+      eventHandlers:
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid          
+  - kind: ethereum/contract
     name: AMM
     network: arbitrum-one
     source:

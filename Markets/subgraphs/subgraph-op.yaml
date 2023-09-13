@@ -147,6 +147,27 @@ dataSources:
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
   - kind: ethereum/contract
+    name: SpeedMarkets
+    network: optimism
+    source:
+      address: '0xE16B8a01490835EC1e76bAbbB3Cadd8921b32001'
+      abi: SpeedMarketsAMM
+      startBlock: 107839610
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/speed-markets-mapping.ts
+      entities:
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: SpeedMarketsAMM
+          file: ../abis/speed-markets/SpeedMarketsAMM.json
+      eventHandlers:
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid  
+  - kind: ethereum/contract
     name: DiscountVault
     network: optimism
     source:
