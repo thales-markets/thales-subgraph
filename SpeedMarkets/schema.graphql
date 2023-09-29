@@ -1,0 +1,16 @@
+enum Direction {
+  UP
+  DOWN
+}
+
+type SpeedMarket @entity {
+  id: ID!
+  timestamp: BigInt!
+  address: Bytes!
+  user: Bytes!
+  asset: String!
+  strikeTime: BigInt!
+  strikePrice: BigInt!
+  direction: Direction!
+  amount: BigInt!
+}
