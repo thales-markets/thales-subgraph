@@ -88,6 +88,8 @@ dataSources:
           handler: handleSoldToAMMEvent
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferralTransaction
+        - event: ExercisedWithOfframp(address,address,address,bool,uint256,uint256)
+          handler: handleExercisedWithOfframp
   - kind: ethereum/contract
     name: GamesOddsObtainer
     network: base

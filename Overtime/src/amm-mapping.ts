@@ -12,6 +12,7 @@ import {
   ReferredTrader,
   ReferralTransaction,
 } from '../generated/schema';
+import { ExercisedWithOfframp } from '../generated/SportsAMM/SportsAMM';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   let transaction = new MarketTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -161,4 +162,35 @@ export function handleReferralTransaction(event: ReferrerPaid): void {
   referralTransaction.ammType = 'single';
   referralTransaction.timestamp = event.block.timestamp;
   referralTransaction.save();
+}
+
+export function handleExercisedWithOfframp(event: ExercisedWithOfframp): void {
+  let market = SportMarket.load(event.params.market.toHex());
+  if (market !== null) {
+    let position = Position.load(market.upAddress.toHex());
+    if (position !== null) {
+      let userHomeBalance = PositionBalance.load(position.id + ' - ' + event.params.user.toHex());
+      if (userHomeBalance !== null) {
+        userHomeBalance.claimed = true;
+        userHomeBalance.save();
+      }
+    }
+    let positionDown = Position.load(market.downAddress.toHex());
+    if (positionDown !== null) {
+      let userAwayBalance = PositionBalance.load(positionDown.id + ' - ' + event.params.user.toHex());
+      if (userAwayBalance !== null) {
+        userAwayBalance.claimed = true;
+        userAwayBalance.save();
+      }
+    }
+
+    let positionDraw = Position.load(market.drawAddress.toHex());
+    if (positionDraw !== null) {
+      let userDrawBalance = PositionBalance.load(positionDraw.id + ' - ' + event.params.user.toHex());
+      if (userDrawBalance !== null) {
+        userDrawBalance.claimed = true;
+        userDrawBalance.save();
+      }
+    }
+  }
 }

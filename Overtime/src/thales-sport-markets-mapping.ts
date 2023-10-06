@@ -31,7 +31,6 @@ import {
   GameOddsAdded as GameOddsAddedObtainerEvent,
   GamedOddsAddedChild as GamedOddsAddedChildEvent,
 } from '../generated/GamesOddsObtainer/GamesOddsObtainer';
-
 import {
   CreatePlayerPropsMarket as CreatePlayerPropsMarketEvent,
   ResolveChildMarket as ResolvePlayerPropsChildMarketEvent,
