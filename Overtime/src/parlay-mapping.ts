@@ -70,11 +70,12 @@ export function handleParlayMarketCreated(event: ParlayMarketCreated): void {
     parlayMarket.sUSDAfterFees = event.params.sUSDAfterFees;
     parlayMarket.sUSDPaid = event.params.sUSDPaid;
     parlayMarket.marketQuotes = event.params.marketQuotes;
+    parlayMarket.account = event.params.account;
     parlayMarket.save();
 
-    let userStats = User.load(event.transaction.from.toHex());
+    let userStats = User.load(event.params.account.toHex());
     if (userStats === null) {
-      userStats = new User(event.transaction.from.toHex());
+      userStats = new User(event.params.account.toHex());
       userStats.volume = BigInt.fromI32(0);
       userStats.pnl = BigInt.fromI32(0);
       userStats.trades = 0;
