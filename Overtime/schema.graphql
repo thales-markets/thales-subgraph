@@ -101,6 +101,7 @@ type PositionBalance @entity {
   amount: BigInt!
   position: Position!
   sUSDPaid: BigInt!
+  timestamp: BigInt!
   claimed: Boolean!
 }
 
