@@ -40,6 +40,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.position = position.id;
         userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
+        userBalanceFrom.timestamp = event.block.timestamp;
         userBalanceFrom.claimed = false;
       }
 
@@ -96,6 +97,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.position = position.id;
         userBalanceFrom.sUSDPaid = BigInt.fromI32(0);
+        userBalanceFrom.timestamp = event.block.timestamp;
         userBalanceFrom.claimed = false;
       }
 
