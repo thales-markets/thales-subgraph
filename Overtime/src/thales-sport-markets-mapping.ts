@@ -14,7 +14,12 @@ import {
 } from '../generated/TheRundownConsumer/TheRundownConsumer';
 import { GameResolved as GameResolvedUpdatedAtEvent } from '../generated/TheRundownConsumerUpdatedAt/TheRundownConsumer';
 import { SportMarket as SportMarketTemplate } from '../generated/templates';
-import { OptionsExercised, MarketResolved, PauseUpdated } from '../generated/SportPositionalMarketManager/SportMarket';
+import {
+  OptionsExercised,
+  MarketResolved,
+  PauseUpdated,
+  PositionsInitialized,
+} from '../generated/SportPositionalMarketManager/SportMarket';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import {
   MarketCreated as MarketCreatedEvent,
@@ -603,5 +608,31 @@ export function handleResolvePlayerPropsChildMarketEvent(event: ResolvePlayerPro
     market.playerPropsOutcome = event.params._outcome;
     market.playerPropsScore = BigInt.fromI32(event.params._score);
     market.save();
+  }
+}
+
+export function handlePositionsInitialized(event: PositionsInitialized): void {
+  if (event.params._home.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionHome = new Position(event.params._home.toHex());
+    positionHome.market = event.params._market.toHex();
+    positionHome.claimable = false;
+    positionHome.side = 'home';
+    positionHome.save();
+  }
+
+  if (event.params._away.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionAway = new Position(event.params._away.toHex());
+    positionAway.market = event.params._market.toHex();
+    positionAway.claimable = false;
+    positionAway.side = 'away';
+    positionAway.save();
+  }
+
+  if (event.params._draw.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
+    let positionDraw = new Position(event.params._draw.toHex());
+    positionDraw.market = event.params._market.toHex();
+    positionDraw.claimable = false;
+    positionDraw.side = 'draw';
+    positionDraw.save();
   }
 }

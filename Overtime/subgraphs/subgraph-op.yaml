@@ -586,3 +586,5 @@ templates:
           handler: handleMarketResolved
         - event: PauseUpdated(bool)
           handler: handleMarketPauseUpdated
+        - event: PositionsInitialized(address,address,address,address)
+          handler: handlePositionsInitialized
