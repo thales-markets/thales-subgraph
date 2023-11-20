@@ -612,6 +612,15 @@ export function handleResolvePlayerPropsChildMarketEvent(event: ResolvePlayerPro
 }
 
 export function handlePositionsInitialized(event: PositionsInitialized): void {
+  let market = SportMarket.load(event.params._market.toHex());
+
+  if (market !== null) {
+    market.upAddress = event.params._home;
+    market.downAddress = event.params._away;
+    market.drawAddress = event.params._draw;
+    market.save();
+  }
+
   if (event.params._home.notEqual(Address.fromHexString('0x0000000000000000000000000000000000000000'))) {
     let positionHome = new Position(event.params._home.toHex());
     positionHome.market = event.params._market.toHex();
