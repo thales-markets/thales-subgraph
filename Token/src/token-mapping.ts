@@ -1,26 +1,27 @@
+import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { Claim as AirdropClaimEvent } from '../generated/Airdrop/Airdrop';
+import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
 import {
+  AccountMerged as AccountMergedEvent,
+  CanClaimOnBehalfChanged as CanClaimOnBehalfChangedEvent,
+  CancelUnstake as CancelUnstakeEvent,
+  DelegatedVolume as DelegatedVolumeEvent,
   Staked as StakedEvent,
+  RewardsClaimed as StakingRewardsClaimEvent,
+  RewardsClaimed1 as StakingRewardsClaimEventWithBonus,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
-  CancelUnstake as CancelUnstakeEvent,
-  RewardsClaimed as StakingRewardsClaimEvent,
-  AccountMerged as AccountMergedEvent,
-  DelegatedVolume as DelegatedVolumeEvent,
-  CanClaimOnBehalfChanged as CanClaimOnBehalfChangedEvent,
 } from '../generated/StakingThales/StakingThales';
 import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
-import { AddedToEscrow as AddedToEscrowEvent, Vested as VestedEvent } from '../generated/EscrowThales/EscrowThales';
-import { TokenTransaction, Staker, CanClaimOnBehalfItem } from '../generated/schema';
-import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { CanClaimOnBehalfItem, Staker, TokenTransaction } from '../generated/schema';
 
-import { Claim as MigratedRewardsClaimEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import {
   Staked as LPStakedEvent,
-  Withdrawn as WithdrawnEvent,
   RewardPaid as RewardPaidEvent,
   SecondRewardTokenPaid as SecondRewardTokenPaidEvent,
+  Withdrawn as WithdrawnEvent,
 } from '../generated/LPStakingRewards/LPStakingRewards';
+import { Claim as MigratedRewardsClaimEvent } from '../generated/OngoingAirdrop/OngoingAirdrop';
 import { StakedOnBehalf as StakedOnBehalfEvent } from '../generated/StakingThales/StakingThales';
 
 export function handleMigratedRewardsClaimEvent(event: MigratedRewardsClaimEvent): void {
@@ -128,6 +129,18 @@ export function handleRetroAirdropClaimEvent(event: AirdropClaimEvent): void {
 }
 
 export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.unclaimedReward;
+  tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.protocolRewards = BigInt.fromI32(0);
+  tokenTransaction.save();
+}
+
+export function handleStakingRewardsClaimEventWithBonus(event: StakingRewardsClaimEventWithBonus): void {
   let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
   tokenTransaction.transactionHash = event.transaction.hash;
   tokenTransaction.timestamp = event.block.timestamp;

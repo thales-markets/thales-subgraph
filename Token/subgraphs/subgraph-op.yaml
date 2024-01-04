@@ -49,6 +49,8 @@ dataSources:
         - event: CancelUnstake(address)
           handler: handleCancelUnstakeEvent
         - event: RewardsClaimed(address,uint256,uint256,uint256,uint256)
+          handler: handleStakingRewardsClaimEventWithBonus
+        - event: RewardsClaimed(address,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
         - event: AccountMerged(address,address)
           handler: handleAccountMergedEvent

@@ -21,15 +21,13 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": false, "internalType": "address", "name": "SNXRewards", "type": "address" },
-      { "indexed": false, "internalType": "address", "name": "thalesRoyale", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "thalesAMM", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "thalesRangedAMM", "type": "address" },
-      { "indexed": false, "internalType": "address", "name": "exoticBonds", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "sportsAMM", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "priceFeed", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "ThalesStakingRewardsPool", "type": "address" },
-      { "indexed": false, "internalType": "address", "name": "addressResolver", "type": "address" }
+      { "indexed": false, "internalType": "address", "name": "addressResolver", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "stakingThalesBonusRewardsManager", "type": "address" }
     ],
     "name": "AddressesChanged",
     "type": "event"
@@ -82,6 +80,12 @@
   },
   {
     "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "lastPeriodTimestamp", "type": "uint256" }],
+    "name": "LastPeriodTimestampSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       { "indexed": false, "internalType": "address", "name": "oldOwner", "type": "address" },
       { "indexed": false, "internalType": "address", "name": "newOwner", "type": "address" }
@@ -103,8 +107,28 @@
   },
   {
     "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "_currentPeriodRewards", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_extraRewards", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_revShare", "type": "uint256" }
+    ],
+    "name": "ReceivedStakingRewardsUpdate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [{ "indexed": false, "internalType": "uint256", "name": "reward", "type": "uint256" }],
     "name": "RewardAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "account", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "unclaimedReward", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "baseRewards", "type": "uint256" }
+    ],
+    "name": "RewardsClaimed",
     "type": "event"
   },
   {
@@ -145,7 +169,9 @@
       { "indexed": false, "internalType": "bool", "name": "distributeFeesEnabled", "type": "bool" },
       { "indexed": false, "internalType": "uint256", "name": "durationPeriod", "type": "uint256" },
       { "indexed": false, "internalType": "uint256", "name": "unstakeDurationPeriod", "type": "uint256" },
-      { "indexed": false, "internalType": "bool", "name": "mergeAccountEnabled", "type": "bool" }
+      { "indexed": false, "internalType": "bool", "name": "mergeAccountEnabled", "type": "bool" },
+      { "indexed": false, "internalType": "bool", "name": "readOnlyMode", "type": "bool" },
+      { "indexed": false, "internalType": "bool", "name": "sendCCIPMessage", "type": "bool" }
     ],
     "name": "StakingParametersChanged",
     "type": "event"
@@ -156,12 +182,7 @@
     "inputs": [
       { "indexed": false, "internalType": "uint256", "name": "fixedPeriodReward", "type": "uint256" },
       { "indexed": false, "internalType": "uint256", "name": "periodExtraReward", "type": "uint256" },
-      { "indexed": false, "internalType": "bool", "name": "extraRewardsActive", "type": "bool" },
-      { "indexed": false, "internalType": "uint256", "name": "maxSNXRewardsPercentage", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "maxAMMVolumeRewardsPercentage", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "maxThalesRoyaleRewardsPercentage", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "SNXVolumeRewardsMultiplier", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "AMMVolumeRewardsMultiplier", "type": "uint256" }
+      { "indexed": false, "internalType": "bool", "name": "extraRewardsActive", "type": "bool" }
     ],
     "name": "StakingRewardsParametersChanged",
     "type": "event"
@@ -206,33 +227,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "AMMVolumeRewardsMultiplier",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "SNXRewards",
-    "outputs": [{ "internalType": "contract ISNXRewards", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "SNXVolumeRewardsMultiplier",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "ThalesStakingRewardsPool",
     "outputs": [{ "internalType": "contract IThalesStakingRewardsPool", "name": "", "type": "address" }],
     "payable": false,
@@ -246,15 +240,6 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "addressResolver",
-    "outputs": [{ "internalType": "contract IAddressResolver", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -326,6 +311,24 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "closingPeriodInProgress",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "closingPeriodPauseTime",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "currentPeriodFees",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
@@ -380,15 +383,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "exoticBonds",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "extraRewardsActive",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "payable": false,
@@ -408,24 +402,6 @@
     "constant": true,
     "inputs": [],
     "name": "fixedPeriodReward",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getAMMBonus",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getAMMBonusPercentage",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
@@ -460,15 +436,6 @@
   },
   {
     "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getCRatio",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [],
     "name": "getContractFeeFunds",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -481,15 +448,6 @@
     "inputs": [],
     "name": "getContractRewardFunds",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getExoticMarketsVolume",
-    "outputs": [{ "internalType": "uint256", "name": "volumeforAccount", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -524,107 +482,8 @@
   {
     "constant": true,
     "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getSNXBonus",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getSNXBonusPercentage",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getSNXDebt",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getSNXRateForCurrency",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getSNXRewardsAddress",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getSNXStaked",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getSNXTargetRatio",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getSportsAMMVolume",
-    "outputs": [{ "internalType": "uint256", "name": "volumeforAccount", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getThalesAMMVolume",
-    "outputs": [{ "internalType": "uint256", "name": "volumeforAccount", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getThalesRangedAMMVolume",
-    "outputs": [{ "internalType": "uint256", "name": "volumeforAccount", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
     "name": "getTotalBonus",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-    "name": "getTotalBonusPercentage",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [{ "internalType": "uint256", "name": "returnValue", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -686,33 +545,6 @@
     "constant": true,
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "lastUnstakeTime",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "maxAMMVolumeRewardsPercentage",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "maxSNXRewardsPercentage",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "maxThalesRoyaleRewardsPercentage",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
@@ -800,17 +632,33 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "readOnlyMode",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "sendRoundClosingMessageCrosschain",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
-      { "internalType": "address", "name": "_snxRewards", "type": "address" },
-      { "internalType": "address", "name": "_royale", "type": "address" },
       { "internalType": "address", "name": "_thalesAMM", "type": "address" },
       { "internalType": "address", "name": "_thalesRangedAMM", "type": "address" },
-      { "internalType": "address", "name": "_exoticBonds", "type": "address" },
       { "internalType": "address", "name": "_sportsAMM", "type": "address" },
       { "internalType": "address", "name": "_priceFeed", "type": "address" },
       { "internalType": "address", "name": "_thalesStakingRewardsPool", "type": "address" },
-      { "internalType": "address", "name": "_addressResolver", "type": "address" }
+      { "internalType": "address", "name": "_addressResolver", "type": "address" },
+      { "internalType": "address", "name": "_stakingThalesBonusRewardsManager", "type": "address" }
     ],
     "name": "setAddresses",
     "outputs": [],
@@ -841,6 +689,15 @@
   },
   {
     "constant": false,
+    "inputs": [{ "internalType": "uint256", "name": "_lastPeriodTimestamp", "type": "uint256" }],
+    "name": "setLastPeriodTimestamp",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [{ "internalType": "address", "name": "_owner", "type": "address" }],
     "name": "setOwner",
     "outputs": [],
@@ -864,7 +721,9 @@
       { "internalType": "bool", "name": "_distributeFeesEnabled", "type": "bool" },
       { "internalType": "uint256", "name": "_durationPeriod", "type": "uint256" },
       { "internalType": "uint256", "name": "_unstakeDurationPeriod", "type": "uint256" },
-      { "internalType": "bool", "name": "_mergeAccountEnabled", "type": "bool" }
+      { "internalType": "bool", "name": "_mergeAccountEnabled", "type": "bool" },
+      { "internalType": "bool", "name": "_readOnlyMode", "type": "bool" },
+      { "internalType": "bool", "name": "_sendCCIPMessage", "type": "bool" }
     ],
     "name": "setStakingParameters",
     "outputs": [],
@@ -877,12 +736,7 @@
     "inputs": [
       { "internalType": "uint256", "name": "_fixedReward", "type": "uint256" },
       { "internalType": "uint256", "name": "_extraReward", "type": "uint256" },
-      { "internalType": "bool", "name": "_extraRewardsActive", "type": "bool" },
-      { "internalType": "uint256", "name": "_maxSNXRewardsPercentage", "type": "uint256" },
-      { "internalType": "uint256", "name": "_maxAMMVolumeRewardsPercentage", "type": "uint256" },
-      { "internalType": "uint256", "name": "_maxThalesRoyaleRewardsPercentage", "type": "uint256" },
-      { "internalType": "uint256", "name": "_SNXVolumeRewardsMultiplier", "type": "uint256" },
-      { "internalType": "uint256", "name": "_AMMVolumeRewardsMultiplier", "type": "uint256" }
+      { "internalType": "bool", "name": "_extraRewardsActive", "type": "bool" }
     ],
     "name": "setStakingRewardsParameters",
     "outputs": [],
@@ -962,6 +816,15 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "stakingThalesBonusRewardsManager",
+    "outputs": [{ "internalType": "contract IStakingThalesBonusRewardsManager", "name": "", "type": "address" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "stakingToken",
     "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
     "payable": false,
@@ -1034,34 +897,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "thalesRoyale",
-    "outputs": [{ "internalType": "contract IThalesRoyale", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "totalEscrowedLastPeriodEnd",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalSNXFeesInPeriod",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalSNXRewardsInPeriod",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
@@ -1128,6 +964,19 @@
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "uint256", "name": "_currentPeriodRewards", "type": "uint256" },
+      { "internalType": "uint256", "name": "_extraRewards", "type": "uint256" },
+      { "internalType": "uint256", "name": "_revShare", "type": "uint256" }
+    ],
+    "name": "updateStakingRewards",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
