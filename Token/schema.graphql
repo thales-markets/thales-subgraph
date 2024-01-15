@@ -28,6 +28,7 @@ type TokenTransaction @entity {
   destAccount: Bytes
   amount: BigInt
   protocolRewards: BigInt
+  feeRewards: BigInt
   type: TokenTransactionType!
   blockNumber: BigInt!
 }

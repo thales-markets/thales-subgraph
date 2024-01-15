@@ -32,6 +32,8 @@ dataSources:
           handler: handleStakingRewardsClaimEventWithBonus
         - event: RewardsClaimed(address,uint256,uint256)
           handler: handleStakingRewardsClaimEvent
+        - event: FeeRewardsClaimed(address,uint256)
+          handler: handleFeeRewardsClaimEvent
         - event: AccountMerged(address,address)
           handler: handleAccountMergedEvent
         - event: DelegatedVolume(address)

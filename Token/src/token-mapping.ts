@@ -9,6 +9,7 @@ import {
   Staked as StakedEvent,
   RewardsClaimed as StakingRewardsClaimEvent,
   RewardsClaimed1 as StakingRewardsClaimEventWithBonus,
+  FeeRewardsClaimed,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
 } from '../generated/StakingThales/StakingThales';
@@ -137,6 +138,7 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   tokenTransaction.type = 'claimStakingRewards';
   tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.protocolRewards = BigInt.fromI32(0);
+  tokenTransaction.feeRewards = BigInt.fromI32(0);
   tokenTransaction.save();
 }
 
@@ -149,6 +151,20 @@ export function handleStakingRewardsClaimEventWithBonus(event: StakingRewardsCla
   tokenTransaction.type = 'claimStakingRewards';
   tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.protocolRewards = event.params.protocolBonus;
+  tokenTransaction.feeRewards = BigInt.fromI32(0);
+  tokenTransaction.save();
+}
+
+export function handleFeeRewardsClaimEvent(event: FeeRewardsClaimed): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.feeRewards = event.params.unclaimedFees;
+  tokenTransaction.type = 'claimStakingRewards';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.amount = BigInt.fromI32(0);
+  tokenTransaction.protocolRewards = BigInt.fromI32(0);
   tokenTransaction.save();
 }
 
