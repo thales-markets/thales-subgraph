@@ -6,19 +6,21 @@ import {
   CanClaimOnBehalfChanged as CanClaimOnBehalfChangedEvent,
   CancelUnstake as CancelUnstakeEvent,
   DelegatedVolume as DelegatedVolumeEvent,
+  FeeRewardsClaimed,
   Staked as StakedEvent,
   RewardsClaimed as StakingRewardsClaimEvent,
   RewardsClaimed1 as StakingRewardsClaimEventWithBonus,
-  FeeRewardsClaimed,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
 } from '../generated/StakingThales/StakingThales';
 import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
-import { CanClaimOnBehalfItem, Staker, TokenTransaction } from '../generated/schema';
+import { CanClaimOnBehalfItem, LPReward, LPRewardsDuration, Staker, TokenTransaction } from '../generated/schema';
 
 import {
+  BothRewardsAdded as BothRewardsAddedEvent,
   Staked as LPStakedEvent,
   RewardPaid as RewardPaidEvent,
+  RewardsDurationUpdated as RewardsDurationUpdatedEvent,
   SecondRewardTokenPaid as SecondRewardTokenPaidEvent,
   Withdrawn as WithdrawnEvent,
 } from '../generated/LPStakingRewards/LPStakingRewards';
@@ -369,4 +371,21 @@ export function handleDelegatedVolume(event: DelegatedVolumeEvent): void {
     : 'delegateVolume';
   tokenTransaction.blockNumber = event.block.number;
   tokenTransaction.save();
+}
+
+export function handleBothRewardsAddedEvent(event: BothRewardsAddedEvent): void {
+  let lpReward = new LPReward(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  lpReward.transactionHash = event.transaction.hash;
+  lpReward.timestamp = event.block.timestamp;
+  lpReward.reward = event.params.reward;
+  lpReward.secondReward = event.params.secondReward;
+  lpReward.save();
+}
+
+export function handleRewardsDurationUpdatedEvent(event: RewardsDurationUpdatedEvent): void {
+  let lpReward = new LPRewardsDuration(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  lpReward.transactionHash = event.transaction.hash;
+  lpReward.timestamp = event.block.timestamp;
+  lpReward.newDuration = event.params.newDuration;
+  lpReward.save();
 }

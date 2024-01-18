@@ -51,3 +51,18 @@ type CanClaimOnBehalfItem @entity {
   account: Bytes!
   canClaimOnBehalf: Boolean!
 }
+
+type LPReward @entity {
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  reward: BigInt!
+  secondReward: BigInt!
+}
+
+type LPRewardsDuration @entity {
+  id: ID!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  newDuration: BigInt!
+}
