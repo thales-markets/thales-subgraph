@@ -40,6 +40,12 @@ dataSources:
           handler: handleDelegatedVolume
         - event: CanClaimOnBehalfChanged(address,address,bool)
           handler: handleCanClaimOnBehalfChangedEvent
+        - event: StakingPeriodStarted()
+          handler: handleStakingPeriodStartedEvent
+        - event: ClosedPeriod(uint256,uint256)
+          handler: handleClosedPeriodEvent
+        - event: ReceivedStakingRewardsUpdate(uint256,uint256,uint256)
+          handler: handleReceivedStakingRewardsUpdateEvent
   - kind: ethereum/contract
     name: EscrowThales
     network: arbitrum-one

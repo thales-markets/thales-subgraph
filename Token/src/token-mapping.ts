@@ -5,16 +5,27 @@ import {
   AccountMerged as AccountMergedEvent,
   CanClaimOnBehalfChanged as CanClaimOnBehalfChangedEvent,
   CancelUnstake as CancelUnstakeEvent,
+  ClosedPeriod,
   DelegatedVolume as DelegatedVolumeEvent,
   FeeRewardsClaimed,
+  ReceivedStakingRewardsUpdate,
   Staked as StakedEvent,
+  StakingPeriodStarted,
   RewardsClaimed as StakingRewardsClaimEvent,
   RewardsClaimed1 as StakingRewardsClaimEventWithBonus,
   UnstakeCooldown as StartUnstakeEvent,
   Unstaked as UnstakedEvent,
 } from '../generated/StakingThales/StakingThales';
 import { RewardsClaimed as OldStakingRewardsClaimEvent } from '../generated/StakingThales_OldRewardsClaimed/StakingThales_OldRewardsClaimed';
-import { CanClaimOnBehalfItem, LPReward, LPRewardsDuration, Staker, TokenTransaction } from '../generated/schema';
+import {
+  CanClaimOnBehalfItem,
+  LPReward,
+  LPRewardsDuration,
+  Staker,
+  Staking,
+  StakingClaim,
+  TokenTransaction,
+} from '../generated/schema';
 
 import {
   BothRewardsAdded as BothRewardsAddedEvent,
@@ -142,6 +153,18 @@ export function handleStakingRewardsClaimEvent(event: StakingRewardsClaimEvent):
   tokenTransaction.protocolRewards = BigInt.fromI32(0);
   tokenTransaction.feeRewards = BigInt.fromI32(0);
   tokenTransaction.save();
+
+  let staking = Staking.load(event.address.toHex());
+  if (staking !== null) {
+    let stakingClaim = StakingClaim.load(event.address.toHex() + '-' + staking.period.toString());
+    if (stakingClaim !== null) {
+      stakingClaim.baseThalesClaimed = stakingClaim.baseThalesClaimed.plus(event.params.baseRewards);
+      stakingClaim.extraThalesClaimed = stakingClaim.extraThalesClaimed.plus(
+        event.params.unclaimedReward.minus(event.params.baseRewards),
+      );
+      stakingClaim.save();
+    }
+  }
 }
 
 export function handleStakingRewardsClaimEventWithBonus(event: StakingRewardsClaimEventWithBonus): void {
@@ -168,6 +191,15 @@ export function handleFeeRewardsClaimEvent(event: FeeRewardsClaimed): void {
   tokenTransaction.amount = BigInt.fromI32(0);
   tokenTransaction.protocolRewards = BigInt.fromI32(0);
   tokenTransaction.save();
+
+  let staking = Staking.load(event.address.toHex());
+  if (staking !== null) {
+    let stakingClaim = StakingClaim.load(event.address.toHex() + '-' + staking.period.toString());
+    if (stakingClaim !== null) {
+      stakingClaim.feesClaimed = stakingClaim.feesClaimed.plus(event.params.unclaimedFees);
+      stakingClaim.save();
+    }
+  }
 }
 
 export function handleOldStakingRewardsClaimEvent(event: OldStakingRewardsClaimEvent): void {
@@ -388,4 +420,51 @@ export function handleRewardsDurationUpdatedEvent(event: RewardsDurationUpdatedE
   lpReward.timestamp = event.block.timestamp;
   lpReward.newDuration = event.params.newDuration;
   lpReward.save();
+}
+
+export function handleStakingPeriodStartedEvent(event: StakingPeriodStarted): void {
+  let staking = new Staking(event.address.toHex());
+  staking.period = BigInt.fromI32(0);
+  staking.save();
+
+  let stakingClaim = new StakingClaim(event.address.toHex() + '-0');
+  stakingClaim.period = BigInt.fromI32(0);
+  stakingClaim.baseThalesClaimed = BigInt.fromI32(0);
+  stakingClaim.extraThalesClaimed = BigInt.fromI32(0);
+  stakingClaim.feesClaimed = BigInt.fromI32(0);
+  stakingClaim.baseRewards = BigInt.fromI32(0);
+  stakingClaim.extraRewards = BigInt.fromI32(0);
+  stakingClaim.feesRewards = BigInt.fromI32(0);
+  stakingClaim.save();
+}
+
+export function handleClosedPeriodEvent(event: ClosedPeriod): void {
+  let staking = Staking.load(event.address.toHex());
+  if (staking !== null) {
+    staking.period = event.params.PeriodOfStaking;
+    staking.save();
+  }
+
+  let stakingClaim = new StakingClaim(event.address.toHex() + '-' + event.params.PeriodOfStaking.toString());
+  stakingClaim.period = event.params.PeriodOfStaking;
+  stakingClaim.baseThalesClaimed = BigInt.fromI32(0);
+  stakingClaim.extraThalesClaimed = BigInt.fromI32(0);
+  stakingClaim.feesClaimed = BigInt.fromI32(0);
+  stakingClaim.baseRewards = BigInt.fromI32(0);
+  stakingClaim.extraRewards = BigInt.fromI32(0);
+  stakingClaim.feesRewards = BigInt.fromI32(0);
+  stakingClaim.save();
+}
+
+export function handleReceivedStakingRewardsUpdateEvent(event: ReceivedStakingRewardsUpdate): void {
+  let staking = Staking.load(event.address.toHex());
+  if (staking !== null) {
+    let stakingClaim = StakingClaim.load(event.address.toHex() + '-' + staking.period.toString());
+    if (stakingClaim !== null) {
+      stakingClaim.baseRewards = event.params._currentPeriodRewards;
+      stakingClaim.extraRewards = event.params._extraRewards;
+      stakingClaim.feesRewards = event.params._revShare;
+      stakingClaim.save();
+    }
+  }
 }

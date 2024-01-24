@@ -66,3 +66,19 @@ type LPRewardsDuration @entity {
   timestamp: BigInt!
   newDuration: BigInt!
 }
+
+type Staking @entity {
+  id: ID!
+  period: BigInt!
+}
+
+type StakingClaim @entity {
+  id: ID!
+  period: BigInt!
+  baseThalesClaimed: BigInt!
+  extraThalesClaimed: BigInt!
+  feesClaimed: BigInt!
+  baseRewards: BigInt!
+  extraRewards: BigInt!
+  feesRewards: BigInt!
+}
