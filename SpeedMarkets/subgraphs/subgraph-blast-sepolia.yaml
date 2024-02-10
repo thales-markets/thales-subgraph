@@ -1,0 +1,27 @@
+specVersion: 0.0.4
+description: Speed Markets API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SpeedMarketsAMM
+    network: blast-testnet
+    source:
+      address: '0xA2dCFEe657Bc0a71AC31d146366246202eae18a4'
+      abi: SpeedMarketsAMM
+      startBlock: 1026242
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/speed-markets-mapping.ts
+      entities:
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: SpeedMarketsAMM
+          file: ../abis/SpeedMarketsAMM.json
+      eventHandlers:
+        - event: MarketCreated(address,address,bytes32,uint256,int64,uint8,uint256)
+          handler: handleMarketCreated
