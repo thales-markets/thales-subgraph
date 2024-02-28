@@ -1,0 +1,31 @@
+specVersion: 0.0.4
+description: March Madness Arbitrum One
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MarchMadness
+    network: arbitrum-one
+    source:
+      address: '0x29bd4ceDb94C4dC37B4D9c52Ac98Eb4967BFAaa3'
+      abi: MarchMadness
+      startBlock: 67679178
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/march-madness-mapping.ts
+      entities:
+        - Token
+        - Game
+      abis:
+        - name: MarchMadness
+          file: ../abis/MarchMadness.json
+      eventHandlers:
+        - event: ResultForGameAdded(uint256,uint256)
+          handler: handleResultForGameAdded
+        - event: Mint(address,uint256,uint256[63])
+          handler: handleMint
+        - event: UpdateBracketsForAlreadyMintedItem(address,uint256,uint256[63])
+          handler: handleBracketsUpdate
