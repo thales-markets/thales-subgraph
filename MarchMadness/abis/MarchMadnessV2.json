@@ -149,25 +149,6 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_roundId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_points",
-        "type": "uint256"
-      }
-    ],
-    "name": "PointsSettledForRound",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
         "name": "_gameIndex",
         "type": "uint256"
       },
@@ -179,6 +160,83 @@
       }
     ],
     "name": "ResultForGameAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "mintingPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetMintingPrice",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_onramper",
+        "type": "address"
+      }
+    ],
+    "name": "SetMultiCollateralOnOffRamp",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_safeBox",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_sbFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetSafeBox",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "whitelisted",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "SetWhitelistedAddress",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "SetsUSD",
     "type": "event"
   },
   {
@@ -276,28 +334,14 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "name": "addressAlreadyMinted",
-    "outputs": [
+      },
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "addressToTokenId",
+    "name": "addressToTokenIds",
     "outputs": [
       {
         "internalType": "uint256",
@@ -379,6 +423,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "addressToFetchFor",
+        "type": "address"
+      }
+    ],
+    "name": "getAddressToTokenIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -398,17 +461,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_minter",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "itemId",
+        "type": "uint256"
       }
     ],
-    "name": "getCorrectPositionsByMinterAddress",
+    "name": "getBracketsByItemId",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "uint256[63]",
+        "name": "brackets",
+        "type": "uint256[63]"
       }
     ],
     "stateMutability": "view",
@@ -422,36 +485,12 @@
         "type": "uint256"
       }
     ],
-    "name": "getCorrectPositionsByTokenId",
+    "name": "getCorrectPositionsByRound",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "correctPredictions",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_roundId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_minter",
-        "type": "address"
-      }
-    ],
-    "name": "getCorrectPositionsPerRoundByMinterAddress",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "uint256[6]",
+        "name": "correctPositionsByRound",
+        "type": "uint256[6]"
       }
     ],
     "stateMutability": "view",
@@ -482,19 +521,26 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_minter",
-        "type": "address"
-      }
-    ],
-    "name": "getTotalPointsByMinterAddress",
+    "inputs": [],
+    "name": "getCurrentTokenId",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getResults",
+    "outputs": [
+      {
+        "internalType": "uint256[63]",
+        "name": "",
+        "type": "uint256[63]"
       }
     ],
     "stateMutability": "view",
@@ -514,6 +560,25 @@
         "internalType": "uint256",
         "name": "totalPoints",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getTotalPointsByTokenIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "totalPoints",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -570,6 +635,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "isWhitelistedAddress",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -608,6 +692,80 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "collateral",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "collateralAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[63]",
+        "name": "_brackets",
+        "type": "uint256[63]"
+      }
+    ],
+    "name": "mintWithDiffCollateral",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "newItemId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[63]",
+        "name": "_brackets",
+        "type": "uint256[63]"
+      }
+    ],
+    "name": "mintWithEth",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "newItemId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mintingPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "multiCollateralOnOffRamp",
+    "outputs": [
+      {
+        "internalType": "contract IMultiCollateralOnOffRamp",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -698,6 +856,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "retrieveSUSDAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "",
         "type": "uint256"
       },
@@ -719,19 +890,26 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "roundToPoints",
+    "inputs": [],
+    "name": "sUSD",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
-        "type": "uint256"
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "safeBox",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -789,6 +967,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "sbFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -822,6 +1013,32 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_mintingPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMintingPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_onramper",
+        "type": "address"
+      }
+    ],
+    "name": "setMultiCollateralOnOffRamp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bool",
         "name": "paused",
         "type": "bool"
@@ -835,17 +1052,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_roundId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_points",
-        "type": "uint256"
+        "internalType": "uint256[63]",
+        "name": "_results",
+        "type": "uint256[63]"
       }
     ],
-    "name": "setPointsToRound",
+    "name": "setResultArray",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -871,17 +1083,61 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_safeBox",
+        "type": "address"
       },
       {
+        "internalType": "uint256",
+        "name": "_sbFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSafeBox",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "string",
-        "name": "_tokenURI",
+        "name": "_urlToUse",
         "type": "string"
       }
     ],
-    "name": "setTokenURI",
+    "name": "setURLToUse",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "setWhitelistedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "setsUSD",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -990,5 +1246,41 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "urlToUse",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "whitelistedAddresses",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]
