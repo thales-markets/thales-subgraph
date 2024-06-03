@@ -1,0 +1,17 @@
+{
+  "name": "overtime",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "auth": "graph auth --studio {deploy-key}",
+    "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
+    "deploy:optimism": "graph deploy --studio sport-markets-v2-optimism subgraphs/subgraph-op.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.73.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
+}

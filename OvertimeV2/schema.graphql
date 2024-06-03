@@ -1,0 +1,31 @@
+type LiquidityPool @entity {
+  id: ID!
+  address: Bytes!
+  round: BigInt!
+}
+
+type LiquidityPoolPnl @entity {
+  id: ID!
+  liquidityPool: Bytes!
+  timestamp: BigInt!
+  round: BigInt!
+  pnl: BigInt!
+}
+
+enum LiquidityPoolUserTransactionType {
+  deposit
+  withdrawalRequest
+  claim
+}
+
+type LiquidityPoolUserTransaction @entity {
+  id: ID!
+  liquidityPool: Bytes!
+  hash: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  account: Bytes!
+  type: LiquidityPoolUserTransactionType!
+  amount: BigInt
+  round: BigInt!
+}
