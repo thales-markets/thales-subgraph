@@ -94,3 +94,31 @@ dataSources:
           handler: handleWithdrawalRequested
         - event: Claimed(address,uint256)
           handler: handleClaimed
+  - kind: ethereum/contract
+    name: SportsAMM
+    network: optimism
+    source:
+      address: '0xFb4e4811C7A811E098A556bD79B64c20b479E431'
+      abi: SportsAMM
+      startBlock: 120581662
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/sports-amm-mapping.ts
+      entities:
+        - ParlayMarket
+        - User
+        - Referrer
+        - ReferredTraders
+        - ReferralTransaction
+      abis:
+        - name: SportsAMM
+          file: ../abis/SportsAMM.json
+      eventHandlers:
+        - event: NewTicket((bytes32,uint16,uint16,uint256,uint8,int24,uint24,uint8,uint256,(uint16,uint8,int24)[])[],address,uint256,uint256,bool)
+          handler: handleNewTicket
+        - event: TicketCreated(address,address,uint256,uint256,uint256,uint256,address)
+          handler: handleTicketCreated
+        - event: ReferrerPaid(address,address,uint256,uint256,address)
+          handler: handleReferralTransaction

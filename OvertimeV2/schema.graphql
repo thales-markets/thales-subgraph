@@ -1,3 +1,31 @@
+type Market @entity {
+  id: ID!
+  gameId: Bytes!
+  sportId: BigInt!
+  typeId: BigInt!
+  maturity: BigInt!
+  status: BigInt!
+  line: BigInt!
+  playerId: BigInt!
+  position: BigInt!
+  odd: BigInt!
+}
+
+type Ticket @entity {
+  id: ID!
+  txHash: Bytes!
+  timestamp: BigInt!
+  markets: [Market!]!
+  lastGameStarts: BigInt!
+  owner: Bytes!
+  buyInAmount: BigInt!
+  payout: BigInt!
+  isLive: Boolean!
+  totalQuote: BigInt
+  fees: BigInt
+  collateral: Bytes
+}
+
 type LiquidityPool @entity {
   id: ID!
   address: Bytes!
