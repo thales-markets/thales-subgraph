@@ -5,7 +5,9 @@
     "codegen": "graph codegen",
     "auth": "graph auth --studio {deploy-key}",
     "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
-    "deploy:optimism": "graph deploy --studio sport-markets-v2-optimism subgraphs/subgraph-op.yaml"
+    "deploy:optimism": "graph deploy --studio sport-markets-v2-optimism subgraphs/subgraph-op.yaml",
+    "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arb.yaml",
+    "deploy:arbitrum": "graph deploy --studio sport-markets-v2-arbitrum subgraphs/subgraph-arb.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.73.0",
