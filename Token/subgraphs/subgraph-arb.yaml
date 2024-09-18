@@ -46,6 +46,10 @@ dataSources:
           handler: handleClosedPeriodEvent
         - event: ReceivedStakingRewardsUpdate(uint256,uint256,uint256)
           handler: handleReceivedStakingRewardsUpdateEvent
+        - event: StakedThalesDecreased(address,uint256)
+          handler: handleStakedThalesDecreasedEvent
+        - event: StakedThalesIncreased(address,uint256)
+          handler: handleStakedThalesIncreasedEvent
   - kind: ethereum/contract
     name: EscrowThales
     network: arbitrum-one

@@ -10,6 +10,8 @@ import {
   FeeRewardsClaimed,
   ReceivedStakingRewardsUpdate,
   Staked as StakedEvent,
+  StakedThalesDecreased,
+  StakedThalesIncreased,
   StakingPeriodStarted,
   RewardsClaimed as StakingRewardsClaimEvent,
   RewardsClaimed1 as StakingRewardsClaimEventWithBonus,
@@ -467,4 +469,51 @@ export function handleReceivedStakingRewardsUpdateEvent(event: ReceivedStakingRe
       stakingClaim.save();
     }
   }
+}
+
+export function handleStakedThalesDecreasedEvent(event: StakedThalesDecreased): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.amount;
+  tokenTransaction.type = 'overtimeTrade';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker !== null) {
+    staker.stakedAmount = staker.stakedAmount.minus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.equals(BigInt.fromI32(0))
+      ? BigInt.fromI32(0)
+      : staker.stakedAmount.plus(staker.escrowedAmount);
+    staker.timestamp = event.block.timestamp;
+    staker.save();
+  }
+}
+
+export function handleStakedThalesIncreasedEvent(event: StakedThalesIncreased): void {
+  let tokenTransaction = new TokenTransaction(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
+  tokenTransaction.transactionHash = event.transaction.hash;
+  tokenTransaction.timestamp = event.block.timestamp;
+  tokenTransaction.account = event.params.account;
+  tokenTransaction.amount = event.params.amount;
+  tokenTransaction.type = 'overtimeClaim';
+  tokenTransaction.blockNumber = event.block.number;
+  tokenTransaction.save();
+
+  let staker = Staker.load(event.params.account.toHex());
+  if (staker === null) {
+    staker = new Staker(event.params.account.toHex());
+    staker.account = event.params.account;
+    staker.stakedAmount = event.params.amount;
+    staker.escrowedAmount = BigInt.fromI32(0);
+    staker.totalStakedAmount = event.params.amount;
+    staker.unstakingAmount = BigInt.fromI32(0);
+  } else {
+    staker.stakedAmount = staker.stakedAmount.plus(event.params.amount);
+    staker.totalStakedAmount = staker.stakedAmount.plus(staker.escrowedAmount);
+  }
+  staker.timestamp = event.block.timestamp;
+  staker.save();
 }

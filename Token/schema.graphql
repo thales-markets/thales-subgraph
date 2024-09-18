@@ -17,6 +17,8 @@ enum TokenTransactionType {
   mergeAccount
   delegateVolume
   removeDelegation
+  overtimeTrade
+  overtimeClaim
 }
 
 type TokenTransaction @entity {
