@@ -3,28 +3,20 @@
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
-    "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token 879103ce98ed4b1b892d9dc4f3d9857d",
-    "codegen:optimism-goerli": "npm run codegen -- subgraphs/subgraph-op-goerli.yaml",
-    "deploy:optimism-goerli": "npm run deploy -- thales-markets/thales-markets-goerli-ovm subgraphs/subgraph-op-goerli.yaml",
+    "auth": "graph auth --studio {deploy-key}",
     "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
-    "deploy:optimism": "npm run deploy -- thales-markets/thales-markets subgraphs/subgraph-op.yaml",
+    "deploy:optimism": "graph deploy --studio thales-markets subgraphs/subgraph-op.yaml",
     "codegen:lp-optimism": "npm run codegen -- subgraphs/subgraph-lp-op.yaml",
-    "deploy:lp-optimism": "npm run deploy -- thales-markets/thales-lp-optimism subgraphs/subgraph-lp-op.yaml",
-    "codegen:optimism-rewards": "npm run codegen -- subgraphs/subgraph-rewards.yaml",
-    "deploy:optimism-rewards": "npm run deploy -- thales-markets/trade-rewards subgraphs/subgraph-rewards.yaml",
-    "codegen:polygon": "npm run codegen -- subgraphs/subgraph-polygon.yaml",
-    "deploy:polygon": "npm run deploy -- thales-markets/thales-polygon subgraphs/subgraph-polygon.yaml",
-    "codegen:bsc": "npm run codegen -- subgraphs/subgraph-bsc.yaml",
-    "deploy:bsc": "npm run deploy -- thales-markets/thales-bsc subgraphs/subgraph-bsc.yaml",
+    "deploy:lp-optimism": "graph deploy --studio thales-lp-optimism subgraphs/subgraph-lp-op.yaml",
     "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arbitrum.yaml",
-    "deploy:arbitrum": "npm run deploy -- thales-markets/thales-arbitrum subgraphs/subgraph-arbitrum.yaml",
+    "deploy:arbitrum": "graph deploy --studio thales-arbitrum subgraphs/subgraph-arbitrum.yaml",
     "codegen:base": "npm run codegen -- subgraphs/subgraph-base.yaml",
-    "auth:base": "graph auth --studio aac7a0e1831f5b21419b7e59c4a2d3a2",
-    "deploy:base": "graph deploy --studio thales-markets-base subgraphs/subgraph-base.yaml"
+    "deploy:base": "graph deploy --studio thales-markets-base subgraphs/subgraph-base.yaml",
+    "codegen:polygon": "npm run codegen -- subgraphs/subgraph-polygon.yaml",
+    "deploy:polygon": "graph deploy --studio thales-polygon subgraphs/subgraph-polygon.yaml"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.55.0",
+    "@graphprotocol/graph-cli": "0.73.0",
     "@graphprotocol/graph-ts": "0.27.0"
   },
   "devDependencies": {

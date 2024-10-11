@@ -88,12 +88,66 @@ dataSources:
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
   - kind: ethereum/contract
+    name: AMMNewUSDC
+    network: optimism
+    source:
+      address: '0x9Ce94cdf8eCd57cec0835767528DC88628891dd9'
+      abi: AMMNew
+      startBlock: 126439697
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/amm-mapping.ts
+      entities:
+        - Trade
+        - ReferralTransfer
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: AMMNew
+          file: ../abis/AMMNew.json
+      eventHandlers:
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: BoughtWithDiscount(address,uint256,uint256)
+          handler: hangledBoughtWithDiscount
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
+  - kind: ethereum/contract
     name: NewPositionaMarketManager
     network: optimism
     source:
       address: '0x9227334352A890e51e980BeB7A56Bbdd01499B54'
       abi: BinaryOptionMarketManager
       startBlock: 6481303
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/binary-options-mapping.ts
+      entities:
+        - Market
+        - Position
+      abis:
+        - name: BinaryOptionMarketManager
+          file: ../abis/BinaryOptionMarketManager.json
+        - name: BinaryOptionMarket
+          file: '../abis/BinaryOptionMarket.json'
+      eventHandlers:
+        - event: MarketCreated(address,indexed address,indexed bytes32,uint256,uint256,uint256,address,address,bool,address)
+          handler: handleNewMarket
+        - event: MarketExpired(address)
+          handler: handleMarketExpired
+  - kind: ethereum/contract
+    name: NewPositionaMarketManagerUSDC
+    network: optimism
+    source:
+      address: '0x7f9e03e40d8b95419C7BdF30D256d08f2Ec11Dba'
+      abi: BinaryOptionMarketManager
+      startBlock: 126439384
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -147,6 +201,40 @@ dataSources:
         - event: ReferrerPaid(address,address,uint256,uint256)
           handler: handleReferrerPaid
   - kind: ethereum/contract
+    name: RangedMarketsUSDC
+    network: optimism
+    source:
+      address: '0xEd59dCA9c272FbC0ca4637F32ab32CBDB62E856B'
+      abi: RangedMarketsAMM
+      startBlock: 126441406
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/ranged-markets-mapping.ts
+      entities:
+        - RangedMarket
+        - Trade
+        - OptionTransaction
+        - RangedPosition
+        - ReferralTransfer
+        - Referrer
+        - ReferredTrader
+      abis:
+        - name: RangedMarket
+          file: ../abis/range-markets/RangedMarket.json
+        - name: RangedMarketsAMM
+          file: ../abis/range-markets/RangedMarketsAMM.json
+      eventHandlers:
+        - event: RangedMarketCreated(address,address,address)
+          handler: handleRangedMarket
+        - event: SoldToAMM(address,address,uint8,uint256,uint256,address,address)
+          handler: handleSoldToAMMEvent
+        - event: BoughtFromAmm(address,address,uint8,uint256,uint256,address,address)
+          handler: handleBoughtFromAmmEvent
+        - event: ReferrerPaid(address,address,uint256,uint256)
+          handler: handleReferrerPaid
+  - kind: ethereum/contract
     name: SpeedMarkets
     network: optimism
     source:
@@ -166,7 +254,7 @@ dataSources:
           file: ../abis/speed-markets/SpeedMarketsAMM.json
       eventHandlers:
         - event: ReferrerPaid(address,address,uint256,uint256)
-          handler: handleReferrerPaid  
+          handler: handleReferrerPaid
   - kind: ethereum/contract
     name: DiscountVault
     network: optimism
@@ -270,6 +358,36 @@ dataSources:
       address: '0xC10a0A6fF6496E0BD896F9f6da5a7B640b85ea40'
       abi: LiquidityPool
       startBlock: 96927845
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: LiquidityPool
+          file: ../abis/LiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: LiquidityPoolUSDC
+    network: optimism
+    source:
+      address: '0x47Da40be6B617d0199ADF1Ec3550f3875b246124'
+      abi: LiquidityPool
+      startBlock: 126441576
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

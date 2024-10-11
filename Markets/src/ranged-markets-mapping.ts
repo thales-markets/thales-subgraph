@@ -1,22 +1,21 @@
 import { RangedMarketCreated } from '../generated/RangedMarkets/RangedMarketsAMM';
 
+import { BigInt } from '@graphprotocol/graph-ts';
+import { Exercised, RangedMarket as RangedMarketContract, Resolved } from '../generated/RangedMarkets/RangedMarket';
+import { BoughtFromAmm, ReferrerPaid, SoldToAMM } from '../generated/RangedMarkets/RangedMarketsAMM';
 import {
-  Market,
-  RangedMarket,
-  Trade,
   AccountBuyVolume,
+  Market,
   OptionTransaction,
-  Referrer,
-  ReferralTransfer,
-  ReferredTrader,
+  RangedMarket,
   RangedPosition,
   RangedPositionBalance,
+  ReferralTransfer,
+  ReferredTrader,
+  Referrer,
+  Trade,
 } from '../generated/schema';
 import { RangedMarket as RangedMarketTemplate } from '../generated/templates';
-import { BigInt } from '@graphprotocol/graph-ts';
-import { RangedMarket as RangedMarketContract, Resolved } from '../generated/RangedMarkets/RangedMarket';
-import { BoughtFromAmm, SoldToAMM, ReferrerPaid } from '../generated/RangedMarkets/RangedMarketsAMM';
-import { Exercised } from '../generated/RangedMarkets/RangedMarket';
 
 export function handleRangedMarket(event: RangedMarketCreated): void {
   let rangedMarket = new RangedMarket(event.params.market.toHex());
@@ -39,6 +38,7 @@ export function handleRangedMarket(event: RangedMarketCreated): void {
     rangedMarket.isOpen = true;
     rangedMarket.leftMarket = leftMarket.id;
     rangedMarket.rightMarket = rightMarket.id;
+    rangedMarket.managerAddress = event.address;
 
     rangedMarket.save();
   }
@@ -46,11 +46,13 @@ export function handleRangedMarket(event: RangedMarketCreated): void {
   let inPosition = new RangedPosition(rangedMarket.inAddress.toHex());
   inPosition.side = 'in';
   inPosition.market = rangedMarket.id;
+  inPosition.managerAddress = event.address;
   inPosition.save();
 
   let outPosition = new RangedPosition(rangedMarket.outAddress.toHex());
   outPosition.side = 'out';
   outPosition.market = rangedMarket.id;
+  outPosition.managerAddress = event.address;
   outPosition.save();
 }
 
@@ -69,6 +71,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'buy';
+  trade.ammAddress = event.address;
   trade.save();
 
   let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -76,6 +79,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   accountBuyVolume.account = event.params.buyer;
   accountBuyVolume.amount = event.params.sUSDPaid;
   accountBuyVolume.type = 'buyRanged';
+  accountBuyVolume.ammAddress = event.address;
   accountBuyVolume.save();
 
   let position = RangedPosition.load(event.params.asset.toHex());
@@ -87,6 +91,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
+      userBalanceFrom.managerAddress = event.address;
     }
     userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
     userBalanceFrom.paid = userBalanceFrom.paid.plus(event.params.sUSDPaid);
@@ -109,6 +114,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'in' : 'out';
   trade.orderSide = 'sell';
+  trade.ammAddress = event.address;
   trade.save();
 
   let position = RangedPosition.load(event.params.asset.toHex());
@@ -120,6 +126,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
+      userBalanceFrom.managerAddress = event.address;
     }
     userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
     userBalanceFrom.save();
@@ -139,6 +146,7 @@ export function handleExercised(event: Exercised): void {
     optionTransactionEntity.amount = event.params.amount;
     optionTransactionEntity.side = event.params._position;
     optionTransactionEntity.isRangedMarket = true;
+    optionTransactionEntity.managerAddress = event.address;
     optionTransactionEntity.save();
 
     let positionIn = RangedPosition.load(rangedMarket.inAddress.toHex());
@@ -154,6 +162,7 @@ export function handleExercised(event: Exercised): void {
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.paid = BigInt.fromI32(0);
         userBalanceFrom.position = positionIn.id;
+        userBalanceFrom.managerAddress = event.address;
       }
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.save();
@@ -172,6 +181,7 @@ export function handleExercised(event: Exercised): void {
         userBalanceFrom.amount = BigInt.fromI32(0);
         userBalanceFrom.paid = BigInt.fromI32(0);
         userBalanceFrom.position = positionOut.id;
+        userBalanceFrom.managerAddress = event.address;
       }
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.save();

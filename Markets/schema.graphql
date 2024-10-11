@@ -14,6 +14,7 @@ type Market @entity {
   customMarket: Boolean!
   customOracle: Bytes!
   finalPrice: BigInt
+  managerAddress: Bytes!
 }
 
 type RangedMarket @entity {
@@ -31,6 +32,7 @@ type RangedMarket @entity {
   isOpen: Boolean!
   result: Int
   finalPrice: BigInt
+  managerAddress: Bytes!
 }
 
 enum OptionTransactionType {
@@ -50,6 +52,7 @@ type OptionTransaction @entity(immutable: true) {
   side: Int
   isRangedMarket: Boolean!
   fee: BigInt
+  managerAddress: Bytes!
 }
 
 enum OptionSide {
@@ -80,6 +83,7 @@ type Trade @entity(immutable: true) {
   market: Bytes
   optionSide: OptionSide
   orderSide: OrderSide
+  ammAddress: Bytes!
 }
 
 enum AccountBuyVolumeEnum {
@@ -95,6 +99,7 @@ type AccountBuyVolume @entity(immutable: true) {
   account: Bytes!
   amount: BigInt!
   type: AccountBuyVolumeEnum!
+  ammAddress: Bytes!
 }
 
 type ReferralTransfer @entity(immutable: true) {
@@ -127,6 +132,7 @@ type Position @entity(immutable: true) {
   id: ID!
   market: Market!
   side: OptionSide!
+  managerAddress: Bytes!
 }
 
 type PositionBalance @entity {
@@ -135,12 +141,14 @@ type PositionBalance @entity {
   amount: BigInt!
   paid: BigInt!
   position: Position!
+  managerAddress: Bytes!
 }
 
 type RangedPosition @entity(immutable: true) {
   id: ID!
   market: RangedMarket!
   side: OptionSide!
+  managerAddress: Bytes!
 }
 
 type RangedPositionBalance @entity {
@@ -149,6 +157,7 @@ type RangedPositionBalance @entity {
   amount: BigInt!
   paid: BigInt!
   position: RangedPosition!
+  managerAddress: Bytes!
 }
 
 type Vault @entity {

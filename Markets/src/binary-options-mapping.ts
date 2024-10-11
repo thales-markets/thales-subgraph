@@ -1,16 +1,16 @@
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   MarketCreated as MarketCreatedEvent,
   MarketExpired as MarketExpiredEvent,
 } from '../generated/BinaryOptionMarketManager/BinaryOptionMarketManager';
-import {
-  Mint as MintEvent,
-  MarketResolved as MarketResolvedEvent,
-  OptionsExercised as OptionsExercisedEvent,
-  BinaryOptionMarket,
-} from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 import { Market, OptionTransaction, Position, PositionBalance } from '../generated/schema';
 import { BinaryOptionMarket as BinaryOptionMarketContract } from '../generated/templates';
-import { BigInt } from '@graphprotocol/graph-ts';
+import {
+  BinaryOptionMarket,
+  MarketResolved as MarketResolvedEvent,
+  Mint as MintEvent,
+  OptionsExercised as OptionsExercisedEvent,
+} from '../generated/templates/BinaryOptionMarket/BinaryOptionMarket';
 
 export function handleNewMarket(event: MarketCreatedEvent): void {
   BinaryOptionMarketContract.create(event.params.market);
@@ -29,16 +29,19 @@ export function handleNewMarket(event: MarketCreatedEvent): void {
   entity.customMarket = event.params.customMarket;
   entity.customOracle = event.params.customOracle;
   entity.poolSize = binaryOptionContract.deposited();
+  entity.managerAddress = event.address;
   entity.save();
 
   let upPosition = new Position(event.params.long.toHex());
   upPosition.side = 'long';
   upPosition.market = entity.id;
+  upPosition.managerAddress = event.address;
   upPosition.save();
 
   let downPosition = new Position(event.params.short.toHex());
   downPosition.side = 'short';
   downPosition.market = entity.id;
+  downPosition.managerAddress = event.address;
   downPosition.save();
 }
 
@@ -76,6 +79,7 @@ export function handleOptionsExercised(event: OptionsExercisedEvent): void {
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.value;
     optionTransactionEntity.isRangedMarket = false;
+    optionTransactionEntity.managerAddress = marketEntity.managerAddress;
 
     let positionUp = marketEntity.longAddress;
     let positionDown = marketEntity.shortAddress;
@@ -116,6 +120,7 @@ export function handleMint(event: MintEvent): void {
     optionTransactionEntity.market = event.address;
     optionTransactionEntity.amount = event.params.value;
     optionTransactionEntity.isRangedMarket = false;
+    optionTransactionEntity.managerAddress = marketEntity.managerAddress;
     optionTransactionEntity.save();
 
     if (event.params.side === 0) {
@@ -130,6 +135,7 @@ export function handleMint(event: MintEvent): void {
           userBalanceUp.amount = BigInt.fromI32(0);
           userBalanceUp.paid = BigInt.fromI32(0);
           userBalanceUp.position = position.id;
+          userBalanceUp.managerAddress = marketEntity.managerAddress;
         }
         userBalanceUp.amount = userBalanceUp.amount.plus(event.params.value);
         userBalanceUp.save();
@@ -148,7 +154,7 @@ export function handleMint(event: MintEvent): void {
           userBalanceDown.amount = BigInt.fromI32(0);
           userBalanceDown.paid = BigInt.fromI32(0);
           userBalanceDown.position = position.id;
-          
+          userBalanceDown.managerAddress = marketEntity.managerAddress;
         }
         userBalanceDown.amount = userBalanceDown.amount.plus(event.params.value);
         userBalanceDown.save();

@@ -2,13 +2,14 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { BoughtFromAmm, BoughtWithDiscount, ReferrerPaid, SoldToAMM } from '../generated/AMM/AMM';
 import {
-  Trade,
+  AccountBuyVolume,
+  Market,
+  Position,
+  PositionBalance,
   ReferralTransfer,
   ReferredTrader,
   Referrer,
-  AccountBuyVolume,
-  Position,
-  PositionBalance,
+  Trade,
 } from '../generated/schema';
 
 export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
@@ -27,6 +28,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
   trade.orderSide = 'buy';
+  trade.ammAddress = event.address;
   trade.save();
 
   let accountBuyVolume = new AccountBuyVolume(event.transaction.hash.toHexString() + '-' + event.logIndex.toString());
@@ -34,6 +36,7 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
   accountBuyVolume.account = event.params.buyer;
   accountBuyVolume.amount = event.params.sUSDPaid;
   accountBuyVolume.type = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'buyUp' : 'buyDown';
+  accountBuyVolume.ammAddress = event.address;
   accountBuyVolume.save();
 
   let position = Position.load(event.params.asset.toHex());
@@ -45,6 +48,11 @@ export function handleBoughtFromAmmEvent(event: BoughtFromAmm): void {
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
+
+      let marketEntity = Market.load(event.params.market.toHex());
+      if (marketEntity !== null) {
+        userBalanceFrom.managerAddress = marketEntity.managerAddress;
+      }
     }
     userBalanceFrom.amount = userBalanceFrom.amount.plus(event.params.amount);
     userBalanceFrom.paid = userBalanceFrom.paid.plus(event.params.sUSDPaid);
@@ -58,6 +66,7 @@ export function hangledBoughtWithDiscount(event: BoughtWithDiscount): void {
   accountBuyVolume.account = event.params.buyer;
   accountBuyVolume.amount = event.params.sUSDPaid;
   accountBuyVolume.type = 'buyDiscounted';
+  accountBuyVolume.ammAddress = event.address;
   accountBuyVolume.save();
 }
 
@@ -77,6 +86,7 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
   trade.market = event.params.market;
   trade.optionSide = BigInt.fromI32(event.params.position).equals(BigInt.fromI32(0)) ? 'long' : 'short';
   trade.orderSide = 'sell';
+  trade.ammAddress = event.address;
   trade.save();
 
   let position = Position.load(event.params.asset.toHex());
@@ -88,6 +98,11 @@ export function handleSoldToAMMEvent(event: SoldToAMM): void {
       userBalanceFrom.amount = BigInt.fromI32(0);
       userBalanceFrom.paid = BigInt.fromI32(0);
       userBalanceFrom.position = position.id;
+
+      let marketEntity = Market.load(event.params.market.toHex());
+      if (marketEntity !== null) {
+        userBalanceFrom.managerAddress = marketEntity.managerAddress;
+      }
     }
     userBalanceFrom.amount = userBalanceFrom.amount.minus(event.params.amount);
     userBalanceFrom.save();
