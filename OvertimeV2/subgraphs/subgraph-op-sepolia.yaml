@@ -1,0 +1,28 @@
+specVersion: 0.0.4
+description: Sport Markets V2 API
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ResolveBlocker
+    network: optimism-sepolia
+    source:
+      address: '0x13488544345346d6a61b4408eF5f936ec5C8c027'
+      abi: ResolveBlocker
+      startBlock: 20362140
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/resolve-blocker-mapping.ts
+      entities:
+        - BlockedGames
+      abis:
+        - name: ResolveBlocker
+          file: ../abis/ResolveBlocker.json
+      eventHandlers:
+        - event: GamesBlockedForResolution(bytes32[],string)
+          handler: handleGameBlocked
+        - event: GamesUnblockedForResolution(bytes32[])
+          handler: handleGameUnblocked

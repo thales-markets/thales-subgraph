@@ -122,3 +122,25 @@ dataSources:
           handler: handleTicketCreated
         - event: ReferrerPaid(address,address,uint256,uint256,address)
           handler: handleReferralTransaction
+  - kind: ethereum/contract
+    name: ResolveBlocker
+    network: optimism
+    source:
+      address: '0xdEB3672FA27678a328b0C9Bdbb7fdb42ebc1494B'
+      abi: ResolveBlocker
+      startBlock: 125616717
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/resolve-blocker-mapping.ts
+      entities:
+        - BlockedGames
+      abis:
+        - name: ResolveBlocker
+          file: ../abis/ResolveBlocker.json
+      eventHandlers:
+        - event: GamesBlockedForResolution(bytes32[],string)
+          handler: handleGameBlocked
+        - event: GamesUnblockedForResolution(bytes32[])
+          handler: handleGameUnblocked
