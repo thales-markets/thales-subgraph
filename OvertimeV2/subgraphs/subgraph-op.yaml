@@ -126,9 +126,9 @@ dataSources:
     name: ResolveBlocker
     network: optimism
     source:
-      address: '0xdEB3672FA27678a328b0C9Bdbb7fdb42ebc1494B'
+      address: '0xA5232A7AFE810bf453e2d13DdAf0689bbED31f60'
       abi: ResolveBlocker
-      startBlock: 125616717
+      startBlock: 128639907
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
