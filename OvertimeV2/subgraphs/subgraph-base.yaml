@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: LiquidityPool
-    network: optimism
+    network: base
     source:
-      address: '0x0fe1044Fc8C05482102Db14368fE88791E9B8698'
+      address: '0xf86e90412F52fDad8aD8D1aa2dA5B2C9a7e5f018'
       abi: LiquidityPool
-      startBlock: 120582645
+      startBlock: 24862741
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -36,41 +36,11 @@ dataSources:
           handler: handleClaimed
   - kind: ethereum/contract
     name: LiquidityPoolWETH
-    network: optimism
+    network: base
     source:
-      address: '0x4f2822D4e60af7f9F70E7e45BC1941fe3461231e'
+      address: '0xcc4ED8cD7101B512B134360ED3cCB759caB33f17'
       abi: LiquidityPool
-      startBlock: 120604187
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/liquidity-pool-mapping.ts
-      entities:
-        - LiquidityPool
-        - LiquidityPoolUserTransaction
-        - LiquidityPoolPnl
-      abis:
-        - name: LiquidityPool
-          file: ../abis/LiquidityPool.json
-      eventHandlers:
-        - event: PoolStarted()
-          handler: handlePoolStarted
-        - event: RoundClosed(uint256,uint256)
-          handler: handleRoundClosed
-        - event: Deposited(address,uint256,uint256)
-          handler: handleDeposited
-        - event: WithdrawalRequested(address)
-          handler: handleWithdrawalRequested
-        - event: Claimed(address,uint256)
-          handler: handleClaimed
-  - kind: ethereum/contract
-    name: LiquidityPoolTHALES
-    network: optimism
-    source:
-      address: '0xE59206b08cC96Da0818522C75eE3Fd4EBB7c0A47'
-      abi: LiquidityPool
-      startBlock: 120604508
+      startBlock: 24862802
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -96,11 +66,11 @@ dataSources:
           handler: handleClaimed
   - kind: ethereum/contract
     name: LiquidityPoolOVER
-    network: optimism
+    network: base
     source:
-      address: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D'
+      address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E'
       abi: LiquidityPool
-      startBlock: 130542160
+      startBlock: 24948503
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -126,11 +96,11 @@ dataSources:
           handler: handleClaimed
   - kind: ethereum/contract
     name: SportsAMM
-    network: optimism
+    network: base
     source:
-      address: '0xFb4e4811C7A811E098A556bD79B64c20b479E431'
+      address: '0x76923cDDE21928ddbeC4B8BFDC8143BB6d0841a8'
       abi: SportsAMM
-      startBlock: 120581662
+      startBlock: 24862610
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -152,25 +122,3 @@ dataSources:
           handler: handleTicketCreated
         - event: ReferrerPaid(address,address,uint256,uint256,address)
           handler: handleReferralTransaction
-  - kind: ethereum/contract
-    name: ResolveBlocker
-    network: optimism
-    source:
-      address: '0xA5232A7AFE810bf453e2d13DdAf0689bbED31f60'
-      abi: ResolveBlocker
-      startBlock: 128639907
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ../src/resolve-blocker-mapping.ts
-      entities:
-        - BlockedGames
-      abis:
-        - name: ResolveBlocker
-          file: ../abis/ResolveBlocker.json
-      eventHandlers:
-        - event: GamesBlockedForResolution(bytes32[],string)
-          handler: handleGameBlocked
-        - event: GamesUnblockedForResolution(bytes32[])
-          handler: handleGameUnblocked

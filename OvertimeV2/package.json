@@ -8,6 +8,8 @@
     "deploy:optimism": "graph deploy --studio sport-markets-v2-optimism subgraphs/subgraph-op.yaml",
     "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arb.yaml",
     "deploy:arbitrum": "graph deploy --studio sport-markets-v2-arbitrum subgraphs/subgraph-arb.yaml",
+    "codegen:base": "npm run codegen -- subgraphs/subgraph-base.yaml",
+    "deploy:base": "graph deploy --studio sport-markets-v2-base subgraphs/subgraph-base.yaml",
     "codegen:optimism-sepolia": "npm run codegen -- subgraphs/subgraph-op-sepolia.yaml",
     "deploy:optimism-sepolia": "graph deploy --studio sport-markets-v2-optimism-sepolia subgraphs/subgraph-op-sepolia.yaml"
   },
