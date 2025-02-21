@@ -1,0 +1,17 @@
+{
+  "name": "Overtime March Madness V2",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "auth": "graph auth --studio {deploy-key}",
+    "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arbitrum.yaml",
+    "deploy:arbitrum": "graph deploy --studio march-madness-arbitrum subgraphs/subgraph-arbitrum.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.55.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
+}
