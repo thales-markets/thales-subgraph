@@ -1,0 +1,31 @@
+specVersion: 0.0.4
+description: March Madness V2 Optimism Sepolia
+repository: https://github.com/thales-markets/thales-subgraph
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MarchMadnessV2
+    network: optimism-sepolia
+    source:
+      address: '0xfB9C4ca81ABc1DB90843A9672440a8743C7CA891'
+      abi: MarchMadnessV2
+      startBlock: 24305611
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/march-madness-mapping.ts
+      entities:
+        - Token
+        - Game
+      abis:
+        - name: MarchMadnessV2
+          file: ../abis/MarchMadnessV2.json
+      eventHandlers:
+        - event: ResultForGameAdded(uint256,uint256)
+          handler: handleResultForGameAdded
+        - event: Mint(address,uint256,uint256[63])
+          handler: handleMint
+        - event: UpdateBracketsForAlreadyMintedItem(address,uint256,uint256[63])
+          handler: handleBracketsUpdate
