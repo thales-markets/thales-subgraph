@@ -98,9 +98,9 @@ dataSources:
     name: LiquidityPoolOVER
     network: optimism
     source:
-      address: '0xAeb2B8a262D7118322C43449909eEFEe07BbBD7D'
+      address: '0x59a7A8Ae9d58D69a69b6A24770EC771110647226'
       abi: LiquidityPool
-      startBlock: 130542160
+      startBlock: 131923092
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

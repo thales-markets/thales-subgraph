@@ -68,9 +68,39 @@ dataSources:
     name: LiquidityPoolOVER
     network: base
     source:
-      address: '0xe2FCBAC654970bAd1d88B4F6e10d0Ac6152c584E'
+      address: '0xB4199DC163F3206643649E117A816ad0DECb6C3B'
       abi: LiquidityPool
-      startBlock: 24948503
+      startBlock: 26327980
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/liquidity-pool-mapping.ts
+      entities:
+        - LiquidityPool
+        - LiquidityPoolUserTransaction
+        - LiquidityPoolPnl
+      abis:
+        - name: LiquidityPool
+          file: ../abis/LiquidityPool.json
+      eventHandlers:
+        - event: PoolStarted()
+          handler: handlePoolStarted
+        - event: RoundClosed(uint256,uint256)
+          handler: handleRoundClosed
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+        - event: WithdrawalRequested(address)
+          handler: handleWithdrawalRequested
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+  - kind: ethereum/contract
+    name: LiquidityPoolCBBTC
+    network: base
+    source:
+      address: '0x8d4f838327DedFc735e202731358AcFc260c207a'
+      abi: LiquidityPool
+      startBlock: 25984212
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
