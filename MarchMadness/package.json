@@ -4,8 +4,12 @@
   "scripts": {
     "codegen": "graph codegen",
     "auth": "graph auth --studio {deploy-key}",
+    "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
+    "deploy:optimism": "graph deploy --studio march-madness-optimism subgraphs/subgraph-op.yaml",
     "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arbitrum.yaml",
     "deploy:arbitrum": "graph deploy --studio march-madness-arbitrum subgraphs/subgraph-arbitrum.yaml",
+    "codegen:base": "npm run codegen -- subgraphs/subgraph-base.yaml",
+    "deploy:base": "graph deploy --studio march-madness-base subgraphs/subgraph-base.yaml",
     "codegen:optimism-sepolia": "npm run codegen -- subgraphs/subgraph-op-sepolia.yaml",
     "deploy:optimism-sepolia": "graph deploy --studio march-madness-optimism-sepolia subgraphs/subgraph-op-sepolia.yaml"
   },
