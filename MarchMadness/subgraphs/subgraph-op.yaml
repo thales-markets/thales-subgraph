@@ -1,16 +1,16 @@
 specVersion: 0.0.4
-description: March Madness V2 Arbitrum One
+description: March Madness V2 Optimism
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
   file: ../schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: MarchMadnessV2
-    network: arbitrum-one
+    network: optimism
     source:
-      address: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79'
+      address: '0x74A498769a6B9E5c6C89bd28a4720c52C904b81f'
       abi: MarchMadnessV2
-      startBlock: 314169365
+      startBlock: 133012276
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

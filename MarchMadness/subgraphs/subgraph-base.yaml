@@ -1,16 +1,16 @@
 specVersion: 0.0.4
-description: March Madness V2 Arbitrum One
+description: March Madness V2 Base
 repository: https://github.com/thales-markets/thales-subgraph
 schema:
   file: ../schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: MarchMadnessV2
-    network: arbitrum-one
+    network: base
     source:
-      address: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79'
+      address: '0xd56e477a63C5b20959E1B93bB436cBF0179e2F19'
       abi: MarchMadnessV2
-      startBlock: 314169365
+      startBlock: 27417278
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
