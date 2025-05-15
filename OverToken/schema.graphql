@@ -1,0 +1,39 @@
+type BuybackTransaction @entity(immutable: true) {
+  id: Bytes!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  amountIn: BigInt!
+  amountOut: BigInt!
+}
+
+type BuybackByDate @entity(immutable: false) {
+  id: String!
+  date: String!
+  lastUpdate: BigInt!
+  amountIn: BigInt!
+  amountOut: BigInt!
+}
+
+type BuybackParam @entity(immutable: false) {
+  id: Bytes!
+  lastChange: BigInt!
+  tickLength: BigInt!
+  tickRate: BigInt!
+  tokenAddress: Bytes!
+}
+
+enum BuybackParamChangeType {
+  changeTickLength
+  changeTickRate
+  changeTokenAddress
+}
+
+type BuybackParamChange @entity(immutable: true) {
+  id: Bytes!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+  type: BuybackParamChangeType!
+  tickLength: BigInt!
+  tickRate: BigInt!
+  tokenAddress: Bytes!
+}

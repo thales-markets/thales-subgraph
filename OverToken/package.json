@@ -1,0 +1,21 @@
+{
+  "name": "over-token",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "auth": "graph auth {deploy-key}",
+    "codegen:optimism": "npm run codegen -- subgraphs/subgraph-op.yaml",
+    "deploy:optimism": "graph deploy over-token-optimism subgraphs/subgraph-op.yaml",
+    "codegen:arbitrum": "npm run codegen -- subgraphs/subgraph-arb.yaml",
+    "deploy:arbitrum": "graph deploy over-token-arbitrum subgraphs/subgraph-arb.yaml",
+    "codegen:base": "npm run codegen -- subgraphs/subgraph-base.yaml",
+    "deploy:base": "graph deploy over-token-base subgraphs/subgraph-base.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.97.0",
+    "@graphprotocol/graph-ts": "0.34.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
+}

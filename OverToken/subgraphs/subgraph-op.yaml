@@ -1,0 +1,30 @@
+specVersion: 0.0.4
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SafeBoxBuyback
+    network: optimism
+    source:
+      address: '0x679C0174f6c288C4bcd5C95C9Ec99D50357C59E7'
+      abi: SafeBoxBuyback
+      startBlock: 130048000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ../src/buyback-mapping.ts
+      entities:
+        - TokenTransaction
+      abis:
+        - name: SafeBoxBuyback
+          file: ../abis/SafeBoxBuyback.json
+      eventHandlers:
+        - event: BuybackExecuted(uint256,uint256)
+          handler: handleBuybackExecutedEvent
+        - event: TickLengthChanged(uint256)
+          handler: handleTickLengthChangedEvent
+        - event: TickRateChanged(uint256)
+          handler: handleTickRateChangedEvent
+        - event: ThalesTokenAddressChanged(address)
+          handler: handleThalesTokenAddressChangedEvent
