@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79'
       abi: MarchMadnessV2
-      startBlock: 314169365
+      startBlock: 314169366
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
