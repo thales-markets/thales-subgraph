@@ -8,9 +8,9 @@ dataSources:
     name: MarchMadnessV2
     network: optimism
     source:
-      address: '0x74A498769a6B9E5c6C89bd28a4720c52C904b81f'
+      address: '0x30B887a0ef84C65624518ca749fE0fbBaaf404dF'
       abi: MarchMadnessV2
-      startBlock: 133012277
+      startBlock: 148519627
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

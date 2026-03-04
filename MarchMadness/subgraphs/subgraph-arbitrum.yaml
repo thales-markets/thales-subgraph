@@ -8,9 +8,9 @@ dataSources:
     name: MarchMadnessV2
     network: arbitrum-one
     source:
-      address: '0xb3b8F1d9525A5128F2A4C6Da657c08ecd210ad79'
+      address: '0x94dBB1B8D4FCD49252c6f452f679d75c70b02c07'
       abi: MarchMadnessV2
-      startBlock: 314169366
+      startBlock: 438291433
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
