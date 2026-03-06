@@ -8,9 +8,9 @@ dataSources:
     name: MarchMadnessV2
     network: base
     source:
-      address: '0xd56e477a63C5b20959E1B93bB436cBF0179e2F19'
+      address: '0x94A00A4501780fca8a1657C6a454Afe67e2DA207'
       abi: MarchMadnessV2
-      startBlock: 27417279
+      startBlock: 42927572
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
